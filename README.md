@@ -72,7 +72,7 @@ This system bridges the gap between traditional interview preparation and actual
   <p><i>Watch the system in action:</i></p>
   
   <!-- Replace with your actual demo link -->
-  <a href="https://github.com/yourusername/AI-Interview-Coach">
+  <a href="https://github.com/DeAtHfIrE26/Next-Generation-Virtual-Interview-Training-System/tree/main">
     <img src="https://img.shields.io/badge/View%20Demo-Watch%20Video-red?style=for-the-badge&logo=youtube" alt="Demo">
   </a>
 </div>
@@ -183,8 +183,8 @@ def measure_engagement(
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/AI-Interview-Coach.git
-cd AI-Interview-Coach
+git clone https://github.com/DeAtHfIrE26/Next-Generation-Virtual-Interview-Training-System.git
+cd Next-Generation-Virtual-Interview-Training-System
 
 # Create and activate a virtual environment (optional but recommended)
 python -m venv venv
