@@ -337,7 +337,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT SECTION -->
 ## 📬 Contact
 
-Project Link: [https://github.com/yourusername/AI-Interview-Coach](https://github.com/yourusername/AI-Interview-Coach)
+Project Link: https://github.com/DeAtHfIrE26/Next-Generation-Virtual-Interview-Training-System
 
 <!-- FOOTER ANIMATION -->
 <p align="center">
