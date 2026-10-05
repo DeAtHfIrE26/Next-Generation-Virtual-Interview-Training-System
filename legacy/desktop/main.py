@@ -136,7 +136,7 @@ MIN_MOUTH_MOVEMENT_RATIO = 0.02
 # — Mistral AI Inference (La Plateforme) —
 from mistralai import Mistral
 
-MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY", "lGNvKIR4adIAyLqmB0icaPHyFWxEx17L").strip()
+MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY", "").strip()
 client = Mistral(api_key=MISTRAL_API_KEY)
 
 # Use plain ASCII hyphens here:
@@ -3110,7 +3110,7 @@ def execute_sql_query(query):
 JUDGE0_API_URL = "https://judge0-extra-ce.p.rapidapi.com/submissions"
 JUDGE0_HEADERS = {
     "x-rapidapi-host": "judge0-extra-ce.p.rapidapi.com",
-    "x-rapidapi-key": "09cb6663e3msh50cfbb5473450fbp164d40jsn09a180c9e327",  # Replace with a valid RapidAPI key
+    "x-rapidapi-key": os.getenv("JUDGE0_RAPIDAPI_KEY", ""),
     "content-type": "application/json"
 }
 

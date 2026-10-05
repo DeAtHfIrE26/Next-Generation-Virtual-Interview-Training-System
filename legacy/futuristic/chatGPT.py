@@ -276,7 +276,8 @@ class InterviewCoach:
 
     def _face_cam_loop(self):
         while self.cam and self.cam.isOpened():
-            ret,frame=self.cam.read(); if not ret: break
+            ret,frame=self.cam.read()
+            if not ret: break
             rgb=cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
             # overlay bbox
             if self.face_app:
@@ -508,7 +509,8 @@ class InterviewCoach:
             return rsp.text
         except Exception as e:
             self.logger.warning(f"Whisper failed {e}, fallback to Google")
-            r=sr.Recognizer(); with sr.AudioFile(str(wav_path)) as src: audio=r.record(src)
+            r=sr.Recognizer()
+            with sr.AudioFile(str(wav_path)) as src: audio=r.record(src)
             try: return r.recognize_google(audio)
             except: return "(could not transcribe)"
 
