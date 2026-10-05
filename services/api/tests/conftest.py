@@ -47,7 +47,13 @@ def client(app):
 def signup(client, email="user@example.com", consents=("data_processing",)):
     r = client.post(
         "/auth/register",
-        json={"email": email, "password": "correct horse battery", "name": "Test", "accept_terms": True},
+        json={
+            "email": email,
+            "password": "correct horse battery",
+            "name": "Test",
+            "accept_terms": True,
+            "age_confirmed": True,
+        },
     )
     assert r.status_code == 201, r.text
     for k in consents:

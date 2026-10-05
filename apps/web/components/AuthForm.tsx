@@ -17,7 +17,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
     try {
       if (mode === "signup") {
         await api("/auth/register", { method: "POST", json: {
-          email: f.get("email"), password: f.get("password"), name: f.get("name") ?? "", accept_terms: f.get("terms") === "on" } });
+          email: f.get("email"), password: f.get("password"), name: f.get("name") ?? "", accept_terms: f.get("terms") === "on", age_confirmed: f.get("adult") === "on" } });
         router.push("/onboarding");
       } else {
         await api("/auth/login", { method: "POST", json: { email: f.get("email"), password: f.get("password") } });
@@ -36,6 +36,10 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
       <label className="field"><span>Email</span><input name="email" type="email" required autoComplete="email" /></label>
       <label className="field"><span>Password (10+ characters)</span>
         <input name="password" type="password" required minLength={10} autoComplete={mode === "signup" ? "new-password" : "current-password"} /></label>
+      {mode === "signup" && (
+        <label className="check"><input name="adult" type="checkbox" required />
+          <span>I am 18 or older.</span></label>
+      )}
       {mode === "signup" && (
         <label className="check"><input name="terms" type="checkbox" required />
           <span>I agree to the <Link href="/legal/terms">terms</Link> and have read the <Link href="/legal/privacy">privacy notice</Link>.</span></label>

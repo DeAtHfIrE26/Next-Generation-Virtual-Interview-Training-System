@@ -1,6 +1,6 @@
 # Evaluation Report
 
-Generated 2026-10-05 16:57 UTC at commit `955466f` by `python -m eval_harness run`.
+Generated 2026-10-05 18:09 UTC at commit `20516e9` by `python -m eval_harness run`.
 
 **Rule:** a number appears here only if it was measured on a real, consented evaluation set described by a manifest. Synthetic smoke runs check that pipelines execute and never report accuracy. Systems named `legacy_*` are the prototype algorithms (the "before" numbers); the others are the upgraded implementations ("after").
 

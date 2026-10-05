@@ -6,7 +6,8 @@ test("candidate signs up, consents, completes an interview and gets a shareable 
   await page.getByLabel("Name").fill("E2E Candidate");
   await page.getByLabel("Email").fill(email);
   await page.getByLabel("Password (10+ characters)").fill("correct horse battery");
-  await page.getByRole("checkbox").check();
+  await page.getByRole("checkbox", { name: "I am 18 or older." }).check();
+  await page.getByRole("checkbox", { name: /I agree to the/ }).check();
   await page.getByRole("button", { name: "Create account" }).click();
 
   await expect(page.getByRole("heading", { name: "Before you start" })).toBeVisible();

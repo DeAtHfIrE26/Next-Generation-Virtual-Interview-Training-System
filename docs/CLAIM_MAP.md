@@ -2,6 +2,27 @@
 
 > **Status: provisional.** The filed claims have not been supplied. This map uses the nine system elements in the published **abstract** of application 202541122226, plus field-of-invention para. [0003]. See `docs/patent/SOURCES.md`. When the claims arrive, every row gets re-keyed to its claim number, and any dependent-claim detail missing here is added.
 
+## Current implementation (after milestones M0–M8)
+
+Every element is implemented in the product code and covered by tests. The prototype algorithm for each element is preserved behaviour-for-behaviour in `packages/core/src/interview_core/legacy/` and pinned by characterization tests that run the original prototype code side by side (`packages/core/tests/characterization/`). **Accuracy has not been measured for any element yet, because no consented evaluation data exists** (see `docs/EVAL_REPORT.md`). "IMPLEMENTED" here means the mechanism works on real inputs and is tested; it is not an accuracy claim.
+
+| # | Element | Product implementation | Prototype preserved in | Status | Tests |
+|---|---|---|---|---|---|
+| E1 | UI receiving candidate information and job roles | `apps/web/app/interview/new`, `services/api/.../routers/sessions.py::create_session` (role, seniority, JD, resume PDF) | `legacy/desktop/main.py` (Tkinter) | IMPLEMENTED | API flow tests, Playwright E2E |
+| E2 | Facial recognition: capture facial samples, verify identity | `interview_core.face` (multi-sample embedding template, outlier rejection, calibrated threshold, quality gates, active liveness), `routers/enrollment.py::enrol_face`, periodic `routers/sessions.py::face_check`; on-device capture in `apps/web/lib/vision.ts` | `legacy/face_hist.py` | IMPLEMENTED (needs a commercially licensed embedding model configured to run; returns 503 otherwise) | `test_biometrics.py`, `test_liveness.py`, `test_enrollment.py` |
+| E3 | Voice authentication: record references, real-time matching | `interview_core.voice` (prompted-phrase enrolment, per-utterance matching, enrolment-bypass fixed), `routers/enrollment.py::enrol_voice`, `routers/sessions.py::submit_answer` | `legacy/voice.py` | IMPLEMENTED (needs a speaker model configured) | `test_biometrics.py`, `test_enrollment.py` |
+| E4 | Lip-sync verification: analyse mouth movements, detect speech-authenticity mismatches | `interview_core.lipsync.avsync` (temporal audio-visual correlation, offset, prominence, still-mouth and silent-motion flags), browser mouth series `apps/web/lib/visionMath.ts`, `routers/sessions.py::submit_answer` | `legacy/lipsync.py` (could never fire) | IMPLEMENTED | `test_avsync.py` (incl. "fires where prototype cannot"), API flow tests |
+| E5 | Eye tracking: gaze direction and engagement | `interview_core.gaze` (iris H+V, head yaw/pitch, calibration, smoothing, per-answer observable stats), browser `visionMath.ts` (parity-tested) | `legacy/gaze.py` | IMPLEMENTED | `test_gaze_policy.py`, `visionMath.test.ts` |
+| E6 | NLP: parse resumes, generate personalised questions, evaluate responses with transformer models | `interview_core.nlp` (`resume`, `interviewer`, `evaluator`, `structured`, `providers`), schemas in `nlp/schemas/` | `legacy/resume.py`, `legacy/grading.py` | IMPLEMENTED (transformer evaluation when an LLM is configured; heuristic fallback otherwise, labelled) | `test_nlp.py` |
+| E7 | Security monitoring: unauthorised devices, preventing assistance | browser phone detection (MediaPipe EfficientDet-Lite, Apache-2.0) and face count; `interview_core.security.policy` (per-type debounce, coaching vs proctored); `routers/sessions.py::post_events` | `legacy/security.py` | IMPLEMENTED | `test_gaze_policy.py`, API flow tests |
+| E8 | Technical assessment: present coding challenges, give feedback | `interview_core.codeexec` (hidden tests, Judge0 sandbox, step-limited SQLite), `routers/sessions.py::run_code`, room code panel | `legacy/desktop/main.py` Judge0 calls | IMPLEMENTED (non-SQL languages need a Judge0 instance) | `test_speech_code.py`, API flow tests |
+| E9 | Performance evaluation: analyse transcripts, generate comprehensive reports | `interview_core.report.build_report`, `interview_core.delivery`, `routers/sessions.py::finish`, `apps/web/components/ReportView.tsx`; the prototype nine-factor score is still computed in every report's appendix | `legacy/grading.py` | IMPLEMENTED (no mock data) | API flow tests, E2E |
+| F1 | Real-time behavioural monitoring | browser vision loop at 12 fps, events batched every 2 s | `legacy/desktop/main.py::monitor_webcam` | IMPLEMENTED | E2E |
+
+Changes of method, each staying within the abstract's wording, are listed in `docs/PLAN.md` §d. **Before merging, re-key this table to the filed claims** (they have not been supplied).
+
+## Baseline: the prototype as found (before M0)
+
 **Repo key**
 - **NG** = `DeAtHfIrE26/Next-Generation-Virtual-Interview-Training-System` @ `d821924`, file `main.py`
 - **FT** = `DeAtHfIrE26/futuristic-ai-interviewer` @ `358ea09`. Files are named per row.

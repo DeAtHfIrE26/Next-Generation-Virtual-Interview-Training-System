@@ -27,6 +27,9 @@ class Credentials(BaseModel):
 class Registration(Credentials):
     name: str = Field(default="", max_length=200)
     accept_terms: bool
+    # DPDP Act s.9: under-18s need verifiable parental consent and may not be behaviourally
+    # monitored. Until a parental-consent flow exists, accounts are adults-only.
+    age_confirmed: bool = False
 
 
 def user_out(u: User) -> dict:
@@ -40,6 +43,8 @@ def register(body: Registration, response: Response, db: Session = Depends(get_d
         raise HTTPException(422, "enter a valid email address")
     if not body.accept_terms:
         raise HTTPException(422, "you must accept the terms and privacy notice")
+    if not body.age_confirmed:
+        raise HTTPException(422, "you must be 18 or older to create an account")
     if db.query(User).filter_by(email=email).first():
         raise HTTPException(409, "an account with this email already exists")
     role = "admin" if email in get_settings().admin_emails else "user"

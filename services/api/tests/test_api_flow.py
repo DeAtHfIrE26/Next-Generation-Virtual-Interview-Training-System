@@ -42,9 +42,22 @@ def test_register_login_logout_and_csrf(client):
     assert nocsrf.status_code == 403
     dup = client.post(
         "/auth/register",
-        json={"email": "user@example.com", "password": "another password", "accept_terms": True},
+        json={
+            "email": "user@example.com",
+            "password": "another password",
+            "accept_terms": True,
+            "age_confirmed": True,
+        },
     )
     assert dup.status_code == 409
+
+
+def test_registration_requires_adult_confirmation(client):
+    r = client.post(
+        "/auth/register",
+        json={"email": "teen@example.com", "password": "correct horse battery", "accept_terms": True},
+    )
+    assert r.status_code == 422 and "18" in r.json()["detail"]
 
 
 def test_login_is_rate_limited(client):

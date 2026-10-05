@@ -1,8 +1,8 @@
 # Production Plan: AI Interview Coach (patent application 202541122226)
 
-**Status:** awaiting owner approval. No code has been changed. Phase 2 starts only after an explicit "approved".
-**Inputs:** both repos (read-only audit), the IP India abstract printout, the ICCCNT-2025 paper. See `docs/patent/SOURCES.md`.
-**Biggest caveat:** the **claims have not been seen**. The Claim Map is built from the abstract's nine elements. Everything below is designed to stay inside that element list. It will be re-checked against the claims the moment they arrive (milestone M0 is blocked on nothing; M3 onward should not merge until the claims have been checked).
+**Status:** approved by the owner on 2026-10-05. Milestones M0–M9 are implemented on branch `claude/kind-johnson-rc72nb`; see the per-milestone commits and the handoff lines in the pull request.
+**Inputs:** both repos (audited), the IP India abstract printout, the ICCCNT-2025 paper. See `docs/patent/SOURCES.md`.
+**Still open:** the filed **claims** have not been seen. The Claim Map is keyed to the abstract's nine elements and must be re-checked against the claims before merging. Accuracy is unmeasured everywhere until consented evaluation data exists (`docs/EVAL_REPORT.md`).
 
 ---
 
