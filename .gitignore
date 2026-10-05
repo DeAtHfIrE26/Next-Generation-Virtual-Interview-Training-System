@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+dist/
+build/
+.coverage
+htmlcov/
+
+# Node
+node_modules/
+.next/
+out/
+apps/web/playwright-report/
+apps/web/test-results/
+
+# Secrets and local config
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Data that must never be committed (biometrics, recordings, session output)
+eval/data/
+eval/out/
+data/
+media/
+*.wav
+*.mp4
+*.webm
+reports/
+logs/
+temp/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
