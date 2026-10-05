@@ -6,7 +6,18 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from interview_api.db import Base, engine
-from interview_api.routers import auth, avatar, consent, enrollment, health, privacy, reports, sessions
+from interview_api.routers import (
+    admin,
+    auth,
+    avatar,
+    billing,
+    consent,
+    enrollment,
+    health,
+    privacy,
+    reports,
+    sessions,
+)
 from interview_api.security import CSRF_HEADER
 from interview_api.settings import get_settings
 
@@ -56,13 +67,8 @@ def create_app(*, create_tables: bool = True) -> FastAPI:
         avatar.router,
     ):
         app.include_router(r)
-    try:
-        from interview_api.routers import admin, billing
-
-        app.include_router(billing.router)
-        app.include_router(admin.router)
-    except ImportError:
-        pass
+    app.include_router(billing.router)
+    app.include_router(admin.router)
     try:
         from interview_api import observability
 
