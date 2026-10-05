@@ -47,3 +47,8 @@ services/api/var/
 *.tfstate.*
 *.tfvars
 !*.tfvars.example
+
+# Web vision assets (downloaded at install)
+apps/web/public/vision/
+apps/web/next-env.d.ts
+apps/web/tsconfig.tsbuildinfo

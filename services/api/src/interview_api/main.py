@@ -6,7 +6,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from interview_api.db import Base, engine
-from interview_api.routers import auth, consent, enrollment, health, privacy, reports, sessions
+from interview_api.routers import auth, avatar, consent, enrollment, health, privacy, reports, sessions
 from interview_api.security import CSRF_HEADER
 from interview_api.settings import get_settings
 
@@ -53,6 +53,7 @@ def create_app(*, create_tables: bool = True) -> FastAPI:
         sessions.router,
         reports.router,
         privacy.router,
+        avatar.router,
     ):
         app.include_router(r)
     try:

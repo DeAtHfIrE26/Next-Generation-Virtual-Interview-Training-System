@@ -59,7 +59,15 @@ def capabilities() -> dict:
         "server_asr": getattr(asr_provider(), "name", None),
         "server_tts": getattr(tts_provider(), "name", None),
         "code_execution": judge0() is not None,
+        "neural_avatar": _neural_avatar_enabled(),
     }
+
+
+def _neural_avatar_enabled() -> bool:
+    from interview_api.settings import get_settings
+
+    s = get_settings()
+    return bool(s.feature_neural_avatar and s.neural_avatar_url)
 
 
 def clear() -> None:
