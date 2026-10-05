@@ -1,6 +1,6 @@
 # Evaluation Report
 
-Generated 2026-10-05 16:37 UTC at commit `3e8dcfb` by `python -m eval_harness run`.
+Generated 2026-10-05 16:47 UTC at commit `a48367b` by `python -m eval_harness run`.
 
 **Rule:** a number appears here only if it was measured on a real, consented evaluation set described by a manifest. Synthetic smoke runs check that pipelines execute and never report accuracy. Systems named `legacy_*` are the prototype algorithms (the "before" numbers); the others are the upgraded implementations ("after").
 
@@ -29,6 +29,8 @@ E2 face verification: FAR / FRR / EER, by subgroup.
 
 **Data needed:** >=100 subjects; per subject 1 enrolment session (>=15 aligned face crops) and >=10 probe crops across 2 lighting conditions and >=2 devices; optional self-reported subgroups.
 - No manifest at eval/data/face_verification/manifest.jsonl. Not measured.
+- face embedder not configured (FACE_EMBEDDER); only legacy_histogram evaluated
+- speaker embedder not configured (SPEAKER_EMBEDDER)
 
 ## liveness
 
@@ -134,8 +136,9 @@ Avatar lip-sync quality (LSE-D lower is better, LSE-C higher is better).
 | Suite | Ran | Systems exercised | Items |
 |---|---|---|---|
 | face_verification | yes | legacy_histogram | 32 |
-| lipsync | yes | legacy_single_frame | 6 |
-| gaze | yes | legacy_iris_horizontal | 10 |
+| liveness | yes | active_challenge_v1 | 4 |
+| lipsync | yes | legacy_single_frame, avsync_v2 | 6 |
+| gaze | yes | legacy_iris_horizontal, gaze_v2_uncalibrated | 10 |
 | answer_scoring | yes | legacy_keyword_heuristic | 6 |
 | llm_schema_validity | yes | smoke | 10 |
 | device_detection | yes | smoke | 12 |

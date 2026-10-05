@@ -27,6 +27,7 @@ def _run_suites(names: list[str], data_root: Path, cfg: dict) -> list[SuiteResul
 
 
 def run_smoke(cfg: dict) -> list[SuiteResult]:
+    systems.register_optional()
     with tempfile.TemporaryDirectory() as tmp:
         root = synthetic.generate(Path(tmp))
         names = [s.name for s in ALL if manifest_path(root, s.name).exists()]
@@ -34,6 +35,7 @@ def run_smoke(cfg: dict) -> list[SuiteResult]:
     for r in results:
         if r.status == "measured":
             r.status = "smoke"
+            r.notes = []  # notes can carry numbers computed from synthetic data
             for s in r.systems:
                 s.metrics = {}  # never surface synthetic numbers
                 s.subgroups = {}

@@ -118,6 +118,74 @@ def make_gaze(root: Path, rng: np.random.Generator) -> None:
     _write_manifest(d, [{"id": "g0", "consent_id": CONSENT, "subject_id": "s0", "frames": "clip.json"}])
 
 
+def _face(pose: str) -> list[list[float]]:
+    lm = np.full((478, 2), 0.5)
+    pts = {
+        33: (0.40, 0.40),
+        160: (0.42, 0.39),
+        158: (0.44, 0.39),
+        133: (0.46, 0.40),
+        153: (0.44, 0.41),
+        144: (0.42, 0.41),
+        362: (0.54, 0.40),
+        385: (0.56, 0.39),
+        387: (0.58, 0.39),
+        263: (0.60, 0.40),
+        373: (0.58, 0.41),
+        380: (0.56, 0.41),
+        13: (0.50, 0.55),
+        14: (0.50, 0.56),
+        82: (0.48, 0.55),
+        87: (0.48, 0.56),
+        312: (0.52, 0.55),
+        317: (0.52, 0.56),
+        1: (0.50, 0.48),
+    }
+    for k, v in pts.items():
+        lm[k] = v
+    if pose == "blink":
+        lm[[160, 158, 153, 144, 385, 387, 373, 380], 1] = 0.40
+    elif pose == "turn_left":
+        lm[1, 0] += 0.04
+    elif pose == "open_mouth":
+        lm[[14, 87, 317], 1] += 0.06
+    return lm.tolist()
+
+
+def make_liveness(root: Path, _rng: np.random.Generator) -> None:
+    d = root / "liveness"
+    (d / "series").mkdir(parents=True, exist_ok=True)
+    steps = ["blink", "turn_left", "open_mouth"]
+    challenge = {
+        "nonce": "n",
+        "steps": steps,
+        "issued_at": "2026-01-01T00:00:00+00:00",
+        "expires_at": "2026-01-01T00:00:30+00:00",
+    }
+    items = []
+    for i, kind in enumerate(["bona_fide", "print", "bona_fide", "print"]):
+        poses = ["neutral"] * 15
+        if kind == "bona_fide":
+            for s in steps:
+                poses += [s] * 4 + ["neutral"] * 9
+        else:
+            poses += ["neutral"] * 39
+        frames = [{"t": j / 15, "landmarks": _face(p), "faces": 1} for j, p in enumerate(poses)]
+        (d / f"series/{i}.json").write_text(
+            json.dumps({"challenge": challenge, "nonce": "n", "frames": frames})
+        )
+        items.append(
+            {
+                "id": f"v{i}",
+                "consent_id": CONSENT,
+                "subject_id": f"s{i // 2}",
+                "kind": kind,
+                "series": f"series/{i}.json",
+            }
+        )
+    _write_manifest(d, items)
+
+
 def make_answers(root: Path, rng: np.random.Generator) -> None:
     answers = [
         "First I identified the bottleneck, then we profiled the database queries and finally added an index.",
@@ -187,6 +255,6 @@ def make_runtime(root: Path, rng: np.random.Generator) -> None:
 
 def generate(root: Path, seed: int = 0) -> Path:
     rng = np.random.default_rng(seed)
-    for make in (make_face, make_lipsync, make_gaze, make_answers, make_runtime):
+    for make in (make_face, make_liveness, make_lipsync, make_gaze, make_answers, make_runtime):
         make(root, rng)
     return root
