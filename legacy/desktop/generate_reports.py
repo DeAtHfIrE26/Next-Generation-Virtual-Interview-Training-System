@@ -1,3 +1,6 @@
+# WARNING: this script generates SYNTHETIC demo resumes and interview reports with
+# random names and random scores. Its output is not real data and must never be
+# presented as evaluation results or user outcomes. See docs/PLAN.md section 0.
 import os
 import uuid
 import random
