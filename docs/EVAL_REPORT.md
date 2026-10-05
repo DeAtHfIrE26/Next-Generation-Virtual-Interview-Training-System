@@ -1,6 +1,6 @@
 # Evaluation Report
 
-Generated 2026-10-05 16:47 UTC at commit `a48367b` by `python -m eval_harness run`.
+Generated 2026-10-05 16:57 UTC at commit `955466f` by `python -m eval_harness run`.
 
 **Rule:** a number appears here only if it was measured on a real, consented evaluation set described by a manifest. Synthetic smoke runs check that pipelines execute and never report accuracy. Systems named `legacy_*` are the prototype algorithms (the "before" numbers); the others are the upgraded implementations ("after").
 
@@ -139,7 +139,7 @@ Avatar lip-sync quality (LSE-D lower is better, LSE-C higher is better).
 | liveness | yes | active_challenge_v1 | 4 |
 | lipsync | yes | legacy_single_frame, avsync_v2 | 6 |
 | gaze | yes | legacy_iris_horizontal, gaze_v2_uncalibrated | 10 |
-| answer_scoring | yes | legacy_keyword_heuristic | 6 |
+| answer_scoring | yes | legacy_keyword_heuristic, heuristic_v2 | 6 |
 | llm_schema_validity | yes | smoke | 10 |
 | device_detection | yes | smoke | 12 |
 | latency | yes | question_to_first_avatar_frame | 20 |

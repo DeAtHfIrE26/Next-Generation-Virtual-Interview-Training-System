@@ -1,0 +1,51 @@
+{
+  "$id": "evaluation.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["scores", "star", "evidence", "strengths", "improvements", "follow_up", "summary"],
+  "properties": {
+    "scores": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relevance", "structure", "depth", "communication", "technical_accuracy"],
+      "properties": {
+        "relevance": {"type": "integer", "enum": [1, 2, 3, 4, 5]},
+        "structure": {"type": "integer", "enum": [1, 2, 3, 4, 5]},
+        "depth": {"type": "integer", "enum": [1, 2, 3, 4, 5]},
+        "communication": {"type": "integer", "enum": [1, 2, 3, 4, 5]},
+        "technical_accuracy": {"anyOf": [{"type": "integer", "enum": [1, 2, 3, 4, 5]}, {"type": "null"}]}
+      }
+    },
+    "star": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["situation", "task", "action", "result"],
+      "properties": {
+        "situation": {"type": "boolean"}, "task": {"type": "boolean"},
+        "action": {"type": "boolean"}, "result": {"type": "boolean"}
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["dimension", "quote", "comment"],
+        "properties": {
+          "dimension": {"type": "string", "enum": ["relevance", "structure", "depth", "communication", "technical_accuracy"]},
+          "quote": {"type": "string", "description": "Exact words copied from the candidate's answer."},
+          "comment": {"type": "string"}
+        }
+      }
+    },
+    "strengths": {"type": "array", "items": {"type": "string"}},
+    "improvements": {"type": "array", "items": {"type": "string"}},
+    "follow_up": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["needed", "question"],
+      "properties": {"needed": {"type": "boolean"}, "question": {"type": "string"}}
+    },
+    "summary": {"type": "string"}
+  }
+}

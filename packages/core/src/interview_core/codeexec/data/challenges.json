@@ -1,0 +1,264 @@
+{
+ "version": 1,
+ "challenges": [
+  {
+   "id": "py-sum-pairs",
+   "title": "Count pairs with a target sum",
+   "family": [
+    "software",
+    "data"
+   ],
+   "difficulty": 2,
+   "languages": [
+    "python",
+    "javascript",
+    "java",
+    "cpp"
+   ],
+   "prompt": "The first line has N and K. The second line has N integers. Print how many pairs (i < j) have a[i] + a[j] = K.",
+   "tests": [
+    {
+     "stdin": "5 6\n1 5 3 3 2\n",
+     "expected": "2",
+     "hidden": false
+    },
+    {
+     "stdin": "4 4\n2 2 2 2\n",
+     "expected": "6",
+     "hidden": true
+    },
+    {
+     "stdin": "3 100\n1 2 3\n",
+     "expected": "0",
+     "hidden": true
+    },
+    {
+     "stdin": "1 2\n1\n",
+     "expected": "0",
+     "hidden": true
+    }
+   ],
+   "starter": {
+    "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    n, k = int(data[0]), int(data[1])\n    a = list(map(int, data[2:2 + n]))\n    # your code here\n\nmain()\n",
+    "javascript": "const data = require('fs').readFileSync(0, 'utf8').trim().split(/\\s+/).map(Number);\nconst [n, k] = data;\nconst a = data.slice(2, 2 + n);\n// your code here\n"
+   }
+  },
+  {
+   "id": "py-balanced",
+   "title": "Balanced brackets",
+   "family": [
+    "software"
+   ],
+   "difficulty": 2,
+   "languages": [
+    "python",
+    "javascript",
+    "java",
+    "cpp"
+   ],
+   "prompt": "Read one line containing only the characters ()[]{}. Print YES if the brackets are balanced, otherwise NO.",
+   "tests": [
+    {
+     "stdin": "([]{})\n",
+     "expected": "YES",
+     "hidden": false
+    },
+    {
+     "stdin": "([)]\n",
+     "expected": "NO",
+     "hidden": true
+    },
+    {
+     "stdin": "((\n",
+     "expected": "NO",
+     "hidden": true
+    },
+    {
+     "stdin": "\n",
+     "expected": "YES",
+     "hidden": true
+    }
+   ],
+   "starter": {
+    "python": "s = input().strip()\n# your code here\n",
+    "javascript": "const s = require('fs').readFileSync(0, 'utf8').trim();\n// your code here\n"
+   }
+  },
+  {
+   "id": "py-word-freq",
+   "title": "Most frequent word",
+   "family": [
+    "software",
+    "data"
+   ],
+   "difficulty": 1,
+   "languages": [
+    "python",
+    "javascript",
+    "java",
+    "cpp"
+   ],
+   "prompt": "Read a line of lowercase words separated by spaces. Print the most frequent word; if tied, print the alphabetically smallest.",
+   "tests": [
+    {
+     "stdin": "b a b a c\n",
+     "expected": "a",
+     "hidden": false
+    },
+    {
+     "stdin": "x\n",
+     "expected": "x",
+     "hidden": true
+    },
+    {
+     "stdin": "the cat the dog the cat\n",
+     "expected": "the",
+     "hidden": true
+    }
+   ],
+   "starter": {
+    "python": "words = input().split()\n# your code here\n",
+    "javascript": "const words = require('fs').readFileSync(0, 'utf8').trim().split(/\\s+/);\n// your code here\n"
+   }
+  },
+  {
+   "id": "py-merge-intervals",
+   "title": "Merge intervals",
+   "family": [
+    "software"
+   ],
+   "difficulty": 3,
+   "languages": [
+    "python",
+    "javascript",
+    "java",
+    "cpp"
+   ],
+   "prompt": "First line N, then N lines 'start end'. Merge overlapping intervals (touching intervals merge too) and print each merged interval on its own line, sorted by start.",
+   "tests": [
+    {
+     "stdin": "3\n1 3\n2 6\n8 10\n",
+     "expected": "1 6\n8 10",
+     "hidden": false
+    },
+    {
+     "stdin": "2\n1 4\n4 5\n",
+     "expected": "1 5",
+     "hidden": true
+    },
+    {
+     "stdin": "3\n5 7\n1 2\n3 4\n",
+     "expected": "1 2\n3 4\n5 7",
+     "hidden": true
+    }
+   ],
+   "starter": {
+    "python": "import sys\nlines = sys.stdin.read().split('\\n')\nn = int(lines[0])\nintervals = [tuple(map(int, lines[i + 1].split())) for i in range(n)]\n# your code here\n",
+    "javascript": "const lines = require('fs').readFileSync(0, 'utf8').trim().split('\\n');\nconst n = Number(lines[0]);\nconst intervals = lines.slice(1, n + 1).map(l => l.split(' ').map(Number));\n// your code here\n"
+   }
+  },
+  {
+   "id": "py-lru",
+   "title": "LRU cache simulator",
+   "family": [
+    "software"
+   ],
+   "difficulty": 4,
+   "languages": [
+    "python",
+    "javascript",
+    "java",
+    "cpp"
+   ],
+   "prompt": "First line: capacity C and number of operations Q. Then Q lines: 'get k' or 'put k v'. For each get, print the value or -1. Use least-recently-used eviction.",
+   "tests": [
+    {
+     "stdin": "2 5\nput 1 1\nput 2 2\nget 1\nput 3 3\nget 2\n",
+     "expected": "1\n-1",
+     "hidden": false
+    },
+    {
+     "stdin": "1 4\nput 1 1\nput 2 2\nget 1\nget 2\n",
+     "expected": "-1\n2",
+     "hidden": true
+    }
+   ],
+   "starter": {
+    "python": "import sys\nlines = sys.stdin.read().split('\\n')\ncap, q = map(int, lines[0].split())\n# your code here\n"
+   }
+  },
+  {
+   "id": "sql-top-customers",
+   "title": "Top customers by spend",
+   "family": [
+    "data",
+    "software",
+    "business"
+   ],
+   "difficulty": 2,
+   "languages": [
+    "sql"
+   ],
+   "prompt": "Tables: customers(id, name), orders(id, customer_id, amount). Return name and total spend of the top 3 customers by total spend, highest first. Columns: name, total.",
+   "setup": "CREATE TABLE customers(id INTEGER PRIMARY KEY, name TEXT);\nCREATE TABLE orders(id INTEGER PRIMARY KEY, customer_id INTEGER, amount REAL);\nINSERT INTO customers VALUES (1,'Asha'),(2,'Ben'),(3,'Chen'),(4,'Dev');\nINSERT INTO orders VALUES (1,1,100),(2,1,50),(3,2,300),(4,3,20),(5,4,90),(6,4,80);\n",
+   "tests": [
+    {
+     "stdin": "",
+     "expected": "Ben|300.0\nDev|170.0\nAsha|150.0",
+     "hidden": false
+    }
+   ],
+   "starter": {
+    "sql": "SELECT c.name, SUM(o.amount) AS total\nFROM customers c\n-- your query here\n"
+   }
+  },
+  {
+   "id": "sql-duplicates",
+   "title": "Find duplicate emails",
+   "family": [
+    "data",
+    "software",
+    "business"
+   ],
+   "difficulty": 1,
+   "languages": [
+    "sql"
+   ],
+   "prompt": "Table users(id, email). Return each email that appears more than once, sorted alphabetically. Column: email.",
+   "setup": "CREATE TABLE users(id INTEGER PRIMARY KEY, email TEXT);\nINSERT INTO users VALUES (1,'a@x.io'),(2,'b@x.io'),(3,'a@x.io'),(4,'c@x.io'),(5,'b@x.io');\n",
+   "tests": [
+    {
+     "stdin": "",
+     "expected": "a@x.io\nb@x.io",
+     "hidden": false
+    }
+   ],
+   "starter": {
+    "sql": "SELECT email\nFROM users\n-- your query here\n"
+   }
+  },
+  {
+   "id": "sql-running-total",
+   "title": "Running total by day",
+   "family": [
+    "data"
+   ],
+   "difficulty": 3,
+   "languages": [
+    "sql"
+   ],
+   "prompt": "Table sales(day TEXT, amount REAL). Return day and the running total of amount ordered by day. Columns: day, running_total.",
+   "setup": "CREATE TABLE sales(day TEXT, amount REAL);\nINSERT INTO sales VALUES ('2026-01-01',10),('2026-01-02',5),('2026-01-03',20);\n",
+   "tests": [
+    {
+     "stdin": "",
+     "expected": "2026-01-01|10.0\n2026-01-02|15.0\n2026-01-03|35.0",
+     "hidden": false
+    }
+   ],
+   "starter": {
+    "sql": "SELECT day,\n       -- your expression here\nFROM sales\n"
+   }
+  }
+ ]
+}

@@ -1,0 +1,14 @@
+{
+  "$id": "question.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["question", "category", "difficulty", "competency", "rationale", "expected_points"],
+  "properties": {
+    "question": {"type": "string", "description": "The interviewer's question, one or two sentences, addressed to the candidate."},
+    "category": {"type": "string", "enum": ["behavioral", "technical", "situational", "role_specific", "wrap_up"]},
+    "difficulty": {"type": "integer", "enum": [1, 2, 3, 4, 5]},
+    "competency": {"type": "string", "description": "The single skill this question probes, e.g. 'debugging', 'stakeholder management'."},
+    "rationale": {"type": "string", "description": "Why this question fits this candidate (resume, JD or previous answer), shown to the user after the session."},
+    "expected_points": {"type": "array", "items": {"type": "string"}, "description": "2-5 points a strong answer would cover."}
+  }
+}

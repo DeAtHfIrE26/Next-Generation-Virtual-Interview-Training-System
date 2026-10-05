@@ -13,6 +13,7 @@ dependencies = [
 
 [project.optional-dependencies]
 # Each adapter is optional; install only the licensed backends you use.
+anthropic = ["anthropic>=1.11"]
 onnx = ["onnxruntime>=1.17"]
 speechbrain = ["speechbrain>=1.0", "torch>=2.2", "torchaudio>=2.2"]
 resemblyzer = ["resemblyzer>=0.1.4"]

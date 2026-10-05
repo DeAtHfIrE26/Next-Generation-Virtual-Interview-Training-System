@@ -28,14 +28,18 @@ apps/web/test-results/
 # Data that must never be committed (biometrics, recordings, session output)
 eval/data/
 eval/out/
-data/
-media/
+/data/
+/media/
 *.wav
 *.mp4
 *.webm
-reports/
-logs/
-temp/
+/reports/
+/logs/
+/temp/
+legacy/*/reports/
+legacy/*/logs/
+legacy/*/temp/
+services/api/var/
 
 # Terraform
 .terraform/

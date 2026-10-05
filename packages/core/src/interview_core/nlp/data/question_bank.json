@@ -1,0 +1,825 @@
+{
+ "version": 1,
+ "questions": [
+  {
+   "id": "gen-beh-01",
+   "category": "behavioral",
+   "family": "general",
+   "difficulty": 1,
+   "competency": "self-presentation",
+   "question": "Walk me through your background and what brings you to this role.",
+   "expected_points": [
+    "concise career story",
+    "link to the role",
+    "one concrete highlight"
+   ]
+  },
+  {
+   "id": "gen-beh-02",
+   "category": "behavioral",
+   "family": "general",
+   "difficulty": 1,
+   "competency": "motivation",
+   "question": "Why are you interested in this position?",
+   "expected_points": [
+    "specific reasons tied to the role",
+    "what you would contribute",
+    "research about the work"
+   ]
+  },
+  {
+   "id": "gen-beh-03",
+   "category": "behavioral",
+   "family": "general",
+   "difficulty": 2,
+   "competency": "teamwork",
+   "question": "Tell me about a time you worked closely with a team to deliver something. What was your part?",
+   "expected_points": [
+    "situation and goal",
+    "your specific actions",
+    "outcome",
+    "what you learned"
+   ]
+  },
+  {
+   "id": "gen-beh-04",
+   "category": "behavioral",
+   "family": "general",
+   "difficulty": 2,
+   "competency": "learning",
+   "question": "Describe a time you had to learn something new quickly. How did you approach it?",
+   "expected_points": [
+    "what had to be learned and why",
+    "learning strategy",
+    "how you applied it",
+    "result"
+   ]
+  },
+  {
+   "id": "gen-beh-05",
+   "category": "behavioral",
+   "family": "general",
+   "difficulty": 2,
+   "competency": "time management",
+   "question": "Tell me about a time you had several deadlines at once. How did you prioritise?",
+   "expected_points": [
+    "competing demands",
+    "prioritisation criteria",
+    "communication with others",
+    "outcome"
+   ]
+  },
+  {
+   "id": "gen-beh-06",
+   "category": "behavioral",
+   "family": "general",
+   "difficulty": 3,
+   "competency": "conflict",
+   "question": "Describe a disagreement with a colleague. How did you resolve it?",
+   "expected_points": [
+    "the disagreement in neutral terms",
+    "how you listened",
+    "resolution",
+    "relationship afterwards"
+   ]
+  },
+  {
+   "id": "gen-beh-07",
+   "category": "behavioral",
+   "family": "general",
+   "difficulty": 3,
+   "competency": "failure",
+   "question": "Tell me about a mistake you made at work or in a project. What happened next?",
+   "expected_points": [
+    "ownership of the mistake",
+    "impact",
+    "how you fixed it",
+    "what changed afterwards"
+   ]
+  },
+  {
+   "id": "gen-beh-08",
+   "category": "behavioral",
+   "family": "general",
+   "difficulty": 3,
+   "competency": "feedback",
+   "question": "Give an example of critical feedback you received and what you did with it.",
+   "expected_points": [
+    "the feedback",
+    "initial reaction",
+    "actions taken",
+    "evidence of improvement"
+   ]
+  },
+  {
+   "id": "gen-beh-09",
+   "category": "behavioral",
+   "family": "general",
+   "difficulty": 3,
+   "competency": "initiative",
+   "question": "Tell me about something you improved without being asked.",
+   "expected_points": [
+    "problem noticed",
+    "why it mattered",
+    "what you did",
+    "measurable result"
+   ]
+  },
+  {
+   "id": "gen-beh-10",
+   "category": "behavioral",
+   "family": "general",
+   "difficulty": 4,
+   "competency": "influence",
+   "question": "Describe a time you persuaded people who did not report to you to change direction.",
+   "expected_points": [
+    "stakeholders and their concerns",
+    "evidence or arguments used",
+    "how you handled pushback",
+    "outcome"
+   ]
+  },
+  {
+   "id": "gen-beh-11",
+   "category": "behavioral",
+   "family": "general",
+   "difficulty": 4,
+   "competency": "ambiguity",
+   "question": "Tell me about a project where the goal was unclear at the start. How did you make progress?",
+   "expected_points": [
+    "sources of ambiguity",
+    "how you clarified scope",
+    "decisions made with incomplete information",
+    "result"
+   ]
+  },
+  {
+   "id": "gen-beh-12",
+   "category": "behavioral",
+   "family": "general",
+   "difficulty": 4,
+   "competency": "ownership",
+   "question": "Describe a time a project you owned was at risk of failing. What did you do?",
+   "expected_points": [
+    "early warning signs",
+    "actions and trade-offs",
+    "communication",
+    "outcome and lessons"
+   ]
+  },
+  {
+   "id": "gen-beh-13",
+   "category": "behavioral",
+   "family": "general",
+   "difficulty": 5,
+   "competency": "leadership",
+   "question": "Tell me about the hardest people-leadership situation you have handled.",
+   "expected_points": [
+    "context and stakes",
+    "your judgement",
+    "actions over time",
+    "impact on people and results"
+   ]
+  },
+  {
+   "id": "gen-beh-14",
+   "category": "behavioral",
+   "family": "general",
+   "difficulty": 5,
+   "competency": "strategy",
+   "question": "Describe a decision you made that traded short-term results for long-term benefit. How did you justify it?",
+   "expected_points": [
+    "the trade-off",
+    "data and reasoning",
+    "stakeholder alignment",
+    "how it played out"
+   ]
+  },
+  {
+   "id": "gen-sit-01",
+   "category": "situational",
+   "family": "general",
+   "difficulty": 2,
+   "competency": "customer focus",
+   "question": "A user reports that something you built is confusing. What would you do first?",
+   "expected_points": [
+    "understand the problem from the user",
+    "reproduce or observe",
+    "prioritise a fix",
+    "follow up"
+   ]
+  },
+  {
+   "id": "gen-sit-02",
+   "category": "situational",
+   "family": "general",
+   "difficulty": 3,
+   "competency": "prioritisation",
+   "question": "Your manager and a key stakeholder ask for conflicting things with the same deadline. What do you do?",
+   "expected_points": [
+    "clarify both requests",
+    "surface the conflict early",
+    "propose options",
+    "agree on a decision"
+   ]
+  },
+  {
+   "id": "gen-sit-03",
+   "category": "situational",
+   "family": "general",
+   "difficulty": 3,
+   "competency": "ethics",
+   "question": "You notice a colleague cutting a corner that could hurt users. How do you handle it?",
+   "expected_points": [
+    "assess the risk",
+    "raise it directly and respectfully",
+    "escalate if needed",
+    "protect users"
+   ]
+  },
+  {
+   "id": "gen-sit-04",
+   "category": "situational",
+   "family": "general",
+   "difficulty": 4,
+   "competency": "crisis",
+   "question": "Something you are responsible for breaks in front of an important client. Walk me through the next hour.",
+   "expected_points": [
+    "contain the impact",
+    "communicate clearly",
+    "coordinate the fix",
+    "follow-up and prevention"
+   ]
+  },
+  {
+   "id": "gen-wra-01",
+   "category": "wrap_up",
+   "family": "general",
+   "difficulty": 1,
+   "competency": "closing",
+   "question": "Is there anything about your experience we have not covered that you would like to highlight?",
+   "expected_points": [
+    "one relevant strength not yet discussed",
+    "link to the role"
+   ]
+  },
+  {
+   "id": "gen-wra-02",
+   "category": "wrap_up",
+   "family": "general",
+   "difficulty": 1,
+   "competency": "closing",
+   "question": "What questions would you ask the interviewer about this role or team?",
+   "expected_points": [
+    "thoughtful questions about the work",
+    "team and success criteria"
+   ]
+  },
+  {
+   "id": "sof-tec-01",
+   "category": "technical",
+   "family": "software",
+   "difficulty": 1,
+   "competency": "fundamentals",
+   "question": "What is the difference between a process and a thread?",
+   "expected_points": [
+    "memory isolation",
+    "shared state in threads",
+    "scheduling and cost",
+    "when to use each"
+   ]
+  },
+  {
+   "id": "sof-tec-02",
+   "category": "technical",
+   "family": "software",
+   "difficulty": 1,
+   "competency": "fundamentals",
+   "question": "Explain what a REST API is and give an example of a good endpoint design.",
+   "expected_points": [
+    "resources and HTTP verbs",
+    "statelessness",
+    "status codes",
+    "example endpoint"
+   ]
+  },
+  {
+   "id": "sof-tec-03",
+   "category": "technical",
+   "family": "software",
+   "difficulty": 2,
+   "competency": "data structures",
+   "question": "When would you choose a hash map over a sorted array, and what are the trade-offs?",
+   "expected_points": [
+    "lookup complexity",
+    "ordering needs",
+    "memory",
+    "range queries"
+   ]
+  },
+  {
+   "id": "sof-tec-04",
+   "category": "technical",
+   "family": "software",
+   "difficulty": 2,
+   "competency": "testing",
+   "question": "How do you decide what to unit test versus integration test?",
+   "expected_points": [
+    "unit tests for logic",
+    "integration for boundaries",
+    "speed and reliability",
+    "example"
+   ]
+  },
+  {
+   "id": "sof-tec-05",
+   "category": "technical",
+   "family": "software",
+   "difficulty": 2,
+   "competency": "version control",
+   "question": "Describe your Git workflow on a team project, including how you handle merge conflicts.",
+   "expected_points": [
+    "branching",
+    "reviews",
+    "resolving conflicts",
+    "keeping history clean"
+   ]
+  },
+  {
+   "id": "sof-tec-06",
+   "category": "technical",
+   "family": "software",
+   "difficulty": 3,
+   "competency": "debugging",
+   "question": "Walk me through how you would debug an API endpoint that is intermittently slow in production.",
+   "expected_points": [
+    "measure before guessing",
+    "logs, traces, metrics",
+    "form and test hypotheses",
+    "fix and verify"
+   ]
+  },
+  {
+   "id": "sof-tec-07",
+   "category": "technical",
+   "family": "software",
+   "difficulty": 3,
+   "competency": "databases",
+   "question": "How would you find and fix a slow SQL query?",
+   "expected_points": [
+    "inspect the query plan",
+    "indexes",
+    "query shape and N+1",
+    "measure the improvement"
+   ]
+  },
+  {
+   "id": "sof-tec-08",
+   "category": "technical",
+   "family": "software",
+   "difficulty": 3,
+   "competency": "concurrency",
+   "question": "What is a race condition? Describe one you have seen or could imagine, and how to prevent it.",
+   "expected_points": [
+    "definition",
+    "concrete example",
+    "locks, atomic operations or idempotency",
+    "testing for it"
+   ]
+  },
+  {
+   "id": "sof-tec-09",
+   "category": "technical",
+   "family": "software",
+   "difficulty": 3,
+   "competency": "security",
+   "question": "How would you protect a web application against common vulnerabilities like SQL injection and XSS?",
+   "expected_points": [
+    "parameterised queries",
+    "output encoding",
+    "input validation",
+    "least privilege"
+   ]
+  },
+  {
+   "id": "sof-tec-10",
+   "category": "technical",
+   "family": "software",
+   "difficulty": 4,
+   "competency": "system design",
+   "question": "Design a URL shortener that handles millions of requests per day.",
+   "expected_points": [
+    "API and data model",
+    "ID generation",
+    "caching and storage",
+    "scaling and failure modes"
+   ]
+  },
+  {
+   "id": "sof-tec-11",
+   "category": "technical",
+   "family": "software",
+   "difficulty": 4,
+   "competency": "system design",
+   "question": "How would you design a notification system that sends email, SMS and push messages reliably?",
+   "expected_points": [
+    "queueing",
+    "retries and idempotency",
+    "provider abstraction",
+    "rate limits and monitoring"
+   ]
+  },
+  {
+   "id": "sof-tec-12",
+   "category": "technical",
+   "family": "software",
+   "difficulty": 4,
+   "competency": "reliability",
+   "question": "How do you make a service resilient to a slow or failing dependency?",
+   "expected_points": [
+    "timeouts",
+    "retries with backoff",
+    "circuit breakers",
+    "graceful degradation"
+   ]
+  },
+  {
+   "id": "sof-tec-13",
+   "category": "technical",
+   "family": "software",
+   "difficulty": 5,
+   "competency": "architecture",
+   "question": "When would you split a monolith into services, and how would you do it safely?",
+   "expected_points": [
+    "reasons and costs",
+    "boundaries by domain",
+    "incremental migration",
+    "data ownership and observability"
+   ]
+  },
+  {
+   "id": "sof-tec-14",
+   "category": "technical",
+   "family": "software",
+   "difficulty": 5,
+   "competency": "distributed systems",
+   "question": "Explain the trade-offs between consistency and availability in a distributed database you have used or studied.",
+   "expected_points": [
+    "CAP/PACELC framing",
+    "concrete system",
+    "impact on application design",
+    "examples of anomalies"
+   ]
+  },
+  {
+   "id": "sof-rol-01",
+   "category": "role_specific",
+   "family": "software",
+   "difficulty": 2,
+   "competency": "code quality",
+   "question": "What makes code easy for someone else to maintain?",
+   "expected_points": [
+    "naming and structure",
+    "tests",
+    "small focused units",
+    "documentation where it matters"
+   ]
+  },
+  {
+   "id": "sof-rol-02",
+   "category": "role_specific",
+   "family": "software",
+   "difficulty": 3,
+   "competency": "code review",
+   "question": "How do you give and receive code review feedback?",
+   "expected_points": [
+    "focus on correctness and clarity",
+    "kind and specific",
+    "explaining reasoning",
+    "acting on feedback"
+   ]
+  },
+  {
+   "id": "sof-rol-03",
+   "category": "role_specific",
+   "family": "software",
+   "difficulty": 4,
+   "competency": "technical leadership",
+   "question": "Tell me about a technical decision you drove. How did you evaluate the options?",
+   "expected_points": [
+    "options considered",
+    "criteria",
+    "prototyping or evidence",
+    "outcome and follow-up"
+   ]
+  },
+  {
+   "id": "dat-tec-01",
+   "category": "technical",
+   "family": "data",
+   "difficulty": 1,
+   "competency": "statistics",
+   "question": "Explain the difference between mean and median, and when you would report each.",
+   "expected_points": [
+    "definitions",
+    "outlier sensitivity",
+    "skewed distributions",
+    "example"
+   ]
+  },
+  {
+   "id": "dat-tec-02",
+   "category": "technical",
+   "family": "data",
+   "difficulty": 2,
+   "competency": "sql",
+   "question": "How would you find the top 5 customers by total spend in the last 30 days using SQL?",
+   "expected_points": [
+    "filter by date",
+    "aggregate by customer",
+    "order and limit",
+    "edge cases like ties"
+   ]
+  },
+  {
+   "id": "dat-tec-03",
+   "category": "technical",
+   "family": "data",
+   "difficulty": 2,
+   "competency": "data cleaning",
+   "question": "How do you handle missing or inconsistent data in a dataset?",
+   "expected_points": [
+    "profile the data",
+    "understand why values are missing",
+    "imputation or exclusion",
+    "document the decision"
+   ]
+  },
+  {
+   "id": "dat-tec-04",
+   "category": "technical",
+   "family": "data",
+   "difficulty": 3,
+   "competency": "experimentation",
+   "question": "How would you design an A/B test for a new checkout button?",
+   "expected_points": [
+    "hypothesis and metric",
+    "randomisation unit",
+    "sample size and duration",
+    "guarding against peeking"
+   ]
+  },
+  {
+   "id": "dat-tec-05",
+   "category": "technical",
+   "family": "data",
+   "difficulty": 3,
+   "competency": "machine learning",
+   "question": "How do you detect and prevent overfitting?",
+   "expected_points": [
+    "train/validation/test split",
+    "cross-validation",
+    "regularisation",
+    "simpler models and more data"
+   ]
+  },
+  {
+   "id": "dat-tec-06",
+   "category": "technical",
+   "family": "data",
+   "difficulty": 3,
+   "competency": "metrics",
+   "question": "A key metric dropped 15% overnight. How do you investigate?",
+   "expected_points": [
+    "check data pipeline first",
+    "segment the drop",
+    "external factors",
+    "communicate findings"
+   ]
+  },
+  {
+   "id": "dat-tec-07",
+   "category": "technical",
+   "family": "data",
+   "difficulty": 4,
+   "competency": "modelling",
+   "question": "How would you build a model to predict customer churn, and how would you know it is useful?",
+   "expected_points": [
+    "define churn and horizon",
+    "features and leakage",
+    "evaluation metric",
+    "business impact and monitoring"
+   ]
+  },
+  {
+   "id": "dat-tec-08",
+   "category": "technical",
+   "family": "data",
+   "difficulty": 4,
+   "competency": "data engineering",
+   "question": "Design a pipeline that ingests daily event data and produces reliable reporting tables.",
+   "expected_points": [
+    "ingestion and schema",
+    "idempotent transforms",
+    "data quality checks",
+    "backfills and monitoring"
+   ]
+  },
+  {
+   "id": "dat-tec-09",
+   "category": "technical",
+   "family": "data",
+   "difficulty": 5,
+   "competency": "causal inference",
+   "question": "When an A/B test is not possible, how can you estimate the effect of a change?",
+   "expected_points": [
+    "observational methods",
+    "confounders",
+    "difference-in-differences or matching",
+    "limits of the conclusion"
+   ]
+  },
+  {
+   "id": "dat-rol-01",
+   "category": "role_specific",
+   "family": "data",
+   "difficulty": 3,
+   "competency": "communication",
+   "question": "How do you explain a complex analysis to non-technical stakeholders?",
+   "expected_points": [
+    "start from the decision",
+    "simple visuals",
+    "uncertainty stated plainly",
+    "recommendation"
+   ]
+  },
+  {
+   "id": "pro-tec-01",
+   "category": "technical",
+   "family": "product",
+   "difficulty": 2,
+   "competency": "product sense",
+   "question": "Pick a product you use daily. What would you improve and why?",
+   "expected_points": [
+    "user and problem",
+    "evidence",
+    "proposed change",
+    "how to measure success"
+   ]
+  },
+  {
+   "id": "pro-tec-02",
+   "category": "technical",
+   "family": "product",
+   "difficulty": 3,
+   "competency": "prioritisation",
+   "question": "How do you decide what goes into the next release when everything seems important?",
+   "expected_points": [
+    "goals and metrics",
+    "impact vs effort",
+    "stakeholder input",
+    "saying no clearly"
+   ]
+  },
+  {
+   "id": "pro-tec-03",
+   "category": "technical",
+   "family": "product",
+   "difficulty": 3,
+   "competency": "metrics",
+   "question": "How would you define success metrics for a new onboarding flow?",
+   "expected_points": [
+    "north-star link",
+    "activation metric",
+    "guardrails",
+    "measurement plan"
+   ]
+  },
+  {
+   "id": "pro-tec-04",
+   "category": "technical",
+   "family": "product",
+   "difficulty": 4,
+   "competency": "strategy",
+   "question": "How would you decide whether to build, buy or partner for a new capability?",
+   "expected_points": [
+    "strategic fit",
+    "cost and time",
+    "risk and control",
+    "decision criteria"
+   ]
+  },
+  {
+   "id": "pro-rol-01",
+   "category": "role_specific",
+   "family": "product",
+   "difficulty": 4,
+   "competency": "execution",
+   "question": "Tell me about a product launch that did not go as planned. What did you do?",
+   "expected_points": [
+    "what went wrong",
+    "response",
+    "stakeholder communication",
+    "changes afterwards"
+   ]
+  },
+  {
+   "id": "des-tec-01",
+   "category": "technical",
+   "family": "design",
+   "difficulty": 2,
+   "competency": "user research",
+   "question": "How do you decide which research method to use for a design question?",
+   "expected_points": [
+    "question type",
+    "generative vs evaluative",
+    "constraints",
+    "example"
+   ]
+  },
+  {
+   "id": "des-tec-02",
+   "category": "technical",
+   "family": "design",
+   "difficulty": 3,
+   "competency": "accessibility",
+   "question": "How do you make sure your designs are accessible?",
+   "expected_points": [
+    "contrast and typography",
+    "keyboard and screen readers",
+    "testing with users",
+    "standards like WCAG"
+   ]
+  },
+  {
+   "id": "des-tec-03",
+   "category": "technical",
+   "family": "design",
+   "difficulty": 4,
+   "competency": "design systems",
+   "question": "How would you introduce a design system to a team that has none?",
+   "expected_points": [
+    "audit",
+    "start small",
+    "adoption and governance",
+    "measuring impact"
+   ]
+  },
+  {
+   "id": "bus-tec-01",
+   "category": "technical",
+   "family": "business",
+   "difficulty": 2,
+   "competency": "analysis",
+   "question": "How would you analyse why sales in one region fell last quarter?",
+   "expected_points": [
+    "break down the metric",
+    "compare segments",
+    "talk to the team",
+    "recommend actions"
+   ]
+  },
+  {
+   "id": "bus-tec-02",
+   "category": "technical",
+   "family": "business",
+   "difficulty": 3,
+   "competency": "stakeholders",
+   "question": "How do you manage a stakeholder who keeps changing requirements?",
+   "expected_points": [
+    "understand the underlying need",
+    "agree on scope and change process",
+    "document decisions",
+    "maintain the relationship"
+   ]
+  },
+  {
+   "id": "bus-tec-03",
+   "category": "technical",
+   "family": "business",
+   "difficulty": 3,
+   "competency": "process improvement",
+   "question": "Describe how you would improve a process that everyone complains about.",
+   "expected_points": [
+    "map the current process",
+    "measure pain points",
+    "pilot a change",
+    "measure results"
+   ]
+  },
+  {
+   "id": "bus-tec-04",
+   "category": "technical",
+   "family": "business",
+   "difficulty": 4,
+   "competency": "negotiation",
+   "question": "Walk me through how you prepare for a difficult negotiation.",
+   "expected_points": [
+    "interests vs positions",
+    "alternatives (BATNA)",
+    "research",
+    "concessions plan"
+   ]
+  }
+ ]
+}
