@@ -44,8 +44,8 @@ SKIP_SUFFIXES = {
 
 
 def tracked_files(paths: list[str]) -> list[Path]:
-    out = subprocess.run(  # noqa: S603
-        ["git", "ls-files", "-z", *paths],  # noqa: S607
+    out = subprocess.run(
+        ["git", "ls-files", "-z", *paths],
         capture_output=True,
         check=True,
     ).stdout

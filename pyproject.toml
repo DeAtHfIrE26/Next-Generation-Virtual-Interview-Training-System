@@ -11,7 +11,7 @@ interview-core = { workspace = true }
 dev = ["pytest>=8", "ruff>=0.6", "hypothesis>=6", "opencv-python-headless>=4.9"]
 
 [tool.uv.workspace]
-members = ["packages/core"]
+members = ["packages/core", "eval"]
 
 [tool.ruff]
 line-length = 110
@@ -20,7 +20,7 @@ extend-exclude = ["legacy"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "S", "RUF"]
-ignore = ["S101", "E501", "RUF001", "RUF002", "RUF003"]
+ignore = ["S101", "S603", "S607", "E501", "RUF001", "RUF002", "RUF003"]
 
 [tool.ruff.lint.per-file-ignores]
 "**/tests/**" = ["S", "B011"]

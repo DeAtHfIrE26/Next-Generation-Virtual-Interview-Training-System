@@ -1,0 +1,16 @@
+[project]
+name = "interview-eval"
+version = "0.1.0"
+description = "One-command evaluation harness for the AI Interview Coach."
+requires-python = ">=3.11"
+dependencies = ["interview-core", "numpy>=1.26", "opencv-python-headless>=4.9"]
+
+[tool.uv.sources]
+interview-core = { workspace = true }
+
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/eval_harness"]

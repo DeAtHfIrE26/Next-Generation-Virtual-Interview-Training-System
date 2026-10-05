@@ -22,3 +22,7 @@ jobs:
       - run: uv run ruff format --check .
       - run: uv run pytest
       - run: python3 -m compileall -q legacy
+      - name: Evaluation (smoke on synthetic data + any configured suites)
+        run: uv run python -m eval_harness run --suite all --report eval/out/EVAL_REPORT.md
+      - name: Regression gate against stored baseline
+        run: uv run python -m eval_harness gate
