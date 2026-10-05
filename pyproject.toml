@@ -2,12 +2,16 @@
 name = "interview-coach-workspace"
 version = "0.1.0"
 requires-python = ">=3.11"
+dependencies = ["interview-core"]
+
+[tool.uv.sources]
+interview-core = { workspace = true }
 
 [dependency-groups]
-dev = ["pytest>=8", "ruff>=0.6", "hypothesis>=6"]
+dev = ["pytest>=8", "ruff>=0.6", "hypothesis>=6", "opencv-python-headless>=4.9"]
 
 [tool.uv.workspace]
-members = ["packages/core", "services/api", "eval"]
+members = ["packages/core"]
 
 [tool.ruff]
 line-length = 110

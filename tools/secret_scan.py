@@ -28,11 +28,27 @@ RULES: dict[str, re.Pattern[str]] = {
 
 PLACEHOLDER = re.compile(r"(?i)your_|_here|placeholder|example|xxxx|changeme|dummy|redacted")
 
-SKIP_SUFFIXES = {".png", ".jpg", ".jpeg", ".gif", ".pdf", ".pt", ".caffemodel", ".onnx", ".wav", ".ico", ".woff2"}
+SKIP_SUFFIXES = {
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".gif",
+    ".pdf",
+    ".pt",
+    ".caffemodel",
+    ".onnx",
+    ".wav",
+    ".ico",
+    ".woff2",
+}
 
 
 def tracked_files(paths: list[str]) -> list[Path]:
-    out = subprocess.run(["git", "ls-files", "-z", *paths], capture_output=True, check=True).stdout
+    out = subprocess.run(  # noqa: S603
+        ["git", "ls-files", "-z", *paths],  # noqa: S607
+        capture_output=True,
+        check=True,
+    ).stdout
     return [Path(p) for p in out.decode().split("\0") if p]
 
 

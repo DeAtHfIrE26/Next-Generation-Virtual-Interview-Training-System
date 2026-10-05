@@ -1,0 +1,30 @@
+[project]
+name = "interview-core"
+version = "0.1.0"
+description = "Patented interview-coaching algorithms (application 202541122226): pure, testable, no I/O."
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26",
+    "jsonschema>=4.21",
+    "pypdf>=4.0",
+    "httpx>=0.27",
+    "cryptography>=42",
+]
+
+[project.optional-dependencies]
+# Each adapter is optional; install only the licensed backends you use.
+onnx = ["onnxruntime>=1.17"]
+speechbrain = ["speechbrain>=1.0", "torch>=2.2", "torchaudio>=2.2"]
+resemblyzer = ["resemblyzer>=0.1.4"]
+aws = ["boto3>=1.34"]
+whisper = ["faster-whisper>=1.0"]
+
+[dependency-groups]
+dev = ["opencv-python-headless>=4.9", "pytest>=8", "hypothesis>=6"]
+
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/interview_core"]
