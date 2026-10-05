@@ -120,3 +120,23 @@ class IntegrityMonitor:
 
     def summary(self) -> dict[str, int]:
         return {e.value: n for e, n in self.episodes.items() if n}
+
+    def to_state(self) -> dict:
+        """JSON-serialisable state so a monitor survives across HTTP requests."""
+        return {
+            "streak": {e.value: n for e, n in self._streak.items() if n},
+            "active": [e.value for e, a in self._active.items() if a],
+            "episodes": self.summary(),
+        }
+
+    @classmethod
+    def from_state(cls, state: dict | None, config: PolicyConfig | None = None) -> IntegrityMonitor:
+        m = cls(config)
+        state = state or {}
+        for k, n in state.get("streak", {}).items():
+            m._streak[EventType(k)] = n
+        for k in state.get("active", []):
+            m._active[EventType(k)] = True
+        for k, n in state.get("episodes", {}).items():
+            m.episodes[EventType(k)] = n
+        return m
