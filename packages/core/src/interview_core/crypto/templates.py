@@ -56,6 +56,33 @@ class LocalKeyProvider:
         return self._aead.decrypt(wrapped[:12], wrapped[12:], self.key_id.encode())
 
 
+class GcpKmsKeyProvider:
+    """KEK held in Google Cloud KMS (``TEMPLATE_KMS_KEY`` = projects/../cryptoKeys/..).
+
+    The KEK never leaves KMS; only 32-byte data keys are wrapped and unwrapped, and every
+    unwrap is an audited KMS call.
+    """
+
+    def __init__(self, key_name: str, client=None):
+        if client is None:
+            from google.cloud import kms  # optional extra: interview-core[gcp]
+
+            client = kms.KeyManagementServiceClient()
+        self._client = client
+        self.key_id = key_name
+
+    def wrap(self, data_key: bytes) -> bytes:
+        return self._client.encrypt(request={"name": self.key_id, "plaintext": data_key}).ciphertext
+
+    def unwrap(self, wrapped: bytes) -> bytes:
+        return self._client.decrypt(request={"name": self.key_id, "ciphertext": wrapped}).plaintext
+
+
+def key_provider_from_env() -> KeyProvider:
+    kms_key = os.getenv("TEMPLATE_KMS_KEY", "").strip()
+    return GcpKmsKeyProvider(kms_key) if kms_key else LocalKeyProvider.from_env()
+
+
 @dataclass(frozen=True)
 class EncryptedBlob:
     kek_id: str

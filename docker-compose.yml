@@ -1,0 +1,36 @@
+# One-command local stack:  cp .env.example .env  (set TEMPLATE_KEK_BASE64)  &&  docker compose up --build
+# Offline mode needs no vendor keys. Code execution for non-SQL languages needs a Judge0 CE
+# instance (see docs/ARCHITECTURE.md#code-execution) pointed to by JUDGE0_URL.
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: interview
+      POSTGRES_PASSWORD: interview
+      POSTGRES_DB: interview
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U interview"]
+      interval: 5s
+      retries: 10
+
+  api:
+    build: { context: ., dockerfile: services/api/Dockerfile }
+    env_file: .env
+    environment:
+      APP_ENV: development
+      DATABASE_URL: postgresql+psycopg://interview:interview@db:5432/interview
+      APP_BASE_URL: http://localhost:3000
+    depends_on:
+      db: { condition: service_healthy }
+    ports: ["8000:8000"]
+
+  web:
+    build: { context: apps/web }
+    environment:
+      API_BASE_URL: http://api:8000
+    depends_on: [api]
+    ports: ["3000:3000"]
+
+volumes:
+  pgdata:

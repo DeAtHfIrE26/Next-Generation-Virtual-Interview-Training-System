@@ -17,6 +17,8 @@ dependencies = [
 
 [project.optional-dependencies]
 postgres = ["psycopg[binary]>=3.1"]
+gcp = ["google-cloud-kms>=3.0"]
+llm = ["anthropic>=1.11"]
 observability = ["opentelemetry-sdk>=1.25", "opentelemetry-exporter-otlp>=1.25",
                  "opentelemetry-instrumentation-fastapi>=0.46b0", "sentry-sdk[fastapi]>=2.0"]
 

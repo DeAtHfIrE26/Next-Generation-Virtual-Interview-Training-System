@@ -17,7 +17,7 @@ from interview_api.security import current_user, token_hash
 from interview_api.settings import get_settings
 
 router = APIRouter(tags=["reports"])
-share_limit = limiter("shared", capacity=30, per_seconds=60)
+share_limit = limiter("shared", capacity=30, per_seconds=60, per_session=False)
 
 
 @router.get("/reports/{session_id}")

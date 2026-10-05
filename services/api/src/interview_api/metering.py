@@ -93,7 +93,10 @@ def record(db: Session, user: User, session_id: str | None, kind: str, provider_
 
 
 def record_llm_calls(db: Session, user: User, session_id: str | None, calls: list[CallRecord]) -> None:
+    from interview_api.observability import record_model_call
+
     for c in calls:
+        record_model_call(c.provider, c.task, c.raw_valid, c.used_fallback, c.latency_ms / 1000)
         db.add(
             LLMCall(
                 session_id=session_id,

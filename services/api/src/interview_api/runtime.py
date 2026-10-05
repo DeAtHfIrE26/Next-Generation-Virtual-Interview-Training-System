@@ -10,7 +10,7 @@ from functools import cache
 
 from interview_core.adapters import factory
 from interview_core.codeexec.runner import Judge0Client
-from interview_core.crypto import KeyProvider, LocalKeyProvider
+from interview_core.crypto import KeyProvider, key_provider_from_env
 from interview_core.nlp import providers
 from interview_core.speech import asr, tts
 
@@ -47,7 +47,7 @@ def judge0():
 
 @cache
 def key_provider() -> KeyProvider:
-    return LocalKeyProvider.from_env()
+    return key_provider_from_env()
 
 
 def capabilities() -> dict:

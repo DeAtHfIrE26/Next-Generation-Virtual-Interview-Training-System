@@ -7,8 +7,8 @@ import httpx
 import pytest
 from conftest import signup
 
-STRIPE_SECRET = "whsec_test_secret_value"
-RZP_SECRET = "rzp_webhook_secret_value"
+STRIPE_SECRET = "whsec_dummy_for_tests"
+RZP_SECRET = "dummy_razorpay_webhook"
 
 
 @pytest.fixture

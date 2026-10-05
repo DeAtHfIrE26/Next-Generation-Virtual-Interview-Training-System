@@ -118,3 +118,29 @@ def test_face_verifier_and_quality():
     flat = np.full((112, 112, 3), 128, np.uint8)
     rep = assess_quality(flat, 50, 640, 2)
     assert not rep.ok and len(rep.problems) == 3
+
+
+def test_gcp_kms_provider_wraps_through_kms_client():
+    from types import SimpleNamespace
+
+    from interview_core.crypto import GcpKmsKeyProvider
+
+    class FakeKms:
+        def __init__(self):
+            self.calls = []
+
+        def encrypt(self, request):
+            self.calls.append(("encrypt", request["name"]))
+            return SimpleNamespace(ciphertext=b"W" + request["plaintext"])
+
+        def decrypt(self, request):
+            self.calls.append(("decrypt", request["name"]))
+            return SimpleNamespace(plaintext=request["ciphertext"][1:])
+
+    kms = FakeKms()
+    keys = GcpKmsKeyProvider("projects/p/locations/asia-south1/keyRings/r/cryptoKeys/templates", client=kms)
+    tpl = build_template("face", "m", [np.array([1.0, 0.0])] * 5, min_samples=5)
+    blob = encrypt_template(tpl, "u", keys)
+    assert blob.kek_id.endswith("cryptoKeys/templates")
+    assert np.allclose(decrypt_template(blob, "u", "face", "m", keys).vector, tpl.vector)
+    assert [c[0] for c in kms.calls] == ["encrypt", "decrypt"]

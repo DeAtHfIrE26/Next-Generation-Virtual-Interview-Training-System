@@ -53,9 +53,40 @@ def test_login_is_rate_limited(client):
         client.post(
             "/auth/login", json={"email": "x@example.com", "password": "wrong password!!"}
         ).status_code
-        for _ in range(12)
+        for _ in range(25)
     ]
     assert 429 in codes
+
+
+def test_spoofed_forwarded_for_does_not_bypass_limits(client, monkeypatch):
+    monkeypatch.delenv("TRUSTED_PROXY_HOPS", raising=False)
+    codes = [
+        client.post(
+            "/auth/login",
+            json={"email": "x@example.com", "password": "wrong password!!"},
+            headers={"x-forwarded-for": f"10.0.0.{i}"},
+        ).status_code
+        for i in range(25)
+    ]
+    assert 429 in codes
+
+
+def test_trusted_proxy_hops_uses_client_entry():
+    from types import SimpleNamespace
+
+    from interview_api.ratelimit import client_ip
+
+    req = SimpleNamespace(
+        headers={"x-forwarded-for": "6.6.6.6, 1.2.3.4, 76.76.21.1"}, client=SimpleNamespace(host="10.0.0.1")
+    )
+    import os
+
+    os.environ["TRUSTED_PROXY_HOPS"] = "2"
+    try:
+        assert client_ip(req) == "1.2.3.4"
+    finally:
+        del os.environ["TRUSTED_PROXY_HOPS"]
+    assert client_ip(req) == "10.0.0.1"
 
 
 def test_admin_role_from_allowlist(client):

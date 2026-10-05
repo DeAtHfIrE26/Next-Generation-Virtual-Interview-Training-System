@@ -15,7 +15,7 @@ from interview_api.security import current_user, end_session, hash_password, sta
 from interview_api.settings import get_settings
 
 router = APIRouter(prefix="/auth", tags=["auth"])
-auth_limit = limiter("auth", capacity=10, per_seconds=60)
+auth_limit = limiter("auth", capacity=20, per_seconds=60, per_session=False)
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
 

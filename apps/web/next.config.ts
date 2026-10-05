@@ -18,6 +18,7 @@ const csp = [
 ].join("; ");
 
 const config: NextConfig = {
+  output: "standalone",
   reactStrictMode: true,
   poweredByHeader: false,
   async headers() {

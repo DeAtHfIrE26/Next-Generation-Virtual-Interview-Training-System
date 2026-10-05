@@ -6,6 +6,7 @@ limits in the edge (Cloud Armor / Vercel firewall) or swap the store for Redis.
 
 from __future__ import annotations
 
+import os
 import time
 from collections.abc import Callable
 from threading import Lock
@@ -34,8 +35,19 @@ class TokenBucket:
 
 
 def client_ip(request: Request) -> str:
+    """Client address for rate limiting.
+
+    ``X-Forwarded-For`` is attacker-controlled except for the entries appended by our own
+    proxies, so it is used only when ``TRUSTED_PROXY_HOPS`` says how many trusted proxies sit in
+    front of the API (for Vercel -> Cloud Run: 2). Otherwise the socket peer is used.
+    """
+    hops = int(os.getenv("TRUSTED_PROXY_HOPS", "0") or 0)
     fwd = request.headers.get("x-forwarded-for", "")
-    return fwd.split(",")[0].strip() if fwd else (request.client.host if request.client else "unknown")
+    if hops > 0 and fwd:
+        parts = [p.strip() for p in fwd.split(",") if p.strip()]
+        if parts:
+            return parts[-hops] if len(parts) >= hops else parts[0]
+    return request.client.host if request.client else "unknown"
 
 
 _BUCKETS: list[TokenBucket] = []
@@ -48,13 +60,17 @@ def reset_all() -> None:
             b._state.clear()
 
 
-def limiter(name: str, capacity: int, per_seconds: float):
+def limiter(name: str, capacity: int, per_seconds: float, *, per_session: bool = True):
+    """``per_session=False`` keys on IP only (unauthenticated routes, where a client could
+    otherwise mint fresh buckets by sending random cookies). ``RATE_LIMIT_MULTIPLIER`` scales
+    every limit (for load tests and staging)."""
+    capacity = max(1, round(capacity * float(os.getenv("RATE_LIMIT_MULTIPLIER", "1") or 1)))
     bucket = TokenBucket(capacity, per_seconds)
     _BUCKETS.append(bucket)
 
     def dep(request: Request) -> None:
-        user_cookie = request.cookies.get("ic_session", "")[:16]
-        if not bucket.allow(f"{name}:{client_ip(request)}:{user_cookie}"):
+        who = request.cookies.get("ic_session", "")[:16] if per_session else ""
+        if not bucket.allow(f"{name}:{client_ip(request)}:{who}"):
             raise HTTPException(
                 status.HTTP_429_TOO_MANY_REQUESTS,
                 "too many requests, slow down",

@@ -5,6 +5,7 @@ from __future__ import annotations
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
+from interview_api import observability
 from interview_api.db import Base, engine
 from interview_api.routers import (
     admin,
@@ -69,12 +70,7 @@ def create_app(*, create_tables: bool = True) -> FastAPI:
         app.include_router(r)
     app.include_router(billing.router)
     app.include_router(admin.router)
-    try:
-        from interview_api import observability
-
-        observability.install(app)
-    except ImportError:
-        pass
+    observability.install(app)
     if create_tables:
         Base.metadata.create_all(engine())
     return app
