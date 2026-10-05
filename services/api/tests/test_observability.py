@@ -43,3 +43,11 @@ def test_metrics_token(client, monkeypatch):
     monkeypatch.setenv("METRICS_TOKEN", "t0ken")
     assert client.get("/metrics").status_code == 401
     assert client.get("/metrics", headers={"authorization": "Bearer t0ken"}).status_code == 200
+
+
+def test_shared_secret_gate(client, monkeypatch):
+    monkeypatch.setenv("API_SHARED_SECRET", "dummy-shared")
+    assert client.get("/health").status_code == 200
+    assert client.get("/auth/me").status_code == 404
+    r = client.get("/auth/me", headers={"x-ic-internal": "dummy-shared"})
+    assert r.status_code == 401

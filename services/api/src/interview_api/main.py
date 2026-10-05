@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import hmac
+import os
+
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
@@ -23,6 +26,8 @@ from interview_api.security import CSRF_HEADER
 from interview_api.settings import get_settings
 
 CSRF_EXEMPT_PREFIXES = ("/billing/webhooks/",)
+INTERNAL_HEADER = "x-ic-internal"
+INTERNAL_EXEMPT_PATHS = ("/health",)
 
 
 def create_app(*, create_tables: bool = True) -> FastAPI:
@@ -36,6 +41,14 @@ def create_app(*, create_tables: bool = True) -> FastAPI:
 
     @app.middleware("http")
     async def guard(request: Request, call_next):
+        # Optional: when the API has its own public URL, accept only requests from the web proxy.
+        shared = os.getenv("API_SHARED_SECRET", "")
+        if (
+            shared
+            and request.url.path not in INTERNAL_EXEMPT_PATHS
+            and not hmac.compare_digest(request.headers.get(INTERNAL_HEADER, ""), shared)
+        ):
+            return JSONResponse({"detail": "not found"}, status_code=404)
         # Body size limit (Content-Length is required for bodies; chunked uploads are refused).
         if request.method in ("POST", "PUT", "PATCH"):
             length = request.headers.get("content-length")
