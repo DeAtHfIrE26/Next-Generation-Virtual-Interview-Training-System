@@ -328,3 +328,13 @@ Raising the timeout alone was not enough. `finish` scored every answer inside on
 - **E2E.** With `E2E_REQUIRE_LLM=1`, the test now also fails if any answer in the final report still shows "offline scoring".
 
 Test: `test_slow_llm_scoring_finishes_in_the_background`. The existing `test_full_session_with_signals_and_report` still gets LLM scores straight from `finish`.
+
+**Follow-up (f1a2634).** The real-LLM E2E completed the whole spoken interview with LLM questions: opening, follow-up, barge-in and close. It then failed the new check, because LLM scoring was still pending 10 minutes later. The Ollama log showed two evaluation requests running at once, one of them for about 3 minutes. Two causes:
+- **A race.** `finish` saved the pending report before registering its background job. A report request in that gap started a second job, which doubled the load on a model that serves one request at a time.
+- **Repair calls.** Each evaluation can take a second full call to repair malformed JSON.
+
+Fixes:
+- **Job registration.** The job is registered before the pending report is saved. A job lost to a restart is resumed only after `RESUME_SCORING_AFTER_S` (30 min), so two workers never both start one.
+- **Constrained decoding.** The evaluator's JSON adapter asks schema-capable providers for grammar-constrained output, so the reply always parses. If a server rejects the schema with HTTP 400, 422 or 500, the adapter retries once without it and stops sending the schema to that provider and model.
+
+Tests: `test_slow_llm_scoring_finishes_in_the_background` (now also asserts one job) and `test_json_provider.py`.

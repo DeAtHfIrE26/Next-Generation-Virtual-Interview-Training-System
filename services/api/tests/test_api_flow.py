@@ -356,14 +356,21 @@ def test_slow_llm_scoring_finishes_in_the_background(client, user, llm, monkeypa
 
     from interview_api import interview
 
-    real = interview._score
+    real, jobs = interview._score, []
+
+    def slow(*a):
+        jobs.append(1)
+        time.sleep(0.5)
+        return real(*a)
+
     monkeypatch.setattr(interview, "FINISH_EVAL_BUDGET_S", 0.05)
-    monkeypatch.setattr(interview, "_score", lambda *a: (time.sleep(0.5), real(*a))[1])
+    monkeypatch.setattr(interview, "_score", slow)
     sid = _create(client)["id"]
     _answer(client, sid)
     _answer(client, sid, text=ANSWER)
     report = client.post(f"/sessions/{sid}/finish").json()
     assert report["scoring"] == "pending"
+    client.get(f"/reports/{sid}")  # the report page loading at once must not start a second job
     assert [a["method"] for a in report["answers"]] == ["heuristic"]  # shown as "offline scoring"
     for _ in range(100):
         report = client.get(f"/reports/{sid}").json()
@@ -372,3 +379,4 @@ def test_slow_llm_scoring_finishes_in_the_background(client, user, llm, monkeypa
         time.sleep(0.05)
     assert report["scoring"] == "complete"
     assert [a["method"] for a in report["answers"]] == ["llm"]
+    assert len(jobs) == 1

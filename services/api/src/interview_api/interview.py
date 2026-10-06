@@ -11,6 +11,7 @@ from __future__ import annotations
 import logging
 import os
 import threading
+import time
 from concurrent.futures import Future, ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FutureTimeout
 from datetime import UTC, datetime
@@ -287,6 +288,7 @@ def advance(
 # finishes well inside it; a slow (CPU-hosted) model keeps scoring in the background and the report
 # is rebuilt when it is done (D21).
 FINISH_EVAL_BUDGET_S = float(os.getenv("FINISH_EVAL_BUDGET_S", "20"))
+RESUME_SCORING_AFTER_S = float(os.getenv("RESUME_SCORING_AFTER_S", "1800"))
 _eval_pool = ThreadPoolExecutor(max_workers=4, thread_name_prefix="evaluate")
 _scoring: dict[str, Future] = {}
 _scoring_lock = threading.Lock()
@@ -391,6 +393,12 @@ def finish(db: Session, user: User, s: InterviewSession) -> dict:
     _offline(st)
     s.state = st.to_dict()
     s.report = _report(s, st, "pending" if pending else "complete")
+    if pending:
+        # Register the job before the pending report becomes visible, so a report request in
+        # between does not start a second one (resume_scoring checks this registry).
+        s.report["scoring_started_at"] = time.time()
+        with _scoring_lock:
+            _scoring[s.id] = fut
     if s.status == "active":
         s.status = "finished"
     s.finished_at = datetime.now(UTC)
@@ -401,8 +409,12 @@ def finish(db: Session, user: User, s: InterviewSession) -> dict:
 
 
 def resume_scoring(db: Session, s: InterviewSession) -> None:
-    """Restart background scoring that a process restart interrupted (the report still says pending)."""
-    if (s.report or {}).get("scoring") != "pending":
+    """Restart background scoring that a process restart interrupted (the report still says pending
+    long after it started; another worker may still be running it before then)."""
+    report = s.report or {}
+    if report.get("scoring") != "pending":
+        return
+    if time.time() - float(report.get("scoring_started_at") or 0) < RESUME_SCORING_AFTER_S:
         return
     with _scoring_lock:
         if s.id in _scoring:
@@ -414,4 +426,6 @@ def resume_scoring(db: Session, s: InterviewSession) -> None:
         s.report = {**s.report, "scoring": "complete"}
         db.commit()
         return
+    s.report = {**report, "scoring_started_at": time.time()}
+    db.commit()
     _finish_later(s.id, user.id, _eval_pool.submit(_score, chain, st, _to_score(st)))
