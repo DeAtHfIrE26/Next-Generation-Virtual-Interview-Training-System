@@ -145,7 +145,7 @@ Several of these pass their unit tests only because they run under offline defau
 
 ### Tests on this commit
 
-- Python: 158 passed (core and API, including the live speech-model tests).
+- Python: 180 passed (core, API and eval, including the live speech-model tests; 96 s on 3e0f5b1).
 - Web unit: 13 passed.
 - Spoken E2E: 3 per browser on 6 browser projects in CI, plus the compose run.
 - Real-LLM E2E: *pending: final CI run*.
