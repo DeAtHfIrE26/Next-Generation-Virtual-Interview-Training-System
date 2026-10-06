@@ -200,6 +200,14 @@ Two changes to the repair step after a repeat:
 
 Test: `test_repeat_repair_lists_asked_questions_and_pins_the_named_competency`.
 
+**Follow-up (agent-evidence run 7, case 9).** A follow-up quoted the latest answer, but its question was about an answer from two turns earlier (it asked about the "task allocation system" and "mentorship program", while the latest answer was about productivity and absenteeism). The agent's validator accepted it; the evidence check rejected it.
+
+Changes:
+- **Same rule in the agent and the evidence check.** Both now use `refers_to`: a `follow_up` or `challenge` must share a content word with what the candidate just said or with the anchor quote. Words are compared on a 4-letter stem, so "failures" matches "failed".
+- **Going back to an earlier answer** has to be the `revisit` action, and the repair message says so.
+
+Test: `test_follow_up_must_be_about_the_answer_it_quotes`.
+
 ## D17. Playback end follows the audio actually played; the avatar sheds load on a starved device (2026-10-06)
 
 **Measured.** Local E2E pinned to 2 cores (`taskset -c 0,1`, about the size of a CI runner):

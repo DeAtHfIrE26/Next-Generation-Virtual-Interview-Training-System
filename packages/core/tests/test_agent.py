@@ -472,3 +472,33 @@ def test_repeat_repair_lists_asked_questions_and_pins_the_named_competency():
     assert "Tell me about an API you designed recently?" in h  # the model sees what it already asked
     s = repair_turn_schema(["repeats an earlier question: 'x'"], ["c1", "c2", "c3"], None, "a", "c1", "c3")
     assert s["properties"]["competency"]["enum"] == ["c3"]  # grammar agrees with the hint
+
+
+def test_follow_up_must_be_about_the_answer_it_quotes():
+    """Found by agent-evidence case 9: a follow-up quoted the latest answer but asked about one from
+    two turns earlier. It is now rejected (or must be marked revisit)."""
+    llm = Scripted(
+        "primary",
+        [
+            json.dumps(BLUEPRINT),
+            reply("open"),
+            reply(
+                "follow_up",
+                say="Could you walk me through how you rolled out the mentorship program?",
+                quote="the cache was stale for hours",
+                last={"score": 3, "strengths": "", "gaps": "", "vague": False},
+            ),
+            reply(
+                "follow_up",
+                say="You said the cache was stale for hours. How did you notice it?",
+                quote="the cache was stale for hours",
+                last={"score": 3, "strengths": "", "gaps": "", "vague": False},
+            ),
+        ],
+    )
+    ag = InterviewerAgent([llm])
+    st = state()
+    ag.next_turn(st, now=0.5)
+    t = ag.next_turn(st, Answer("Honestly the cache was stale for hours.", seconds=10), now=30)
+    assert t.say.startswith("You said the cache was stale") and not t.emergency
+    assert "revisit" in llm.calls[-1]["messages"][-1]["content"]

@@ -28,10 +28,9 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 
-from interview_core.agent.interviewer import Answer, InterviewerAgent, is_repeat, quote_matches
+from interview_core.agent.interviewer import Answer, InterviewerAgent, is_repeat, quote_matches, refers_to
 from interview_core.agent.llm import ChatLLM, chain_from_env
 from interview_core.agent.state import AgentState, InterviewParams
-from interview_core.nlp.heuristics import content_words
 
 ROOT = Path(__file__).resolve().parents[1]
 BANK = json.loads((ROOT / "packages/core/tests/fixtures/legacy_question_bank.json").read_text())
@@ -403,9 +402,7 @@ def check(result: dict) -> dict:
     follow_ok = []
     for t in follow:
         prev = st.turns[t.index - 1].answer or ""
-        refs = quote_matches(t.anchor_quote, prev) and bool(
-            content_words(t.say) & (content_words(prev) | content_words(t.anchor_quote))
-        )
+        refs = quote_matches(t.anchor_quote, prev) and refers_to(t.say, f"{prev} {t.anchor_quote}")
         follow_ok.append(refs)
     diff_ok, transitions = True, []
     for a, b in zip(st.turns, st.turns[1:], strict=False):

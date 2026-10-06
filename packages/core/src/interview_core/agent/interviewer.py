@@ -116,6 +116,16 @@ def ground_quote(quote: str, answer: str) -> str | None:
     return None
 
 
+def refers_to(question: str, text: str) -> bool:
+    """True when ``question`` shares a content word with ``text``, compared on a 4-letter stem so
+    word forms match ("failures" / "failed", "allocation" / "allocated")."""
+
+    def stems(t: str) -> set[str]:
+        return {w[:4] for w in content_words(t)}
+
+    return bool(stems(question) & stems(text))
+
+
 def ground_by_topic(quote: str, say: str, answer: str, min_shared: int = 3) -> str | None:
     """Second grounding pass for a paraphrased quote: the answer clause sharing the most content
     words with the model's quote and question together. Accepted only with ``min_shared`` distinct
@@ -224,6 +234,11 @@ def repair_turn_hint(errors: list[str], st: AgentState, last_comp: str | None) -
                 + " | ".join(a[:140] for a in asked)
                 + "."
             )
+    if "must ask about what the candidate just said" in text:
+        hints.append(
+            "A follow_up or challenge asks about the anchor_quote itself, using its key words. "
+            "If you want to go back to something from an earlier answer, set action to revisit."
+        )
     if "must ask the candidate a question" in text:
         hints.append("End 'say' with exactly one direct question to the candidate, ending with '?'.")
     return " ".join(hints) + (" " if hints else "")
@@ -610,6 +625,12 @@ class InterviewerAgent:
                     else:
                         plan["anchor_quote"] = real
                         plan["_grounded_from"] = quote
+                anchor = str(plan.get("anchor_quote") or "")
+                if quote and say and not refers_to(say, f"{last_answer or ''} {anchor}"):
+                    errs.append(
+                        f"{action} must ask about what the candidate just said (the anchor_quote); "
+                        "to return to an earlier answer use action revisit"
+                    )
             if len(say) > MAX_SAY_CHARS:
                 errs.append(f"say must be under {MAX_SAY_CHARS} characters")
             if re.search(r"(^|\s)([-*•]|\d+\.)\s", say) or "**" in say:
