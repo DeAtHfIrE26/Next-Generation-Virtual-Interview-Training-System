@@ -19,7 +19,7 @@ import json
 import re
 from pathlib import Path
 
-TS = re.compile(r"^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d+Z ?")
+TS = re.compile(r"^\ufeff?\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d+Z ?")  # GitHub starts log chunks with a BOM
 SAFE = re.compile(r"^[A-Za-z0-9._-]+$")
 
 
