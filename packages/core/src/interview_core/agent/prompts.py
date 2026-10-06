@@ -18,6 +18,12 @@ FAIRNESS = (
     "characteristics, and never comment on accent, appearance, emotions or personality traits."
 )
 
+
+def min_competencies(duration_minutes: int) -> int:
+    """Longer interviews need more ground to cover, or the questions start to repeat."""
+    return 3 if duration_minutes <= 20 else 4 if duration_minutes <= 35 else 5
+
+
 PLANNER_SYSTEM = f"""You are a senior interviewer preparing a realistic mock interview. Before the interview starts you
 write a blueprint: the competencies this interview must assess and how the time will be spent.
 
@@ -95,7 +101,7 @@ def session_brief(p: InterviewParams) -> str:
         f"Round: {p.round}",
         f"Requested difficulty: {p.difficulty}",
         f"Language: {LANGUAGES[p.language]}",
-        f"Duration: {p.duration_minutes} minutes",
+        f"Duration: {p.duration_minutes} minutes (plan at least {min_competencies(p.duration_minutes)} competencies)",
         f"Skills to probe: {', '.join(p.skills) if p.skills else '(none specified)'}",
         "Job description:\n" + wrap_untrusted(p.job_description or "(not provided)"),
         "Candidate resume (contact details removed):\n"

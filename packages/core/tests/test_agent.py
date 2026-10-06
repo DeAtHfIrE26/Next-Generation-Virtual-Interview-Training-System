@@ -502,3 +502,52 @@ def test_follow_up_must_be_about_the_answer_it_quotes():
     t = ag.next_turn(st, Answer("Honestly the cache was stale for hours.", seconds=10), now=30)
     assert t.say.startswith("You said the cache was stale") and not t.emergency
     assert "revisit" in llm.calls[-1]["messages"][-1]["content"]
+
+
+def test_off_topic_follow_up_repair_lets_the_model_move_on():
+    """Agent-evidence case 19: two repairs in a row kept 'follow_up' about an earlier answer. The
+    repair grammar now offers revisit/new_topic instead."""
+    errs = [
+        "follow_up must ask about what the candidate just said (the anchor_quote); to return to an earlier answer use action revisit"
+    ]
+    s = repair_turn_schema(errs, ["c1", "c2"], None, "an answer", "c1")
+    assert s["properties"]["action"]["enum"] == ["revisit", "new_topic"]
+
+
+def test_backup_questions_never_repeat_each_other():
+    """Agent-evidence case 4: two backup questions on the same competency were word-for-word equal."""
+    from interview_core.agent.interviewer import emergency_turn, is_repeat
+
+    st = state()
+    st.blueprint = InterviewerAgent([Scripted("p", [json.dumps(BLUEPRINT)])]).plan(st)
+    for i in range(4):
+        t = emergency_turn(st, None, now=float(i))
+        assert not any(is_repeat(t.say, prev.say) for prev in st.turns)
+        st.turns.append(t)
+
+
+def test_long_interviews_plan_enough_competencies():
+    """Agent-evidence case 4: a 25-minute interview planned 3 competencies and ran out of fresh
+    questions. Longer interviews must plan more."""
+    four = {
+        **BLUEPRINT,
+        "competencies": [
+            *BLUEPRINT["competencies"],
+            {"id": "c4", "name": "Testing", "why": "JD", "weight": 0.1, "minutes": 4, "signals": []},
+        ],
+    }
+    llm = Scripted("p", [json.dumps(BLUEPRINT), json.dumps(four)])
+    st = state(duration_minutes=25)
+    bp = InterviewerAgent([llm]).plan(st)
+    assert len(bp.competencies) == 4 and not bp.emergency
+    assert "at least 4 competencies" in llm.calls[-1]["messages"][-1]["content"]
+
+
+def test_over_long_blueprint_minutes_are_scaled_without_a_repair_call():
+    """Real-LLM E2E: a 10-minute interview planned 16 minutes, and the repair round-trip cost minutes
+    on a CPU model. Minutes are a budget, so they are scaled to fit instead."""
+    llm = Scripted("p", [json.dumps(BLUEPRINT)])  # 6 + 5 + 5 = 16 minutes
+    bp = InterviewerAgent([llm]).plan(state(duration_minutes=10))
+    assert len(llm.calls) == 1 and not bp.emergency
+    assert [c.minutes for c in bp.competencies] == [4.0, 3.0, 3.0]
+    assert sum(c.minutes for c in bp.competencies) <= 10

@@ -206,6 +206,9 @@ def repair_turn_schema(
         clauses = answer_clauses(last_answer)
         if clauses:
             props["anchor_quote"] = {"type": "string", "enum": ["", *clauses]}
+    if "must ask about what the candidate just said" in text and not forced and "repeats" not in text:
+        # the model wants to talk about something else: let it, as an explicit revisit or new topic
+        props["action"] = {"type": "string", "enum": ["revisit", "new_topic"]}
     if "repeats an earlier question" in text and not forced:
         props["action"] = {"type": "string", "enum": ["new_topic", "revisit"]}
         others = [target] if target in ids else [i for i in ids if i != last_comp]
@@ -227,6 +230,8 @@ def repair_turn_hint(errors: list[str], st: AgentState, last_comp: str | None) -
             + (f": {target.why}" if target.why else "")
             + ") and ask one new, specific question about it."
         )
+        if target.signals:
+            hints.append("Angles not yet explored there: " + "; ".join(target.signals[:4]) + ".")
         asked = [t.say for t in st.turns[-8:] if t.say]
         if asked:
             hints.append(
@@ -500,7 +505,26 @@ class InterviewerAgent:
                         [str(s)[:160] for s in c.get("signals", [])][:5],
                     )
                 )
+            need = prompts.min_competencies(p.duration_minutes)
+            if len(parsed) < need:
+                errs.append(
+                    f"a {p.duration_minutes}-minute interview needs at least {need} competencies "
+                    "so the questions stay varied"
+                )
             total = sum(c.minutes for c in parsed)
+            if total > p.duration_minutes + 1 and parsed:
+                # Over-long minutes are a budgeting slip, not a bad plan: scale them to fit instead of
+                # spending a whole LLM round-trip on a repair (D18).
+                scale = p.duration_minutes / total
+                for c in parsed:
+                    c.minutes = max(1.0, round(c.minutes * scale * 2) / 2)
+                log.info(
+                    "blueprint minutes scaled to fit duration=%s from=%g to=%g",
+                    p.duration_minutes,
+                    total,
+                    sum(c.minutes for c in parsed),
+                )
+                total = sum(c.minutes for c in parsed)
             if total > p.duration_minutes + 1:
                 errs.append(
                     f"minutes add up to {total:g}, more than the {p.duration_minutes}-minute duration"
@@ -803,6 +827,14 @@ def emergency_turn(st: AgentState, forced: str | None, now: float) -> Turn:
     else:
         cov = st.coverage()
         target = min(bp.competencies, key=lambda c: (cov[c.id]["turns"], -c.weight))
-        say = f"Let's talk about {target.name.lower()}. Can you walk me through a specific situation where this mattered, what you did yourself, and what the outcome was?"
+        topic = target.name.lower()
+        templates = [
+            f"Let's talk about {topic}. Can you walk me through a specific situation where this mattered, what you did yourself, and what the outcome was?",
+            f"I'd like to hear about {topic}. What is the hardest problem you have faced in this area, and how did you approach it?",
+            f"Turning to {topic}: if you started that work again today, what would you do differently, and why?",
+            f"On {topic}, how do you judge whether your work has gone well? Give me a recent example.",
+        ]
+        asked = [t.say for t in st.turns]
+        say = next((q for q in templates if not any(is_repeat(q, a) for a in asked)), templates[-1])
         action, comp = "new_topic", target.id
     return Turn(idx, action, comp, st.difficulty, say, provider="emergency", emergency=True, asked_at=now)

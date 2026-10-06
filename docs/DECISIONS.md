@@ -208,6 +208,19 @@ Changes:
 
 Test: `test_follow_up_must_be_about_the_answer_it_quotes`.
 
+**Follow-up (agent-evidence run 8, cases 19 and 4).**
+
+- **Case 19 (vague candidate).** One turn was rejected twice in a row as a follow-up that didn't ask about the latest answer. Its repair grammar now offers only `revisit` or `new_topic`, so the model can move on explicitly.
+- **Case 4 (25 minutes, 3 planned competencies, 17 questions).** The model ran out of fresh angles: 9 rejected repeats and 2 backup questions. The two backup questions were word-for-word identical. Three changes:
+  1. **Minimum competencies by length.** Interviews of 20 minutes or less need at least 3 competencies, up to 35 minutes at least 4, longer ones at least 5. The planner prompt states the minimum and validation enforces it.
+  2. **Unexplored signals in the repeat repair.** After a repeat, the repair message lists the target competency's planned signals that haven't been probed yet.
+  3. **Backup questions rotate.** They rotate through four phrasings, and none repeats an earlier question.
+
+Tests:
+- `test_off_topic_follow_up_repair_lets_the_model_move_on`
+- `test_backup_questions_never_repeat_each_other`
+- `test_long_interviews_plan_enough_competencies`
+
 ## D17. Playback end follows the audio actually played; the avatar sheds load on a starved device (2026-10-06)
 
 **Measured.** Local E2E pinned to 2 cores (`taskset -c 0,1`, about the size of a CI runner):
@@ -242,6 +255,15 @@ Test: `test_follow_up_must_be_about_the_answer_it_quotes`.
 
 **After:** the full spoken-interview E2E passes on the same 2-core pin (barge-in, lip-sync, report), where it previously failed at barge-in and then at lip-sync.
 
+**Follow-up (77719ad, mobile Safari).** Twice the report page never rendered after "End and see report": the URL changed, but the page stopped responding, and even the test's failure dump hung. The browser console showed MediaPipe's GPU delegate failing to create a WebGL2 context, falling back to WebGL 1, and throwing `GLctx.activeTexture` errors from the vision loop.
+
+On-device vision now:
+- uses the GPU delegate only when a hardware WebGL2 context exists, and the CPU delegate otherwise (same models, same outputs);
+- catches per-frame errors and stops after 10 in a row instead of throwing into the page;
+- is closed when its effect is cleaned up, not only when the room unmounts.
+
+Local Chromium E2E passes, including the report step. Mobile Safari is only available in CI; its result there is the evidence.
+
 ## D18. The interview plan is prepared while the candidate checks their devices (2026-10-06)
 
 **Measured.** In the real-LLM E2E on 08f0fc6 (Qwen2.5-7B on a CI CPU), the first question had not arrived after 300 s.
@@ -256,3 +278,7 @@ The plan (the blueprint) was only generated when the room's first turn started. 
 - **First-question timeout.** It is 10 minutes when a CPU-hosted model is required. Hosted APIs answer in seconds.
 
 Test: `test_plan_is_prepared_while_the_candidate_checks_devices`. It checks that the blueprint exists before the first turn, and that the first turn then costs exactly one LLM call.
+
+**Follow-up (77719ad).** The real-LLM E2E still had no first question after 10 minutes. The Ollama log showed prompt processing at 6.3 tokens/s on the CI CPU. The blueprint for the 10-minute test interview budgeted more minutes than the interview has. Validation rejected it, so planning cost a second full LLM call.
+
+Minutes are a budget, not a reason to reject the plan. Over-long minutes are now scaled to fit the duration (rounded to 0.5, at least 1 minute each), and the correction is logged. Test: `test_over_long_blueprint_minutes_are_scaled_without_a_repair_call`.
