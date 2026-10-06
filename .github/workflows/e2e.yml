@@ -136,23 +136,8 @@ jobs:
           find test-results -name '*.webm' -exec cp {} e2e-evidence/ \;
           find test-results -name '*.png' -exec cp {} e2e-evidence/ \;
           tail -n 200 /tmp/ollama.log > e2e-evidence/ollama-tail.log || true
+          tail -n 30 /tmp/ollama.log || true
           ls -la e2e-evidence
-      # The same evidence, small enough to print: environments that cannot download artifacts
-      # rebuild it from the job log with eval/extract_job_log_files.py (base64 blocks).
-      - name: Print evidence into the log
-        if: always()
-        run: |
-          command -v ffmpeg >/dev/null || sudo apt-get install -y --no-install-recommends ffmpeg >/dev/null
-          cd e2e-evidence
-          for f in *.webm; do
-            [ -f "$f" ] || continue
-            ffmpeg -loglevel error -y -i "$f" -vf "scale=720:-2,fps=8" -c:v libvpx-vp9 -b:v 250k -an "../e2e-full-${f}"
-          done
-          cd ..
-          for f in e2e-full-*.webm e2e-evidence/*.png; do
-            [ -f "$f" ] || continue
-            echo "BEGIN_FILE $(basename "$f").b64"; base64 -w 160 "$f"; echo "END_FILE $(basename "$f").b64"
-          done
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -160,3 +145,26 @@ jobs:
           path: |
             apps/web/e2e-evidence/
             apps/web/playwright-report/
+
+  # The full job's evidence, small enough to print, in its own job log (so the full job's log keeps
+  # the test output at its end). Environments that cannot download artifacts rebuild the evidence
+  # from this log with eval/extract_job_log_files.py (base64 blocks).
+  evidence-log:
+    needs: full
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: e2e-evidence
+          path: ev
+      - name: Print evidence into the log
+        run: |
+          command -v ffmpeg >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends ffmpeg >/dev/null)
+          find ev -name '*.webm' | while read -r f; do
+            ffmpeg -loglevel error -y -i "$f" -vf "scale=720:-2,fps=8" -c:v libvpx-vp9 -b:v 250k -an "e2e-full-video.webm"
+          done
+          for f in e2e-full-video.webm $(find ev/e2e-evidence -name '*.png' | sort); do
+            [ -f "$f" ] || continue
+            echo "BEGIN_FILE $(basename "$f").b64"; base64 -w 160 "$f"; echo "END_FILE $(basename "$f").b64"
+          done
