@@ -1,0 +1,57 @@
+name: Agent evidence (real LLM mock interviews)
+
+# Runs the production interviewer agent against a real open-weights LLM (Ollama, Qwen2.5-7B-Instruct,
+# Apache-2.0) with a simulated candidate, and checks every transcript. Transcripts are printed to
+# the log (between BEGIN_FILE/END_FILE markers) and uploaded as an artifact.
+on:
+  workflow_dispatch:
+  push:
+    branches: ["claude/**"]
+    paths:
+      - "packages/core/src/interview_core/agent/**"
+      - "eval/agent_mock_interviews.py"
+      - ".github/workflows/agent-evidence.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  mock-interviews:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3]
+    env:
+      LLM_PROVIDER: ollama
+      OPENAI_COMPAT_BASE_URL: http://127.0.0.1:11434/v1
+      OPENAI_COMPAT_MODEL: qwen2.5:7b-instruct
+      OLLAMA_CONTEXT_LENGTH: "16384"
+      OLLAMA_NUM_PARALLEL: "2"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.11"
+      - run: uv sync --all-packages
+      - name: Install and start Ollama
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          (OLLAMA_CONTEXT_LENGTH=16384 OLLAMA_NUM_PARALLEL=2 ollama serve > /tmp/ollama.log 2>&1 &)
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:11434/api/version && break; sleep 2; done
+          ollama pull qwen2.5:7b-instruct
+      - name: Run mock interviews (shard ${{ matrix.shard }}/4)
+        run: uv run python eval/agent_mock_interviews.py --out out --shard ${{ matrix.shard }}/4 || echo "CHECKS_FAILED=1" >> "$GITHUB_ENV"
+      - name: Print transcripts
+        if: always()
+        run: |
+          for f in out/*.md out/*.json; do echo "BEGIN_FILE $(basename $f)"; cat "$f"; echo; echo "END_FILE $(basename $f)"; done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mock-interviews-shard-${{ matrix.shard }}
+          path: out/
+      - name: Fail if any transcript failed its checks
+        if: env.CHECKS_FAILED == '1'
+        run: exit 1
