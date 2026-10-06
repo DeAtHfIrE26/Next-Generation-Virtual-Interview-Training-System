@@ -13,8 +13,8 @@ One card per component that makes a judgement about a person or their answer. Ev
 | [lipsync-avsync.md](lipsync-avsync.md) | E4 | None (signal processing) |
 | [gaze.md](gaze.md) | E5 | MediaPipe Face Landmarker, Apache-2.0 |
 | [device-detection.md](device-detection.md) | E7 | MediaPipe EfficientDet-Lite0, Apache-2.0 |
-| [interviewer-llm.md](interviewer-llm.md) | E6 | Provider terms |
+| [interviewer-llm.md](interviewer-llm.md) | E6 | Provider terms; Qwen2.5-7B-Instruct Apache-2.0 |
 | [answer-evaluator.md](answer-evaluator.md) | E6 / E9 | Provider terms |
-| [asr.md](asr.md) | Speech | Provider terms / Whisper MIT |
-| [avatar-tts.md](avatar-tts.md) | Not a patent element | Original artwork; TTS provider terms |
+| [asr.md](asr.md) | Speech | sherpa-onnx Apache-2.0; Parakeet CC-BY-4.0 (attribution); Nemotron streaming: licence to confirm; Silero VAD MIT; Deepgram terms |
+| [avatar-tts.md](avatar-tts.md) | Not a patent element | TalkingHead/HeadAudio/three.js MIT; MPFB character CC0; Kokoro Apache-2.0 with espeak-ng data (GPL-3.0, needs legal review) |
 | [legacy-prototype.md](legacy-prototype.md) | All (reference) | Contains AGPL and non-commercial weights: never ship |

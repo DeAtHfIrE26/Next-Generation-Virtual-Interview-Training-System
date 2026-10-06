@@ -82,9 +82,14 @@ Today the voice is Kokoro, running locally and free. Lip-sync comes from the act
    - `AWS_REGION` = `ap-south-1`
    - `TTS_PROVIDER` = `polly`
 
-## 5. Avatar — decision pending research
+## 5. Avatar — DECIDED (nothing needed now; optional upgrades below)
 
-I am benchmarking 3D avatar sources and photoreal streaming-avatar services, checking each one's licence and availability. The recommendation and any purchase or key it needs will be added here, with exact steps. Until then, the 3D avatar ships with a commercially licensed default.
+**Shipped:** a real-time 3D interviewer built on TalkingHead and three.js (both MIT). It uses an MPFB character (CC0, so free for commercial use), and its lip-sync is driven by the TTS audio actually playing. Details are in DECISIONS D4 and D6–D9. It works with no key or purchase.
+
+Optional upgrades, each needing you:
+
+- **Male personas.** Only one licensed character exists today, so all four personas are female-presenting. A second character can be made for free with Blender and the MPFB add-on (CC0). Alternatively, if you want a commissioned or brand-specific avatar, approve the spend and send the files (GLB with ARKit blendshapes).
+- **Photoreal streaming avatar** (Anam, Tavus, HeyGen LiveAvatar or Simli). All are paid. If you want one, create an account and add its API key as an environment variable. I will wire it behind the existing `NEURAL_AVATAR_URL` switch, with the 3D avatar kept as the fallback.
 
 ## 6. Real voice recordings for testing — UPGRADE (accuracy evidence)
 
@@ -95,7 +100,21 @@ I can test with synthesized speech, but real people's voices are the honest test
 3. Format: WAV, 16 kHz, mono. Name each file `speakerID_answerN.wav`. Add a `.txt` file next to each one with the exact words spoken.
 4. Upload them to a private Google Drive folder and tell me when they are there. Do not commit them to the public repo.
 
-## 7. Carried over from the last pass (still open)
+## 7. Hosting for the realtime API — BLOCKING for a live public demo of the new voice interview
+
+The new spoken interview needs a long-lived WebSocket server holding about 1.3 GB of speech models. That does not fit Vercel serverless functions. **The two Vercel previews still run the old code**, and I won't redeploy them without your approval each time.
+
+- **Option A (recommended):** Google Cloud Run, using the API image from `services/api/Dockerfile`, with at least 2 vCPU and 4 GB memory, min-instances 1, and session affinity for WebSockets. Needs a GCP project with billing enabled. Tell me the project ID once it exists.
+- **Option B:** any VM with Docker (for example a Hetzner or AWS instance with at least 4 vCPU and 8 GB). Run `docker compose up -d` there and point a domain at it.
+
+After either: set `PUBLIC_API_URL` on the web app to the API's public https URL, and set the same `REALTIME_SECRET` on every API instance.
+
+## 8. Licence review of two speech components — before distributing images
+
+- **espeak-ng (GPL-3.0):** its phoneme data is bundled with the Kokoro voice used for local TTS. Ask your lawyer whether distributing Docker images that contain it is acceptable for your licensing plans. Alternatively, set `TTS_PROVIDER=polly` or `elevenlabs` in production, which removes it from the request path.
+- **NVIDIA Nemotron streaming STT checkpoint:** confirm its model licence permits your commercial use. The final-pass model, Parakeet TDT 0.6B v2, is CC-BY-4.0, which needs an attribution line in the product's notices. All third-party licences are listed in `docs/legal/COMPLIANCE_NOTES.md`.
+
+## 9. Carried over from the last pass (still open)
 
 - **Rotate the leaked keys now.** That means the old Mistral key and the RapidAPI/Judge0 key; both are in the repo's git history.
 - **Rotate the preview `API_SHARED_SECRET`** on both Vercel projects. It appeared in an earlier session log.
