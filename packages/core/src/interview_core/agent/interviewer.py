@@ -168,12 +168,27 @@ def answer_clauses(answer: str, limit: int = 16) -> list[str]:
     return out[:limit]
 
 
+def repeat_target(st: AgentState, last_comp: str | None):
+    """The competency to move to after a repeated question: the least covered other one."""
+    if not st.blueprint:
+        return None
+    cov = st.coverage()
+    others = [c for c in st.blueprint.competencies if c.id != last_comp] or st.blueprint.competencies
+    return min(others, key=lambda c: (cov.get(c.id, {}).get("turns", 0), -c.weight))
+
+
 def repair_turn_schema(
-    errors: list[str], ids: list[str], forced: str | None, last_answer: str | None, last_comp: str | None
+    errors: list[str],
+    ids: list[str],
+    forced: str | None,
+    last_answer: str | None,
+    last_comp: str | None,
+    target: str | None = None,
 ) -> dict[str, Any]:
     """A narrower grammar for the repair attempt, derived from what failed validation:
     - anchor quote not verbatim: the quote must be one of the answer's own clauses;
-    - repeated question: move on (new_topic/revisit) to a different competency."""
+    - repeated question: move on (new_topic/revisit) to the competency the repair hint names
+      (``target``), or any other competency when there is none."""
     s = turn_schema(ids, forced, last_answer is not None)
     props = s["properties"]
     text = " ".join(errors)
@@ -183,26 +198,32 @@ def repair_turn_schema(
             props["anchor_quote"] = {"type": "string", "enum": ["", *clauses]}
     if "repeats an earlier question" in text and not forced:
         props["action"] = {"type": "string", "enum": ["new_topic", "revisit"]}
-        others = [i for i in ids if i != last_comp]
+        others = [target] if target in ids else [i for i in ids if i != last_comp]
         if others:
             props["competency"] = {"type": "string", "enum": others}
     return s
 
 
 def repair_turn_hint(errors: list[str], st: AgentState, last_comp: str | None) -> str:
-    """Concrete instructions for the repair attempt: what to ask instead of a repeat, how to fix a
+    """Concrete instructions for the repair attempt: what to ask instead of a repeat (and the
+    questions already asked, which a small model loses track of in a long history), how to fix a
     reply that asks nothing."""
     text = " ".join(errors)
     hints: list[str] = []
-    if "repeats an earlier question" in text and st.blueprint:
-        cov = st.coverage()
-        others = [c for c in st.blueprint.competencies if c.id != last_comp] or st.blueprint.competencies
-        target = min(others, key=lambda c: (cov.get(c.id, {}).get("turns", 0), -c.weight))
+    target = repeat_target(st, last_comp) if "repeats an earlier question" in text else None
+    if target is not None:
         hints.append(
             f"Do not ask for the same detail again. Move on to competency {target.id} ({target.name}"
             + (f": {target.why}" if target.why else "")
             + ") and ask one new, specific question about it."
         )
+        asked = [t.say for t in st.turns[-8:] if t.say]
+        if asked:
+            hints.append(
+                "Questions already asked (do not reuse their wording or topic): "
+                + " | ".join(a[:140] for a in asked)
+                + "."
+            )
     if "must ask the candidate a question" in text:
         hints.append("End 'say' with exactly one direct question to the candidate, ending with '?'.")
     return " ".join(hints) + (" " if hints else "")
@@ -611,7 +632,12 @@ class InterviewerAgent:
             schema=turn_schema(sorted(ids), forced, last_answer is not None),
             json_note=JSON_FORMAT_NOTE,
             repair_schema=lambda errs: repair_turn_schema(
-                errs, sorted(ids), forced, last_answer, last.competency if last else None
+                errs,
+                sorted(ids),
+                forced,
+                last_answer,
+                last.competency if last else None,
+                getattr(repeat_target(st, last.competency if last else None), "id", None),
             ),
             repair_hint=lambda errs: repair_turn_hint(errs, st, last.competency if last else None),
         )

@@ -192,6 +192,14 @@ Tests:
 - `test_transient_error_during_a_repair_still_gets_its_retry`
 - `test_llm_timeout_defaults`
 
+**Follow-up (agent-evidence run 6, case 5).** The simulated candidate in case 5 gives only vague answers. The model re-asked near-identical questions 6 times, and one turn ran out of repairs.
+
+Two changes to the repair step after a repeat:
+- It now lists the questions already asked; a small model loses track of them in a long history.
+- Its grammar is pinned to the single competency the hint names (it was "any other competency"), so the hint and the grammar agree.
+
+Test: `test_repeat_repair_lists_asked_questions_and_pins_the_named_competency`.
+
 ## D17. Playback end follows the audio actually played; the avatar sheds load on a starved device (2026-10-06)
 
 **Measured.** Local E2E pinned to 2 cores (`taskset -c 0,1`, about the size of a CI runner):

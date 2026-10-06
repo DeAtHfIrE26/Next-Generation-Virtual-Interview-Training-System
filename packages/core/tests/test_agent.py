@@ -460,3 +460,15 @@ def test_llm_timeout_defaults(monkeypatch):
     assert llm_timeout_s([Scripted("ollama", [])]) == 240.0
     monkeypatch.setenv("LLM_TIMEOUT_S", "90")
     assert llm_timeout_s([Scripted("ollama", [])]) == 90.0
+
+
+def test_repeat_repair_lists_asked_questions_and_pins_the_named_competency():
+    from interview_core.agent.state import Turn
+
+    st = state()
+    st.blueprint = InterviewerAgent([Scripted("p", [json.dumps(BLUEPRINT)])]).plan(st)
+    st.turns.append(Turn(0, "open", "c1", 3, "Tell me about an API you designed recently?"))
+    h = repair_turn_hint(["repeats an earlier question: 'x'"], st, "c1")
+    assert "Tell me about an API you designed recently?" in h  # the model sees what it already asked
+    s = repair_turn_schema(["repeats an earlier question: 'x'"], ["c1", "c2", "c3"], None, "a", "c1", "c3")
+    assert s["properties"]["competency"]["enum"] == ["c3"]  # grammar agrees with the hint
