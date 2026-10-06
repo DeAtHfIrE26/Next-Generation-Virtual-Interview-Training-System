@@ -142,6 +142,38 @@ def turn_schema(ids: list[str], forced: str | None, needs_last_answer: bool) -> 
     return {"type": "object", "properties": props, "required": list(props), "additionalProperties": False}
 
 
+def answer_clauses(answer: str, limit: int = 16) -> list[str]:
+    """Verbatim clauses of an answer (split on sentence and clause punctuation), 3-25 words each."""
+    parts = re.split(r"(?<=[.!?;:,])\s+|\s+(?:and|but|so)\s+", answer.strip())
+    out: list[str] = []
+    for p in parts:
+        p = p.strip(" ,;:.!?")
+        if 3 <= len(p.split()) <= 25 and p not in out:
+            out.append(p)
+    return out[:limit]
+
+
+def repair_turn_schema(
+    errors: list[str], ids: list[str], forced: str | None, last_answer: str | None, last_comp: str | None
+) -> dict[str, Any]:
+    """A narrower grammar for the repair attempt, derived from what failed validation:
+    - anchor quote not verbatim: the quote must be one of the answer's own clauses;
+    - repeated question: move on (new_topic/revisit) to a different competency."""
+    s = turn_schema(ids, forced, last_answer is not None)
+    props = s["properties"]
+    text = " ".join(errors)
+    if "anchor_quote" in text and last_answer:
+        clauses = answer_clauses(last_answer)
+        if clauses:
+            props["anchor_quote"] = {"type": "string", "enum": ["", *clauses]}
+    if "repeats an earlier question" in text and not forced:
+        props["action"] = {"type": "string", "enum": ["new_topic", "revisit"]}
+        others = [i for i in ids if i != last_comp]
+        if others:
+            props["competency"] = {"type": "string", "enum": others}
+    return s
+
+
 BLUEPRINT_SCHEMA: dict[str, Any] = {
     "type": "object",
     "properties": {
@@ -240,10 +272,18 @@ def _extract_json(text: str) -> dict[str, Any]:
 
 
 class InterviewerAgent:
-    def __init__(self, chain: list[ChatLLM], *, timeout_s: float = 30.0, transient_retries: int = 1):
+    def __init__(
+        self,
+        chain: list[ChatLLM],
+        *,
+        timeout_s: float = 30.0,
+        transient_retries: int = 1,
+        max_repairs: int = 2,
+    ):
         self.chain = chain
         self.timeout_s = timeout_s
         self.transient_retries = transient_retries
+        self.max_repairs = max_repairs
         self.attempts: list[Attempt] = []
 
     # ---- low-level call with retry and provider fail-over
@@ -257,14 +297,20 @@ class InterviewerAgent:
         validate,
         schema: dict[str, Any] | None = None,
         json_note: str = "",
+        repair_schema=None,
     ):
-        """Return (result, provider_name) or (None, None) when every provider failed."""
+        """Return (result, provider_name) or (None, None) when every provider failed.
+
+        Each provider gets one attempt plus repairs that show the model its validation errors
+        (``max_repairs``). With schema-constrained providers, ``repair_schema(errors)`` can narrow the
+        grammar for the repair (e.g. only clauses of the answer as the anchor quote)."""
         for llm in self.chain:
             use_schema = schema is not None and getattr(llm, "supports_schema", False)
             sys_prompt = system + json_note if use_schema else system
             corrections: list[str] = []
-            repaired = False
+            repairs = 0
             tries = 0
+            cur_schema = schema
             while True:
                 tries += 1
                 t0 = time.monotonic()
@@ -287,7 +333,7 @@ class InterviewerAgent:
                             max_tokens=max_tokens,
                             timeout_s=self.timeout_s,
                             effort=effort,
-                            **({"schema": schema} if use_schema else {}),
+                            **({"schema": cur_schema} if use_schema else {}),
                         )
                     )
                 except TransientLLMError as e:
@@ -303,9 +349,12 @@ class InterviewerAgent:
                 self._record(llm, not errors, t0, "; ".join(errors))
                 if not errors:
                     return result, llm.name
-                if repaired:
+                if repairs >= self.max_repairs:
                     break
-                repaired, corrections = True, errors
+                repairs += 1
+                corrections = errors
+                if use_schema and repair_schema is not None:
+                    cur_schema = repair_schema(errors) or schema
         return None, None
 
     def _record(self, llm: ChatLLM, ok: bool, t0: float, error: str) -> None:
@@ -508,6 +557,9 @@ class InterviewerAgent:
             validate=validate,
             schema=turn_schema(sorted(ids), forced, last_answer is not None),
             json_note=JSON_FORMAT_NOTE,
+            repair_schema=lambda errs: repair_turn_schema(
+                errs, sorted(ids), forced, last_answer, last.competency if last else None
+            ),
         )
         gen_ms = round((time.monotonic() - t0) * 1000, 1)
         if res is None:

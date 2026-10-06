@@ -1,0 +1,30 @@
+ Network next-generation-virtual-interview-training-system_default Creating 
+ Network next-generation-virtual-interview-training-system_default Created 
+ Volume next-generation-virtual-interview-training-system_models Creating 
+ Volume next-generation-virtual-interview-training-system_models Created 
+ Volume next-generation-virtual-interview-training-system_pgdata Creating 
+ Volume next-generation-virtual-interview-training-system_pgdata Created 
+ Container next-generation-virtual-interview-training-system-db-1 Creating 
+ Container next-generation-virtual-interview-training-system-models-1 Creating 
+ Container next-generation-virtual-interview-training-system-models-1 Created 
+ Container next-generation-virtual-interview-training-system-db-1 Created 
+ Container next-generation-virtual-interview-training-system-api-1 Creating 
+ Container next-generation-virtual-interview-training-system-api-1 Created 
+ Container next-generation-virtual-interview-training-system-web-1 Creating 
+ Container next-generation-virtual-interview-training-system-web-1 Created 
+ Container next-generation-virtual-interview-training-system-db-1 Starting 
+ Container next-generation-virtual-interview-training-system-models-1 Starting 
+ Container next-generation-virtual-interview-training-system-models-1 Started 
+ Container next-generation-virtual-interview-training-system-db-1 Started 
+ Container next-generation-virtual-interview-training-system-models-1 Waiting 
+ Container next-generation-virtual-interview-training-system-db-1 Waiting 
+ Container next-generation-virtual-interview-training-system-db-1 Healthy 
+ Container next-generation-virtual-interview-training-system-models-1 Exited 
+ Container next-generation-virtual-interview-training-system-api-1 Starting 
+ Container next-generation-virtual-interview-training-system-api-1 Started 
+ Container next-generation-virtual-interview-training-system-web-1 Starting 
+ Container next-generation-virtual-interview-training-system-web-1 Started 
+
+real	2m30.001s
+user	0m0.405s
+sys	0m0.164s

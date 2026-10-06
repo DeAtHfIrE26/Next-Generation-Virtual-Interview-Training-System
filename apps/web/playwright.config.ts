@@ -22,7 +22,8 @@ export default defineConfig({
   workers: 1,
   reporter: [["list"], ["html", { open: "never", outputFolder: "playwright-report" }]],
   use: {
-    baseURL: `http://127.0.0.1:${webPort}`,
+    // E2E_BASE_URL targets an already-running stack (e.g. `docker compose up`) instead of starting one.
+    baseURL: process.env.E2E_BASE_URL ?? `http://127.0.0.1:${webPort}`,
     trace: "retain-on-failure",
     video: process.env.E2E_VIDEO === "1" ? "on" : "retain-on-failure",
   },
@@ -34,7 +35,7 @@ export default defineConfig({
     { name: "mobile-chrome", use: { ...devices["Pixel 7"], launchOptions: { args: chromiumArgs } } },
     { name: "mobile-safari", use: { ...devices["iPhone 14"] } },
   ],
-  webServer: [
+  webServer: process.env.E2E_BASE_URL ? undefined : [
     {
       command: `rm -f ${e2eDb} && uv run uvicorn interview_api.main:app --port ${apiPort}`,
       cwd: repo,

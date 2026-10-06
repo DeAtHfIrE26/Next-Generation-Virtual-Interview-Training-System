@@ -116,3 +116,17 @@ Chrome's `--use-fake-device-for-media-stream` flags exist only in Chromium and c
 The WAVs are synthetic (Kokoro voices, including two Hindi voices speaking English) and labelled as such in `apps/web/tests/fixtures/speech/README.md`. Real recorded voices are a request in `NEEDS_FROM_KASHYAP.md`.
 
 The same test runs on Chromium (CI web job), and on Firefox, WebKit, Edge and the Pixel 7 and iPhone 14 viewports (`e2e.yml`). It runs once more with a real LLM, where any backup question fails the run (`e2e.yml`, job `full`).
+
+## D11. Agent repairs are grammar-constrained by the failure (2026-10-06)
+
+**Measured** (agent-evidence run 3, Qwen2.5-7B on CPU, after D8): calls dropped to 26–58 s. In case 3 all 10 follow-ups quoted the candidate correctly and difficulty tracked performance. Three turns still fell back to the backup question: the model kept re-asking a generic "could you give more details about the specific tools…" or quoting words that were not in the answer, even after one repair.
+
+**Chosen:** two repairs instead of one. On schema-capable providers, the repair narrows the grammar according to what failed:
+- an unverifiable `anchor_quote` may only be one of the answer's own clauses;
+- a repeated question must move on (`new_topic` or `revisit`) to a different competency.
+
+Timing-forced actions (`open`, `wrap_up`, `close`) are never overridden. The checks themselves are unchanged.
+
+## D12. Docker builds behind TLS-intercepting proxies (2026-10-06)
+
+Both Dockerfiles accept an optional BuildKit secret `extra_ca` (`--secret id=extra_ca,src=ca.pem`) used only during dependency installation. Without it, builds behave exactly as before. The API image no longer runs `apt-get`: the speech runtime works on `python:3.11-slim` as is, which was verified by running the full E2E against the compose stack.

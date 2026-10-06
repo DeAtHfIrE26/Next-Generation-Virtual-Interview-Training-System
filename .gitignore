@@ -57,3 +57,4 @@ apps/web/tsconfig.tsbuildinfo
 # 3D and voice runtimes copied from node_modules at install (scripts/vendor-3d.mjs)
 apps/web/public/vendor/
 !apps/web/tests/fixtures/speech/*.wav
+!docs/evidence/**/*.webm

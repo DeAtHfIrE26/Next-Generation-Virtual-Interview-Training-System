@@ -10,10 +10,12 @@ import pytest
 from interview_core.agent.interviewer import (
     Answer,
     InterviewerAgent,
+    answer_clauses,
     enforce_difficulty,
     ground_quote,
     parse_reply,
     quote_matches,
+    repair_turn_schema,
     turn_schema,
 )
 from interview_core.agent.llm import Usage
@@ -348,3 +350,48 @@ def test_from_dict_does_not_mutate_its_input():
     d = json.loads(json.dumps(st.to_dict()))
     AgentState.from_dict(d)
     assert AgentState.from_dict(d).blueprint.competencies[0].id == "c1"
+
+
+def test_repair_schema_narrows_anchor_to_real_clauses_and_moves_on_after_repeats():
+    answer = "I profiled the nightly job, added a composite index, and the run dropped to forty minutes."
+    clauses = answer_clauses(answer)
+    assert clauses and all(c in answer for c in clauses)
+    s = repair_turn_schema(["anchor_quote must be copied verbatim"], ["c1", "c2"], None, answer, "c1")
+    assert set(s["properties"]["anchor_quote"]["enum"]) - {""} == set(clauses)
+    s = repair_turn_schema(["repeats an earlier question: 'x'"], ["c1", "c2", "c3"], None, answer, "c1")
+    assert s["properties"]["action"]["enum"] == ["new_topic", "revisit"]
+    assert s["properties"]["competency"]["enum"] == ["c2", "c3"]
+    # timing-forced actions are never overridden
+    s = repair_turn_schema(["repeats an earlier question: 'x'"], ["c1", "c2"], "wrap_up", answer, "c1")
+    assert s["properties"]["action"]["enum"] == ["wrap_up"]
+
+
+def test_schema_provider_repair_uses_narrowed_grammar():
+    answer = "I led the move from cron scripts to Airflow and cut failed runs by sixty percent."
+    opening = {
+        "action": "open",
+        "competency": "c1",
+        "difficulty": 3,
+        "anchor_quote": "",
+        "reason": "r",
+        "say": "Hi, I'm Maya. What data pipeline work have you owned?",
+    }
+    bad = {
+        "last_answer": {"score": 3, "strengths": "", "gaps": "", "vague": False},
+        "action": "follow_up",
+        "competency": "c1",
+        "difficulty": 3,
+        "anchor_quote": "migrated everything to Kubernetes",
+        "reason": "r",
+        "say": "How did you measure the drop in failures?",
+    }
+    good = {**bad, "anchor_quote": "cut failed runs by sixty percent"}
+    llm = SchemaScripted(
+        "ollama", [json.dumps(BLUEPRINT), json.dumps(opening), json.dumps(bad), json.dumps(good)]
+    )
+    agent = InterviewerAgent([llm])
+    st = state()
+    agent.next_turn(st, now=1000.0)
+    t = agent.next_turn(st, Answer(answer), now=1060.0)
+    assert t is not None and not t.emergency and t.anchor_quote == "cut failed runs by sixty percent"
+    assert "enum" in llm.calls[3]["schema"]["properties"]["anchor_quote"]
