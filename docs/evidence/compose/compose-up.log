@@ -1,30 +1,42 @@
+# 2026-10-06T16:50:05Z commit a70ff3e: docker compose up -d --build from empty volumes (sandbox proxy override, not committed)
+ Image next-generation-virtual-interview-training-system-web Building 
+ Image interview-api:local Building 
+ Image interview-api:local Built 
+ Image next-generation-virtual-interview-training-system-web Built 
  Network next-generation-virtual-interview-training-system_default Creating 
  Network next-generation-virtual-interview-training-system_default Created 
  Volume next-generation-virtual-interview-training-system_models Creating 
  Volume next-generation-virtual-interview-training-system_models Created 
  Volume next-generation-virtual-interview-training-system_pgdata Creating 
  Volume next-generation-virtual-interview-training-system_pgdata Created 
- Container next-generation-virtual-interview-training-system-db-1 Creating 
  Container next-generation-virtual-interview-training-system-models-1 Creating 
+ Container next-generation-virtual-interview-training-system-db-1 Creating 
  Container next-generation-virtual-interview-training-system-models-1 Created 
  Container next-generation-virtual-interview-training-system-db-1 Created 
  Container next-generation-virtual-interview-training-system-api-1 Creating 
  Container next-generation-virtual-interview-training-system-api-1 Created 
  Container next-generation-virtual-interview-training-system-web-1 Creating 
  Container next-generation-virtual-interview-training-system-web-1 Created 
- Container next-generation-virtual-interview-training-system-db-1 Starting 
  Container next-generation-virtual-interview-training-system-models-1 Starting 
+ Container next-generation-virtual-interview-training-system-db-1 Starting 
  Container next-generation-virtual-interview-training-system-models-1 Started 
  Container next-generation-virtual-interview-training-system-db-1 Started 
- Container next-generation-virtual-interview-training-system-models-1 Waiting 
  Container next-generation-virtual-interview-training-system-db-1 Waiting 
+ Container next-generation-virtual-interview-training-system-models-1 Waiting 
  Container next-generation-virtual-interview-training-system-db-1 Healthy 
  Container next-generation-virtual-interview-training-system-models-1 Exited 
  Container next-generation-virtual-interview-training-system-api-1 Starting 
  Container next-generation-virtual-interview-training-system-api-1 Started 
  Container next-generation-virtual-interview-training-system-web-1 Starting 
  Container next-generation-virtual-interview-training-system-web-1 Started 
-
-real	2m30.001s
-user	0m0.405s
-sys	0m0.164s
+real	3m12.390s
+exit=0
+api Up 7 seconds (health: starting)
+db Up 2 minutes (healthy)
+models Exited (0) 7 seconds ago
+web Up 7 seconds
+{"ok":true}
+models-1  | stt-streaming: /models/sherpa-onnx-nemotron-speech-streaming-en-0.6b-560ms-int8-2026-04-25
+models-1  | stt-final: /models/sherpa-onnx-nemo-parakeet-tdt-0.6b-v2-int8
+models-1  | vad: /models/silero_vad.onnx
+models-1  | tts-kokoro: /models/kokoro-multi-lang-v1_0
