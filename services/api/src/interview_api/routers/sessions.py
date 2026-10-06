@@ -153,6 +153,7 @@ async def create_session(
         if ch is not None:
             s.code_results = [{"attached": True, "challenge_id": ch.id}]
     db.commit()
+    interview.preplan(s.id, user.id)
     return {
         "id": s.id,
         "resume_profile": profile,

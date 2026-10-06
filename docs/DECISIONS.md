@@ -233,3 +233,18 @@ Test: `test_repeat_repair_lists_asked_questions_and_pins_the_named_competency`.
    - Barge-ins are counted once per utterance, even when both the browser and the server detect them.
 
 **After:** the full spoken-interview E2E passes on the same 2-core pin (barge-in, lip-sync, report), where it previously failed at barge-in and then at lip-sync.
+
+## D18. The interview plan is prepared while the candidate checks their devices (2026-10-06)
+
+**Measured.** In the real-LLM E2E on 08f0fc6 (Qwen2.5-7B on a CI CPU), the first question had not arrived after 300 s.
+
+The plan (the blueprint) was only generated when the room's first turn started. The candidate therefore waited for two LLM calls in a row, planning and then the opening question. The model also loaded into memory on that first request.
+
+**Chosen.**
+- **Plan at creation.** `POST /sessions` starts planning in a background thread. The device check takes a while, so the plan is usually ready before the candidate joins.
+- **Wait, don't re-plan.** `advance()` waits for a plan that is still in flight instead of starting a second one. If pre-planning fails, the turn plans by itself, as before.
+- **Opt-out.** `PREPLAN=0` turns pre-planning off.
+- **CI.** The real-LLM job loads the model into memory before the test.
+- **First-question timeout.** It is 10 minutes when a CPU-hosted model is required. Hosted APIs answer in seconds.
+
+Test: `test_plan_is_prepared_while_the_candidate_checks_devices`. It checks that the blueprint exists before the first turn, and that the first turn then costs exactly one LLM call.

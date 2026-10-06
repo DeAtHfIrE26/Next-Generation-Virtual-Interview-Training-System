@@ -9,7 +9,8 @@ import { expect, test, type Page } from "@playwright/test";
 import { blockMedia, captureConsole, installFakeMedia, newSession, speak } from "./helpers";
 
 const REQUIRE_LLM = process.env.E2E_REQUIRE_LLM === "1";
-const LLM_TIMEOUT = REQUIRE_LLM ? 300_000 : 60_000;
+// A CPU-hosted 7B model (CI) can take minutes per call; hosted APIs answer in seconds.
+const LLM_TIMEOUT = REQUIRE_LLM ? 600_000 : 60_000;
 
 // On failure, print what the browser logged and the room's protocol trace (CI artifacts are not
 // always reachable, the job log is).

@@ -331,3 +331,18 @@ def test_input_validation(client, user, llm, payload):
     sid = _create(client)["id"]
     _answer(client, sid)
     assert client.post(f"/sessions/{sid}/turn", json=payload).status_code == 422
+
+
+def test_plan_is_prepared_while_the_candidate_checks_devices(client, user, llm):
+    """The blueprint is generated in the background at session creation; the first turn then needs
+    only the opening question (one LLM call), not a second plan."""
+    from interview_api import interview
+
+    sid = _create(client)["id"]
+    interview.wait_for_plan(sid)
+    info = client.get(f"/sessions/{sid}").json()
+    assert info["blueprint"] and len(info["blueprint"]["competencies"]) == 3
+    calls = llm.calls
+    first = _answer(client, sid)["turn"]
+    assert first["action"] == "open" and not first["emergency"]
+    assert llm.calls == calls + 1

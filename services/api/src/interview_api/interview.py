@@ -9,6 +9,9 @@ persists the state.
 from __future__ import annotations
 
 import logging
+import os
+import threading
+from concurrent.futures import Future, ThreadPoolExecutor
 from datetime import UTC, datetime
 from typing import Any
 
@@ -26,6 +29,7 @@ from interview_core.voice import VoiceSession, VoiceVerifier
 from sqlalchemy.orm import Session
 
 from interview_api import metering, runtime
+from interview_api.db import session_scope
 from interview_api.models import BiometricTemplate, InterviewSession, User
 from interview_api.routers.consent import latest
 
@@ -168,6 +172,63 @@ def answer_signals(
     return signals, notices
 
 
+# ----------------------------------------------------------------------------- pre-planning
+
+# The interview plan (blueprint) is generated as soon as the session is created, while the
+# candidate is still on the device check, so the first question only waits for one LLM call.
+# advance() waits for a plan that is still in flight instead of generating a second one.
+PREPLAN = os.getenv("PREPLAN", "1") != "0"
+_plan_pool = ThreadPoolExecutor(max_workers=4, thread_name_prefix="preplan")
+_planning: dict[str, Future] = {}
+_planning_lock = threading.Lock()
+
+
+def preplan(session_id: str, user_id: str) -> None:
+    if not PREPLAN:
+        return
+
+    def run() -> None:
+        with session_scope() as db:
+            s = db.get(InterviewSession, session_id)
+            user = db.get(User, user_id)
+            if s is None or user is None:
+                return
+            st = AgentState.from_dict(dict(s.state))
+            if st.blueprint is not None or st.turns:
+                return
+            agent = agent_for(db, user, s)
+            db.commit()  # no transaction held during the LLM call
+            agent.plan(st)
+            db.refresh(s)
+            cur = AgentState.from_dict(dict(s.state))
+            if cur.blueprint is None and not cur.turns:  # nobody planned meanwhile
+                s.state = st.to_dict()
+            metering.record_agent_attempts(db, user, s.id, "interviewer", agent.attempts)
+            db.commit()
+
+    def done(_f: Future) -> None:
+        with _planning_lock:
+            _planning.pop(session_id, None)
+
+    with _planning_lock:
+        fut = _plan_pool.submit(run)
+        _planning[session_id] = fut
+    fut.add_done_callback(done)
+
+
+def wait_for_plan(session_id: str, timeout: float = 600.0) -> bool:
+    """Block until an in-flight pre-plan for this session finishes. True if one was waited for."""
+    with _planning_lock:
+        fut = _planning.get(session_id)
+    if fut is None:
+        return False
+    try:
+        fut.result(timeout=timeout)
+    except Exception:  # a failed pre-plan is redone by the turn itself
+        log.exception("pre-planning failed session=%s", session_id)
+    return True
+
+
 def advance(
     db: Session,
     user: User,
@@ -184,6 +245,8 @@ def advance(
 ) -> tuple[Turn | None, AgentState, list[dict]]:
     """Record ``text`` as the answer to the pending question (None = no answer yet, e.g. start),
     then produce the next interviewer turn. Persists everything before returning."""
+    if wait_for_plan(s.id):
+        db.refresh(s)
     st = AgentState.from_dict(dict(s.state))
     pending = st.awaiting_answer
     answer = None
