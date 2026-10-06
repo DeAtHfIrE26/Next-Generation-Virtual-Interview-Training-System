@@ -1,0 +1,48 @@
+ Image next-generation-virtual-interview-training-system-api Building 
+ Image next-generation-virtual-interview-training-system-web Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.23kB done
+#1 DONE 0.0s
+
+#2 [api internal] load build definition from Dockerfile
+#2 transferring dockerfile:
+#2 transferring dockerfile: 1.13kB done
+#2 DONE 0.0s
+
+#3 [web internal] load build definition from Dockerfile
+#3 transferring dockerfile: 576B done
+#3 DONE 0.0s
+
+#4 [api internal] load metadata for docker.io/library/python:3.11-slim
+#4 DONE 0.0s
+
+#5 [api internal] load metadata for ghcr.io/astral-sh/uv:0.8
+#5 ERROR: failed to copy: httpReadSeeker: failed open: failed to do request: Get "https://pkg-containers.githubusercontent.com/ghcr1/blobs/sha256:6b7573d87eafacd3848a1a7c5428aacce812158bbc0739fc1e5b4ee42056b451?se=2026-10-06T05%3A00%3A00Z&sig=zXuBTR6fJJRcFP2ZCS97rNRFMqV1XyR36BiAdqLbNbc%3D&ske=2026-10-06T14%3A40%3A07Z&skoid=fb3d2a07-ec6c-4fe4-aced-9efe0fd2fe1a&sks=b&skt=2026-10-05T14%3A40%3A07Z&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skv=2025-01-05&sp=r&spr=https&sr=b&sv=2025-01-05&hmac=68613b6d08ec07461bfc93742643c1d655b4371b4472f4a10d13625107fff471": Forbidden
+
+#6 [web internal] load metadata for docker.io/library/node:22-slim
+#6 CANCELED
+------
+ > [api internal] load metadata for ghcr.io/astral-sh/uv:0.8:
+------
+Dockerfile:3
+
+--------------------
+
+   1 |     # Build from the repository root:  docker build -f services/api/Dockerfile -t interview-api .
+
+   2 |     FROM python:3.11-slim AS build
+
+   3 | >>> COPY --from=ghcr.io/astral-sh/uv:0.8 /uv /usr/local/bin/uv
+
+   4 |     ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy UV_PYTHON_DOWNLOADS=never
+
+   5 |     WORKDIR /app
+
+--------------------
+
+target api: failed to solve: ghcr.io/astral-sh/uv:0.8: failed to resolve source metadata for ghcr.io/astral-sh/uv:0.8: failed to copy: httpReadSeeker: failed open: failed to do request: Get "https://pkg-containers.githubusercontent.com/ghcr1/blobs/sha256:6b7573d87eafacd3848a1a7c5428aacce812158bbc0739fc1e5b4ee42056b451?se=2026-10-06T05%3A00%3A00Z&sig=zXuBTR6fJJRcFP2ZCS97rNRFMqV1XyR36BiAdqLbNbc%3D&ske=2026-10-06T14%3A40%3A07Z&skoid=fb3d2a07-ec6c-4fe4-aced-9efe0fd2fe1a&sks=b&skt=2026-10-05T14%3A40%3A07Z&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skv=2025-01-05&sp=r&spr=https&sr=b&sv=2025-01-05&hmac=68613b6d08ec07461bfc93742643c1d655b4371b4472f4a10d13625107fff471": Forbidden
+
+
+real	0m1.356s
+user	0m0.248s
+sys	0m0.160s

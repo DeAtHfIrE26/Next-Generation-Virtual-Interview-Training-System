@@ -1,0 +1,6 @@
+speechSynthesis voices in this browser: 0
+SpeechRecognition API present: true
+distinct avatar mouth states over 3 s: 1
+caption/transcript text visible after 20 s of speech: (none)
+questions: [{"text":"Describe a disagreement with a colleague. How did you resolve it?","source":"bank","has_server_speech":false,"in_static_bank":true}]
+answer requests: [{"transcript":"","audio_wav_bytes":816738,"mouth_samples":145}]
