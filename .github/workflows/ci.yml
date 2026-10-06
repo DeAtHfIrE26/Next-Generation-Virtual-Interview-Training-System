@@ -38,6 +38,8 @@ jobs:
 
   web:
     runs-on: ubuntu-latest
+    env:
+      MODELS_DIR: ${{ github.workspace }}/.models
     defaults:
       run:
         working-directory: apps/web
@@ -58,5 +60,23 @@ jobs:
       - run: npm run build
       - run: uv sync --all-packages
         working-directory: .
+      - name: Cache local speech models (pinned, checksum-verified)
+        uses: actions/cache@v4
+        with:
+          path: .models
+          key: speech-models-${{ hashFiles('packages/core/src/interview_core/realtime/assets.py') }}
+      - name: Download local speech models
+        run: uv run python -m interview_core.realtime.assets download
+        working-directory: .
       - run: npx playwright install --with-deps chromium
-      - run: npx playwright test
+      # Real speech pipeline (sherpa-onnx STT, Kokoro TTS) with no LLM configured: questions are the
+      # flagged backup questions, which the test checks are badged. The real-LLM run is e2e.yml.
+      - run: npx playwright test --project=chromium
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-chromium
+          path: |
+            apps/web/playwright-report/
+            apps/web/test-results/
+          if-no-files-found: ignore

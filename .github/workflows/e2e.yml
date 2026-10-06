@@ -1,0 +1,131 @@
+name: E2E (browsers and real LLM)
+
+# 1. browsers: the spoken-interview E2E on Firefox, WebKit, Edge and mobile viewports (real speech
+#    models, no LLM: backup questions are expected and must be badged).
+# 2. full: the same E2E on Chromium with a real open-weights LLM (Ollama, Qwen2.5-7B-Instruct).
+#    E2E_REQUIRE_LLM=1 makes a single backup question fail the run. Video and screenshots are
+#    uploaded as the e2e-evidence artifact (docs/evidence/e2e/).
+on:
+  workflow_dispatch:
+  push:
+    branches: ["claude/**"]
+    paths:
+      - "apps/web/**"
+      - "services/api/**"
+      - "packages/core/src/interview_core/agent/**"
+      - "packages/core/src/interview_core/realtime/**"
+      - ".github/workflows/e2e.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  browsers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [firefox, webkit, edge, mobile-chrome, mobile-safari]
+    env:
+      MODELS_DIR: ${{ github.workspace }}/.models
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.11"
+      - run: npm ci
+      - run: npm run build
+      - run: uv sync --all-packages
+        working-directory: .
+      - uses: actions/cache@v4
+        with:
+          path: .models
+          key: speech-models-${{ hashFiles('packages/core/src/interview_core/realtime/assets.py') }}
+      - run: uv run python -m interview_core.realtime.assets download
+        working-directory: .
+      - name: Install browser
+        run: |
+          case "${{ matrix.project }}" in
+            firefox) npx playwright install --with-deps firefox ;;
+            webkit|mobile-safari) npx playwright install --with-deps webkit ;;
+            edge) npx playwright install --with-deps msedge ;;
+            *) npx playwright install --with-deps chromium ;;
+          esac
+      - run: npx playwright test --project=${{ matrix.project }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-${{ matrix.project }}
+          path: |
+            apps/web/playwright-report/
+            apps/web/test-results/
+          if-no-files-found: ignore
+
+  full:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      MODELS_DIR: ${{ github.workspace }}/.models
+      LLM_PROVIDER: ollama
+      OPENAI_COMPAT_BASE_URL: http://127.0.0.1:11434/v1
+      OPENAI_COMPAT_MODEL: qwen2.5:7b-instruct
+      E2E_REQUIRE_LLM: "1"
+      E2E_VIDEO: "1"
+      STT_THREADS: "1"
+      TTS_THREADS: "1"
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.11"
+      - name: Install and start Ollama
+        working-directory: .
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          (OLLAMA_CONTEXT_LENGTH=8192 OLLAMA_NUM_PARALLEL=1 ollama serve > /tmp/ollama.log 2>&1 &)
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:11434/api/version && break; sleep 2; done
+          ollama pull qwen2.5:7b-instruct
+      - run: npm ci
+      - run: npm run build
+      - run: uv sync --all-packages
+        working-directory: .
+      - uses: actions/cache@v4
+        with:
+          path: .models
+          key: speech-models-${{ hashFiles('packages/core/src/interview_core/realtime/assets.py') }}
+      - run: uv run python -m interview_core.realtime.assets download
+        working-directory: .
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test --project=chromium tests/interview.e2e.ts -g "spoken interview"
+      - name: Collect evidence
+        if: always()
+        run: |
+          mkdir -p e2e-evidence
+          find test-results -name '*.webm' -exec cp {} e2e-evidence/ \;
+          find test-results -name '*.png' -exec cp {} e2e-evidence/ \;
+          tail -n 200 /tmp/ollama.log > e2e-evidence/ollama-tail.log || true
+          ls -la e2e-evidence
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-evidence
+          path: |
+            apps/web/e2e-evidence/
+            apps/web/playwright-report/

@@ -5,6 +5,7 @@ const config: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   agentRules: false, // do not let `next dev` write AGENTS.md/CLAUDE.md into the repo
+  allowedDevOrigins: ["127.0.0.1"], // E2E opens the dev server by IP
   async headers() {
     return [
       {

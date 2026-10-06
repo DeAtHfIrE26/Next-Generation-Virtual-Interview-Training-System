@@ -1,336 +1,417 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Avatar, NeuralAvatar } from "@/components/Avatar";
-import { api, ApiError, type Capabilities } from "@/lib/api";
-import { MicCapture } from "@/lib/audio";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { AlertTriangle, Clock, Keyboard, Mic, MicOff, PhoneOff, Repeat2, SkipForward, Wifi, WifiOff } from "lucide-react";
+import { AvatarStage } from "@/components/avatar/AvatarStage";
+import { CodePanel, type Challenge } from "@/components/room/CodePanel";
+import { DeviceCheck, type DeviceChoice } from "@/components/room/DeviceCheck";
+import { DiagPanel } from "@/components/room/DiagPanel";
+import { BrandMark } from "@/components/shell";
+import { Alert, Badge, Button, Card, cn, Dialog, Spinner, Textarea } from "@/components/ui";
+import { detectQuality, type Speaker } from "@/lib/avatar/speaker";
+import { api, ApiError } from "@/lib/api";
 import { useUser } from "@/lib/hooks/useUser";
-import { Captions, playServerAudio, speakBrowser, type Speaking } from "@/lib/speech";
-import { Vad } from "@/lib/vad";
-import { faceCrop, VisionMonitor, type VisionSample } from "@/lib/vision";
-import type { Timeline } from "@/lib/visemes";
-import { encodeWav, toBase64 } from "@/lib/wav";
+import { RoomController, type RoomState } from "@/lib/room/controller";
+import { stopStream } from "@/lib/voice/mic";
+import type { Persona } from "@/lib/voice/realtime";
+import { VisionMonitor } from "@/lib/vision";
 
-type Challenge = { id: string; title: string; prompt: string; languages: string[]; starter: Record<string, string>;
-  examples: { stdin: string; expected: string }[]; hidden_tests: number };
-type Question = { index: number; question: string; category: string; difficulty: number; follow_up: boolean;
-  source: string; challenge?: Challenge; speech?: { audio_b64: string; mime: string; visemes: [number, string][] }; done?: boolean };
-type Notice = { event: string; message: string; end_session: boolean };
-type Phase = "setup" | "asking" | "listening" | "processing" | "feedback" | "finishing" | "ended";
+interface SessionInfo {
+  id: string;
+  status: string;
+  params: { role: string; company?: string; interview_type: string; round: string; duration_minutes: number };
+  persona: Persona;
+  blueprint: { competencies: { id: string; name: string; minutes: number; questions: number }[]; emergency: boolean } | null;
+  challenge: Challenge | null;
+  capabilities: { face_verification: boolean };
+}
 
 const VISION_ENABLED = process.env.NEXT_PUBLIC_VISION !== "off";
 
-export default function Room() {
-  const { id } = useParams<{ id: string }>();
-  const { user } = useUser();
-  const router = useRouter();
-  const [phase, setPhase] = useState<Phase>("setup");
-  const [q, setQ] = useState<Question | null>(null);
-  const [caps, setCaps] = useState<Capabilities | null>(null);
-  const [timeline, setTimeline] = useState<Timeline>([]);
-  const [speakStart, setSpeakStart] = useState<number | null>(null);
-  const [caption, setCaption] = useState({ interim: "", final: "" });
-  const [typed, setTyped] = useState("");
-  const [feedback, setFeedback] = useState<{ summary: string; overall: number; label: string; improvements: string[] } | null>(null);
-  const [notices, setNotices] = useState<Notice[]>([]);
-  const [status, setStatus] = useState({ camera: "off", mic: "off", vision: "off" });
-  const [challenge, setChallenge] = useState<Challenge | null>(null);
-  const [error, setError] = useState("");
-  const [neural, setNeural] = useState<string | null>(null); // stream URL when the neural avatar is used
-
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const mic = useRef<MicCapture | null>(null);
-  const vision = useRef<VisionMonitor | null>(null);
-  const captions = useRef<Captions | null>(null);
-  const speaking = useRef<Speaking | null>(null);
-  const vad = useRef(new Vad());
-  const phaseRef = useRef<Phase>("setup");
-  const recStart = useRef(0);
-  const mouth = useRef<{ times: number[]; values: (number | null)[] }>({ times: [], values: [] });
-  const gaze = useRef<[number, boolean | null][]>([]);
-  const obs = useRef<{ t: number; type: string; present: boolean }[]>([]);
-  const lastLandmarks = useRef<VisionSample["landmarks"]>(null);
-  const questionAt = useRef(0);
-  const heardSpeech = useRef(false);
-
-  const setPhaseBoth = (p: Phase) => { phaseRef.current = p; setPhase(p); };
-
-  // ------------------------------------------------------------------ media setup
-  const startMedia = useCallback(async () => {
-    let stream: MediaStream | null = null;
-    try {
-      stream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 }, audio: true });
-      setStatus((s) => ({ ...s, camera: "on", mic: "on" }));
-    } catch {
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        setStatus((s) => ({ ...s, mic: "on", camera: "unavailable" }));
-      } catch {
-        setStatus({ camera: "unavailable", mic: "unavailable", vision: "off" });
-      }
-    }
-    if (stream && videoRef.current && stream.getVideoTracks().length) {
-      videoRef.current.srcObject = stream;
-      await videoRef.current.play().catch(() => undefined);
-    }
-    if (stream && stream.getAudioTracks().length) {
-      mic.current = await MicCapture.open(new MediaStream(stream.getAudioTracks()));
-      mic.current.onFrame = (db, t) => {
-        const ev = vad.current.push(db, t, phaseRef.current === "asking");
-        if (!ev) return;
-        if (ev.type === "speech_start" && phaseRef.current === "asking") { speaking.current?.cancel(); beginListening(); }
-        if (ev.type === "speech_start" && phaseRef.current === "listening") heardSpeech.current = true;
-        if (ev.type === "speech_end" && phaseRef.current === "listening" && heardSpeech.current && ev.durationMs > 800) void submitAnswer();
-      };
-    }
-    if (VISION_ENABLED && stream?.getVideoTracks().length) {
-      try {
-        vision.current = await VisionMonitor.create();
-        setStatus((s) => ({ ...s, vision: vision.current!.canDetectPhones ? "on" : "faces only" }));
-        vision.current.start(videoRef.current!, onVision);
-      } catch {
-        setStatus((s) => ({ ...s, vision: "unavailable" }));
-      }
-    }
-    if (Captions.supported()) captions.current = new Captions((interim, final) => setCaption({ interim, final }));
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  function onVision(s: VisionSample) {
-    lastLandmarks.current = s.landmarks;
-    const t = s.t / 1000;
-    obs.current.push({ t, type: "no_face", present: s.faces === 0 }, { t, type: "second_person", present: s.faces > 1 });
-    if (s.phone !== null) obs.current.push({ t, type: "phone", present: s.phone });
-    if (phaseRef.current === "listening") {
-      mouth.current.times.push((s.t - recStart.current) / 1000);
-      mouth.current.values.push(s.aperture);
-      gaze.current.push([(s.t - recStart.current) / 1000, s.onScreen]);
-    }
-  }
-
-  // Flush integrity observations every 2 s (server debounces and applies the session policy).
-  useEffect(() => {
-    const iv = setInterval(async () => {
-      if (!obs.current.length || phaseRef.current === "ended" || phaseRef.current === "setup") return;
-      const batch = obs.current.splice(0, obs.current.length).slice(-500);
-      try {
-        const r = await api<{ notices: Notice[]; status: string }>(`/sessions/${id}/events`, { method: "POST", json: { observations: batch } });
-        if (r.notices.length) setNotices((n) => [...r.notices, ...n].slice(0, 5));
-        if (r.status === "ended_by_policy") end();
-      } catch { /* transient: next batch retries */ }
-    }, 2000);
-    return () => clearInterval(iv);
-  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Periodic face verification (only when the server can verify and the user enrolled).
-  useEffect(() => {
-    if (!caps?.face_verification) return;
-    const iv = setInterval(async () => {
-      const lm = lastLandmarks.current;
-      if (!lm || !videoRef.current || phaseRef.current === "ended") return;
-      const img = faceCrop(videoRef.current, lm);
-      if (!img) return;
-      const r = await api<{ notice: Notice | null }>(`/sessions/${id}/face-check`, { method: "POST", json: { image: img, t: performance.now() / 1000 } }).catch(() => null);
-      if (r?.notice) setNotices((n) => [r.notice!, ...n].slice(0, 5));
-    }, 45000);
-    return () => clearInterval(iv);
-  }, [caps, id]);
-
-  useEffect(() => () => { vision.current?.close(); void mic.current?.close(); speaking.current?.cancel(); }, []);
-
-  // ------------------------------------------------------------------ flow
-  async function start() {
-    setError("");
-    await startMedia();
-    const s = await api<{ capabilities: Capabilities; status: string }>(`/sessions/${id}`);
-    setCaps(s.capabilities);
-    if (s.status !== "active") { router.replace(`/reports/${id}`); return; }
-    await nextQuestion();
-  }
-
-  async function nextQuestion() {
-    setFeedback(null);
-    setTyped("");
-    setCaption({ interim: "", final: "" });
-    setPhaseBoth("processing");
-    try {
-      const nq = await api<Question>(`/sessions/${id}/next`, { method: "POST" });
-      if (nq.done) { await finish(); return; }
-      setQ(nq);
-      if (nq.challenge) setChallenge(nq.challenge);
-      questionAt.current = performance.now();
-      void ask(nq);
-    } catch (e) {
-      if (e instanceof ApiError && e.status === 409) end();
-      else setError(e instanceof ApiError ? e.message : "Network problem; try again.");
-    }
-  }
-
-  async function tryNeural(nq: Question): Promise<string | null> {
-    // Degradation chain: neural talking head (if enabled and fast) -> viseme rig -> captions.
-    if (!caps?.neural_avatar) return null;
-    const ctl = new AbortController();
-    const timer = setTimeout(() => ctl.abort(), 1200);
-    try {
-      const r = await api<{ stream_url: string }>("/avatar/render", { method: "POST", json: { text: nq.question, session_id: id }, signal: ctl.signal });
-      return r.stream_url;
-    } catch {
-      return null;
-    } finally {
-      clearTimeout(timer);
-    }
-  }
-
-  async function ask(nq: Question) {
-    setPhaseBoth("asking");
-    const stream = await tryNeural(nq);
-    setNeural(stream);
-    if (stream) return; // the neural stream carries its own audio; onEnded moves to listening
-    const onStart = () => setSpeakStart(performance.now());
-    speaking.current = nq.speech
-      ? playServerAudio(nq.speech.audio_b64, nq.speech.mime, nq.speech.visemes, setTimeline, onStart)
-      : speakBrowser(nq.question, setTimeline, onStart);
-    void speaking.current.done.then(() => {
-      setSpeakStart(null);
-      if (phaseRef.current === "asking") beginListening();
-    });
-  }
-
-  function beginListening() {
-    setSpeakStart(null);
-    setPhaseBoth("listening");
-    heardSpeech.current = false;
-    mouth.current = { times: [], values: [] };
-    gaze.current = [];
-    recStart.current = mic.current?.startRecording() ?? performance.now();
-    captions.current?.start();
-  }
-
-  async function submitAnswer() {
-    if (phaseRef.current !== "listening") return;
-    setPhaseBoth("processing");
-    const spoken = captions.current?.stop() ?? "";
-    const rec = mic.current?.stopRecording();
-    const body: Record<string, unknown> = { transcript: (typed || spoken || caption.final).trim() };
-    if (rec && rec.samples.length > 1600) body.audio_wav = toBase64(encodeWav(rec.samples, rec.sampleRate));
-    if (mouth.current.times.length > 10) body.mouth = mouth.current;
-    if (gaze.current.length > 10) body.gaze_samples = gaze.current;
-    try {
-      const r = await api<{ evaluation: { summary: string; overall: number; label: string; improvements: string[] };
-        notices: Notice[]; status: string }>(`/sessions/${id}/answer`, { method: "POST", json: body });
-      setFeedback(r.evaluation);
-      if (r.notices.length) setNotices((n) => [...r.notices, ...n].slice(0, 5));
-      if (r.status === "ended_by_policy") { end(); return; }
-      setPhaseBoth("feedback");
-    } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Could not submit the answer.");
-      setPhaseBoth("listening");
-    }
-  }
-
-  async function finish() {
-    setPhaseBoth("finishing");
-    await api(`/sessions/${id}/finish`, { method: "POST" });
-    router.push(`/reports/${id}`);
-  }
-
-  function end() {
-    setPhaseBoth("ended");
-    speaking.current?.cancel();
-  }
-
-  const reportLatency = useCallback((t: number) => {
-    void api("/metrics/latency", { method: "POST", json: { metric: "question_to_first_avatar_frame", ms: Math.round(t - questionAt.current) } }).catch(() => undefined);
-  }, []);
-
-  if (!user) return null;
+export default function RoomPage() {
   return (
-    <div className="stack">
-      {phase === "setup" && (
-        <div className="card stack" style={{ maxWidth: 720 }}>
-          <h1>Ready?</h1>
-          <p className="muted">We&apos;ll ask for your camera and microphone. Camera analysis (face, gaze, phone) runs in this browser; only numbers are sent. You can also type your answers.</p>
-          <button className="btn primary" onClick={() => void start()}>Start the interview</button>
-        </div>
-      )}
-      {error && <p className="notice error" role="alert">{error}</p>}
-      {phase === "ended" && (
-        <div className="notice error" role="alert">
-          The session ended because of repeated integrity notices (strict practice mode). <a href={`/reports/${id}`} onClick={(e) => { e.preventDefault(); void finish(); }}>See your report</a>
-        </div>
-      )}
-      <div className="room" hidden={phase === "setup"}>
-        <section className="card stack" aria-live="polite">
-          {neural && phase === "asking" ? (
-            <NeuralAvatar src={neural} onError={() => { setNeural(null); if (q) speaking.current = speakBrowser(q.question, setTimeline, () => setSpeakStart(performance.now())); }}
-              onEnded={() => { setNeural(null); beginListening(); }} onPlaying={() => reportLatency(performance.now())} />
-          ) : (
-            <Avatar timeline={timeline} startedAt={speakStart} onFirstFrame={reportLatency} />
+    <Suspense fallback={<FullScreen><Spinner /></FullScreen>}>
+      <Room />
+    </Suspense>
+  );
+}
+
+function Room() {
+  const { id } = useParams<{ id: string }>();
+  const debug = useSearchParams().get("debug") === "1";
+  const router = useRouter();
+  useUser();
+  const [info, setInfo] = useState<SessionInfo | null>(null);
+  const [loadError, setLoadError] = useState("");
+  const [speakerReady, setSpeakerReady] = useState(false);
+  const [joining, setJoining] = useState(false);
+  const [finishing, setFinishing] = useState(false);
+  const [typing, setTyping] = useState(false);
+  const [confirmEnd, setConfirmEnd] = useState(false);
+  const [stream, setStream] = useState<MediaStream | null>(null);
+  const video = useRef<HTMLVideoElement>(null);
+  const vision = useRef<VisionMonitor | null>(null);
+
+  const finish = useCallback(async () => {
+    setFinishing(true);
+    try {
+      await api(`/sessions/${id}/finish`, { method: "POST" });
+    } catch {
+      /* the report page retries finishing */
+    }
+    router.push(`/reports/${id}`);
+  }, [id, router]);
+
+  const ctl = useMemo(() => new RoomController(id, { faceVerification: false, onDone: () => void finish() }), [id, finish]);
+  const state = useSyncExternalStore(ctl.subscribe, ctl.getSnapshot, ctl.getSnapshot);
+  useEffect(() => { if (debug) (window as unknown as { __room?: RoomController }).__room = ctl; }, [debug, ctl]);
+
+  useEffect(() => {
+    api<SessionInfo>(`/sessions/${id}`)
+      .then((s) => {
+        if (s.status !== "active") router.replace(`/reports/${id}`);
+        else setInfo(s);
+      })
+      .catch((e) => setLoadError(e instanceof ApiError ? e.message : "Could not load this interview."));
+  }, [id, router]);
+
+  useEffect(() => () => {
+    void ctl.destroy();
+    vision.current?.close();
+  }, [ctl]);
+  useEffect(() => () => stopStream(stream), [stream]);
+
+  const onSpeaker = useCallback((sp: Speaker) => { ctl.attachSpeaker(sp); setSpeakerReady(true); }, [ctl]);
+
+  async function join(choice: DeviceChoice) {
+    setJoining(true);
+    setStream(choice.stream);
+    ctl.setFaceVerification(!!info?.capabilities.face_verification);
+    await ctl.join(choice.stream);
+    setJoining(false);
+    if (!choice.stream) setTyping(true);
+  }
+
+  // self view + on-device vision once joined with a camera
+  useEffect(() => {
+    const v = video.current;
+    if (!state.joined || !v || !stream?.getVideoTracks().length) return;
+    v.srcObject = stream;
+    void v.play().catch(() => undefined);
+    ctl.setVideo(v);
+    if (!VISION_ENABLED) return;
+    let cancelled = false;
+    VisionMonitor.create()
+      .then((m) => {
+        if (cancelled) return m.close();
+        vision.current = m;
+        const soft = detectQuality().tier === "software";
+        m.start(v, (s) => ctl.onVision(s), soft ? 4 : 12, soft ? 0.5 : 2);
+      })
+      .catch((e) => console.warn("on-device vision unavailable", e));
+    return () => { cancelled = true; };
+  }, [state.joined, stream, ctl]);
+
+  // keyboard: M mute, T type, Esc closes typing
+  useEffect(() => {
+    if (!state.joined) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLTextAreaElement || e.target instanceof HTMLInputElement) return;
+      if (e.key === "m" || e.key === "M") ctl.setMuted(!ctl.getSnapshot().muted);
+      if (e.key === "t" || e.key === "T") { e.preventDefault(); setTyping(true); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [state.joined, ctl]);
+
+  if (loadError) return <FullScreen><Alert tone="danger" title="Couldn't open the interview">{loadError}</Alert></FullScreen>;
+  if (!info) return <FullScreen><Spinner /></FullScreen>;
+
+  const persona = state.persona ?? info.persona;
+  const avatarState = state.joined ? ctl.avatarState() : "idle";
+
+  return (
+    <div className="flex min-h-dvh flex-col bg-canvas">
+      <TopBar info={info} state={state} persona={persona} />
+
+      <main className={cn("mx-auto grid w-full max-w-[1400px] flex-1 gap-4 px-4 pb-28 pt-4", state.joined ? "lg:grid-cols-[1fr_380px]" : "lg:grid-cols-[1fr_1fr] lg:items-start lg:pt-6")}>
+        {/* Stage (same element before and after joining, so the avatar is loaded once) */}
+        <section className="relative flex min-h-[340px] flex-col" data-testid="stage" data-audio={state.audioPlaying ? "playing" : "idle"}>
+          <AvatarStage
+            look={persona.look}
+            state={avatarState}
+            onSpeaker={onSpeaker}
+            name={`${persona.name} · ${persona.title}`}
+            className={cn("w-full", state.joined ? "min-h-[360px] flex-1 lg:min-h-[560px]" : "aspect-[4/3] lg:aspect-auto lg:h-[min(760px,calc(100dvh-130px))]")}
+          />
+          {state.joined && (
+            <>
+              {state.current?.emergency && (
+                <div className="absolute right-4 top-4" data-testid="emergency-badge">
+                  <Badge tone="warn"><AlertTriangle className="size-3" /> Backup question: the AI interviewer is unavailable</Badge>
+                </div>
+              )}
+              <Captions state={state} persona={persona.name} />
+              {stream?.getVideoTracks().length ? (
+                <video ref={video} muted playsInline aria-label="Your camera" className="absolute bottom-4 right-4 hidden aspect-video w-44 -scale-x-100 rounded-[12px] border border-line object-cover shadow-[var(--shadow-float)] sm:block" />
+              ) : null}
+            </>
           )}
-          {q && (
-            <div>
-              <p className="small muted">Question {q.index + 1}{q.follow_up ? " · follow-up" : ""} · {q.category.replace("_", " ")} · difficulty {q.difficulty}/5</p>
-              <p style={{ fontSize: "1.15rem" }}>{q.question}</p>
-            </div>
-          )}
-          {phase === "asking" && <button className="btn" onClick={() => { speaking.current?.cancel(); beginListening(); }}>Skip to answering</button>}
-          {phase === "listening" && (
-            <div className="stack">
-              <p className="caption" aria-live="polite">{caption.final} <span className="muted">{caption.interim}</span></p>
-              <label className="field"><span>{Captions.supported() ? "Or type your answer" : "Type your answer (speech captions are not supported in this browser)"}</span>
-                <textarea rows={4} value={typed} onChange={(e) => setTyped(e.target.value)} /></label>
-              <button className="btn primary" onClick={() => void submitAnswer()}>Done answering</button>
-            </div>
-          )}
-          {phase === "processing" && <p className="muted">Thinking…</p>}
-          {phase === "feedback" && feedback && (
-            <div className="stack">
-              <p><strong>{Math.round(feedback.overall * 100)}%</strong> <span className="badge">{feedback.label}</span></p>
-              <p>{feedback.summary}</p>
-              {feedback.improvements[0] && <p className="muted">Try next time: {feedback.improvements[0]}</p>}
-              <button className="btn primary" onClick={() => void nextQuestion()}>Next question</button>
-            </div>
-          )}
-          {phase === "finishing" && <p className="muted">Building your report…</p>}
         </section>
-        <aside className="stack">
-          <video ref={videoRef} className="self" muted playsInline aria-label="Your camera" />
-          <p className="small muted">Camera: {status.camera} · Mic: {status.mic} · On-device vision: {status.vision}
-            {caps && <> · Feedback: {caps.llm ? "AI rubric" : "automatic (offline)"}</>}</p>
-          {notices.map((n, i) => <p key={i} className="notice small" role="status">{n.message}</p>)}
-          {challenge && <CodePanel sessionId={id} challenge={challenge} />}
-        </aside>
+
+        {!state.joined ? (
+          <Card className="flex flex-col gap-5 p-6">
+            <div>
+              <p className="text-[13px] font-medium text-accent">Before you join</p>
+              <h1 className="mt-1 text-[24px] font-semibold leading-8">Check your camera and microphone</h1>
+              <p className="mt-1 text-[14px] text-fg-muted">
+                {info.params.role}{info.params.company ? ` at ${info.params.company}` : ""} · {label(info.params.interview_type)} · {info.params.duration_minutes} min.
+                Speak naturally; {persona.name} waits for you to finish. You can interrupt at any time.
+              </p>
+            </div>
+            <DeviceCheck onJoin={(c) => void join(c)} joining={joining} ready={speakerReady} />
+          </Card>
+        ) : (
+          <SidePanel info={info} state={state} sessionId={id} />
+        )}
+      </main>
+
+      {state.joined && (
+        <Dock
+          state={state}
+          hasMic={!!stream?.getAudioTracks().length}
+          onMute={() => ctl.setMuted(!state.muted)}
+          onType={() => setTyping((t) => !t)}
+          onRepeat={() => ctl.repeat()}
+          onSkip={() => ctl.skip()}
+          onEnd={() => setConfirmEnd(true)}
+        />
+      )}
+
+      {typing && state.joined && <TypeBox onSend={(t) => { ctl.sendText(t); if (stream) setTyping(false); }} onClose={() => setTyping(false)} disabled={state.phase === "thinking" || state.phase === "done"} />}
+
+      {state.error && state.joined && (
+        <div className="fixed left-1/2 top-16 z-40 w-[min(92vw,520px)] -translate-x-1/2">
+          <Alert tone="warn" title={errorTitle(state.error.code)} action={<Button size="sm" variant="ghost" onClick={() => ctl.dismissError()}>Dismiss</Button>}>
+            {state.error.message}
+          </Alert>
+        </div>
+      )}
+
+      <Dialog
+        open={confirmEnd}
+        onClose={() => setConfirmEnd(false)}
+        title="End the interview?"
+        footer={<><Button variant="secondary" onClick={() => setConfirmEnd(false)}>Keep going</Button><Button variant="danger" onClick={() => { setConfirmEnd(false); ctl.end(); }}>End and see report</Button></>}
+      >
+        <p className="text-[14px] text-fg-muted">Your report will cover the questions answered so far.</p>
+      </Dialog>
+
+      {(finishing || state.done) && (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-canvas/80 backdrop-blur">
+          <div className="flex flex-col items-center gap-3 text-center">
+            <Spinner className="size-6" />
+            <p className="text-[16px] font-medium">Building your report…</p>
+            <p className="text-[13px] text-fg-muted">Scoring each answer against your own words. This takes a few seconds.</p>
+          </div>
+        </div>
+      )}
+
+      {debug && state.joined && <DiagPanel ctl={ctl} state={state} />}
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------- pieces
+
+function TopBar({ info, state, persona }: { info: SessionInfo; state: RoomState; persona: Persona }) {
+  const r = state.remainingS ?? info.params.duration_minutes * 60;
+  const low = r <= 90;
+  return (
+    <header className="sticky top-0 z-30 border-b border-line bg-canvas/80 backdrop-blur">
+      <div className="mx-auto flex h-14 max-w-[1400px] items-center gap-3 px-4">
+        <BrandMark />
+        <span className="hidden h-5 w-px bg-line sm:block" />
+        <div className="hidden min-w-0 sm:block">
+          <p className="truncate text-[13px] font-medium">{info.params.role}{info.params.company ? ` · ${info.params.company}` : ""}</p>
+          <p className="truncate text-[12px] text-fg-subtle">{label(info.params.interview_type)} · {label(info.params.round)} · with {persona.name}</p>
+        </div>
+        <div className="ml-auto flex items-center gap-2">
+          {state.joined && <ConnBadge state={state} />}
+          <span className={cn("inline-flex items-center gap-1.5 rounded-full border px-3 py-1 font-mono text-[13px] tabular", low ? "border-warn/40 text-warn" : "border-line text-fg")} aria-label="Time remaining">
+            <Clock className="size-3.5" /> {fmt(r)}
+          </span>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+function ConnBadge({ state }: { state: RoomState }) {
+  if (state.conn === "open") {
+    const map: Record<string, [string, "live" | "accent" | "warn" | "neutral"]> = {
+      listening: ["Listening", "live"], speaking: ["Speaking", "accent"], thinking: ["Thinking", "warn"], idle: ["Connected", "neutral"], done: ["Finished", "neutral"],
+    };
+    const [text, tone] = map[state.phase] ?? ["Connected", "neutral"];
+    return <Badge tone={tone} className="gap-1.5"><Wifi className="size-3" /> {text}</Badge>;
+  }
+  if (state.conn === "failed") return <Badge tone="danger"><WifiOff className="size-3" /> {state.connDetail || "Disconnected"}</Badge>;
+  return <Badge tone="warn"><Spinner className="size-3" /> {state.conn === "reconnecting" ? "Reconnecting…" : "Connecting…"}</Badge>;
+}
+
+function Captions({ state, persona }: { state: RoomState; persona: string }) {
+  const user = [...state.finals, state.partial].filter(Boolean).join(" ");
+  const showUser = state.phase === "listening" || (state.phase === "thinking" && user);
+  const text = showUser ? user : state.interviewerCaption;
+  return (
+    <div className="pointer-events-none absolute inset-x-4 bottom-4 flex justify-center sm:right-52" aria-live="polite" data-testid="captions">
+      <div className={cn("max-w-[720px] rounded-[14px] border border-line bg-canvas/75 px-4 py-3 backdrop-blur-md transition-opacity", text || state.phase === "listening" ? "opacity-100" : "opacity-0")}>
+        <p className="mb-0.5 text-[11px] font-medium uppercase tracking-wide text-fg-subtle">
+          {showUser ? (state.muted ? "You (muted)" : "You") : persona}
+          {state.phase === "thinking" && <span className="ml-2 normal-case tracking-normal text-warn">thinking…</span>}
+        </p>
+        <p className="text-[15px] leading-6">
+          {text || (state.phase === "listening" ? <span className="text-fg-muted">{state.muted ? "You're muted. Press M to unmute." : "Go ahead, I'm listening…"}</span> : "")}
+        </p>
       </div>
     </div>
   );
 }
 
-function CodePanel({ sessionId, challenge }: { sessionId: string; challenge: Challenge }) {
-  const [lang, setLang] = useState(challenge.languages[0] ?? "python");
-  const [src, setSrc] = useState(challenge.starter[challenge.languages[0] ?? "python"] ?? "");
-  const [out, setOut] = useState<string>("");
-  async function run(final: boolean) {
-    setOut("Running…");
-    try {
-      const r = await api<{ summary: string; error: string | null; outcomes: { passed: boolean; hidden: boolean; status: string; stdout: string | null; expected: string | null }[] }>(
-        `/sessions/${sessionId}/code`, { method: "POST", json: { language: lang, source: src, final } });
-      setOut([r.summary, ...r.outcomes.map((o, i) => `Test ${i + 1}${o.hidden ? " (hidden)" : ""}: ${o.passed ? "passed" : o.status}${!o.hidden && !o.passed ? `\n  expected: ${o.expected}\n  got: ${o.stdout}` : ""}`)].join("\n"));
-    } catch (e) {
-      setOut(e instanceof ApiError ? e.message : "Could not run code.");
-    }
-  }
+function SidePanel({ info, state, sessionId }: { info: SessionInfo; state: RoomState; sessionId: string }) {
+  const box = useRef<HTMLDivElement>(null);
+  // keep the latest line in view by scrolling the transcript box only (never the page)
+  useEffect(() => { const b = box.current; if (b) b.scrollTo({ top: b.scrollHeight, behavior: "smooth" }); }, [state.transcript.length]);
+  const comps = info.blueprint?.competencies ?? [];
+  const asked = new Map<string, number>();
+  state.transcript.forEach((l) => l.role === "interviewer" && l.competency && asked.set(l.competency, (asked.get(l.competency) ?? 0) + 1));
   return (
-    <section className="card stack">
-      <h3>Coding challenge: {challenge.title}</h3>
-      <p className="small">{challenge.prompt}</p>
-      {challenge.examples.map((e, i) => <pre key={i} className="small">input:{"\n"}{e.stdin || "(none)"}{"\n"}expected:{"\n"}{e.expected}</pre>)}
-      <p className="small muted">{challenge.hidden_tests} hidden test(s) are also run.</p>
-      <select aria-label="Language" value={lang} onChange={(e) => { setLang(e.target.value); setSrc(challenge.starter[e.target.value] ?? ""); }}>
-        {challenge.languages.map((l) => <option key={l}>{l}</option>)}
-      </select>
-      <textarea className="code" aria-label="Code editor" spellCheck={false} value={src} onChange={(e) => setSrc(e.target.value)} />
-      <div className="row"><button className="btn" onClick={() => void run(false)}>Run tests</button><button className="btn primary" onClick={() => void run(true)}>Submit</button></div>
-      {out && <pre className="small" aria-live="polite">{out}</pre>}
-    </section>
+    <aside className="flex min-h-0 flex-col gap-4 lg:max-h-[calc(100dvh-160px)]">
+      {state.notices.map((n, i) => <Alert key={`${n.event}-${i}`} tone="warn">{n.message}</Alert>)}
+      {comps.length > 0 && (
+        <Card className="p-4">
+          <p className="mb-3 text-[12px] font-medium uppercase tracking-wide text-fg-subtle">Interview plan</p>
+          <ul className="flex flex-col gap-2">
+            {comps.map((c) => {
+              const n = asked.get(c.name) ?? 0;
+              const active = state.current?.competency === c.name;
+              return (
+                <li key={c.id} className="flex items-center gap-2 text-[13px]">
+                  <span className={cn("size-2 rounded-full", active ? "bg-accent" : n ? "bg-live" : "bg-surface-3")} />
+                  <span className={cn("flex-1 truncate", active ? "font-medium text-fg" : "text-fg-muted")}>{c.name}</span>
+                  <span className="font-mono text-[11px] text-fg-subtle">{n} q · {c.minutes}m</span>
+                </li>
+              );
+            })}
+          </ul>
+        </Card>
+      )}
+      {info.challenge && <CodePanel sessionId={sessionId} challenge={info.challenge} />}
+      <Card className="flex min-h-[200px] flex-1 flex-col overflow-hidden">
+        <p className="border-b border-line px-4 py-3 text-[12px] font-medium uppercase tracking-wide text-fg-subtle">Transcript</p>
+        <div ref={box} className="flex-1 overflow-y-auto px-4 py-3" data-testid="transcript">
+          {state.transcript.length === 0 && <p className="text-[13px] text-fg-muted">The conversation will appear here.</p>}
+          <ol className="flex flex-col gap-3">
+            {state.transcript.map((l) => (
+              <li key={l.id} className={cn("flex flex-col gap-1", l.role === "candidate" && "items-end")}>
+                <span className="text-[11px] text-fg-subtle">
+                  {l.role === "interviewer" ? (state.persona?.name ?? "Interviewer") : "You"}
+                  {l.typed ? " · typed" : ""}
+                  {l.action && l.role === "interviewer" && l.action !== "open" ? ` · ${label(l.action)}` : ""}
+                </span>
+                <p className={cn("max-w-[92%] rounded-[12px] px-3 py-2 text-[13px] leading-5", l.role === "interviewer" ? "bg-surface-2" : "bg-accent/15")}>
+                  {l.text}
+                  {l.emergency && <span className="mt-1 block text-[11px] text-warn">Backup question (AI unavailable)</span>}
+                </p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </Card>
+    </aside>
   );
+}
+
+function Dock({ state, hasMic, onMute, onType, onRepeat, onSkip, onEnd }: {
+  state: RoomState; hasMic: boolean; onMute: () => void; onType: () => void; onRepeat: () => void; onSkip: () => void; onEnd: () => void;
+}) {
+  const busy = state.phase === "thinking" || state.phase === "done" || state.conn !== "open";
+  return (
+    <div className="fixed inset-x-0 bottom-4 z-30 flex justify-center px-4">
+      <div className="flex items-center gap-1.5 rounded-[18px] border border-line bg-surface/90 p-1.5 shadow-[var(--shadow-float)] backdrop-blur" role="toolbar" aria-label="Interview controls">
+        <DockButton label={state.muted ? "Unmute (M)" : "Mute (M)"} onClick={onMute} disabled={!hasMic} active={state.muted} danger={state.muted}>
+          {state.muted || !hasMic ? <MicOff className="size-5" /> : <Mic className="size-5" />}
+        </DockButton>
+        <DockButton label="Type an answer (T)" onClick={onType}><Keyboard className="size-5" /></DockButton>
+        <DockButton label="Repeat the question" onClick={onRepeat} disabled={busy}><Repeat2 className="size-5" /></DockButton>
+        <DockButton label="Skip this question" onClick={onSkip} disabled={busy || state.phase !== "listening"}><SkipForward className="size-5" /></DockButton>
+        <span className="mx-1 h-6 w-px bg-line" />
+        <button type="button" onClick={onEnd} className="inline-flex h-11 items-center gap-2 rounded-[14px] bg-danger/90 px-4 text-[14px] font-medium text-white hover:bg-danger" data-testid="end">
+          <PhoneOff className="size-4" /> <span className="hidden sm:inline">End</span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function DockButton({ label, onClick, disabled, active, danger, children }: { label: string; onClick: () => void; disabled?: boolean; active?: boolean; danger?: boolean; children: React.ReactNode }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={label}
+      title={label}
+      aria-pressed={active}
+      className={cn("grid size-11 place-items-center rounded-[14px] transition-colors disabled:opacity-40", danger ? "bg-danger/15 text-danger" : "text-fg hover:bg-surface-3")}
+    >
+      {children}
+    </button>
+  );
+}
+
+function TypeBox({ onSend, onClose, disabled }: { onSend: (t: string) => void; onClose: () => void; disabled: boolean }) {
+  const [text, setText] = useState("");
+  return (
+    <div className="fixed inset-x-0 bottom-24 z-30 flex justify-center px-4">
+      <Card className="flex w-[min(96vw,640px)] flex-col gap-2 p-3 shadow-[var(--shadow-float)]">
+        <Textarea
+          autoFocus
+          rows={3}
+          value={text}
+          placeholder="Type your answer… (Enter to send, Shift+Enter for a new line)"
+          aria-label="Type your answer"
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") onClose();
+            if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); if (!disabled && text.trim()) { onSend(text); setText(""); } }
+          }}
+        />
+        <div className="flex justify-end gap-2">
+          <Button variant="ghost" size="sm" onClick={onClose}>Close</Button>
+          <Button size="sm" disabled={disabled || !text.trim()} onClick={() => { onSend(text); setText(""); }} data-testid="send-text">Send answer</Button>
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+function FullScreen({ children }: { children: React.ReactNode }) {
+  return <div className="grid min-h-dvh place-items-center bg-canvas p-6">{children}</div>;
+}
+
+function fmt(s: number) {
+  const m = Math.floor(Math.max(0, s) / 60);
+  return `${m}:${String(Math.max(0, s) % 60).padStart(2, "0")}`;
+}
+
+function label(s: string) {
+  return s.replace(/_/g, " ").replace(/^\w/, (c) => c.toUpperCase());
+}
+
+function errorTitle(code: string) {
+  return (
+    { stt_unavailable: "Speech recognition unavailable", stt_failed: "We missed that", tts_failed: "Voice playback problem", turn_failed: "The interviewer hit a problem" } as Record<string, string>
+  )[code] ?? "Something went wrong";
 }

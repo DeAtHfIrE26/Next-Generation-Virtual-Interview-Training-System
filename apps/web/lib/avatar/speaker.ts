@@ -21,7 +21,7 @@ export interface Speaker {
 
 // ----------------------------------------------------------------------------- quality tiers
 
-export interface Quality { tier: "high" | "medium" | "low"; dpr: number; fps: number }
+export interface Quality { tier: "high" | "medium" | "low" | "software"; dpr: number; fps: number }
 
 export function detectQuality(): Quality {
   const nav = navigator as Navigator & { deviceMemory?: number };
@@ -38,7 +38,10 @@ export function detectQuality(): Quality {
   }
   const software = /swiftshader|llvmpipe|software/.test(renderer);
   const dpr = window.devicePixelRatio || 1;
-  if (software || cores <= 2 || mem <= 2) return { tier: "low", dpr: 0.75 / dpr, fps: 30 };
+  // Software WebGL (VMs, headless CI) renders on the CPU and competes with audio, VAD and vision
+  // on the main thread: keep the avatar alive but cheap.
+  if (software) return { tier: "software", dpr: 0.5 / dpr, fps: 10 };
+  if (cores <= 2 || mem <= 2) return { tier: "low", dpr: 0.75 / dpr, fps: 30 };
   if (coarse || cores <= 4 || mem <= 4) return { tier: "medium", dpr: Math.min(1.5, dpr) / dpr, fps: 45 };
   return { tier: "high", dpr: Math.min(2, dpr) / dpr, fps: 60 };
 }
@@ -146,7 +149,23 @@ export async function createTalkingHeadSpeaker(
   const buf = new Uint8Array(analyser.fftSize);
   let streaming = false;
   let sr = 0;
+  // Per-utterance bookkeeping. TalkingHead's stream callbacks fire once per stream session, not per
+  // utterance, so start/end are tracked here from the audio actually queued.
+  let utt = 0;
+  let started = false;
+  let ended = true;
+  let endRequested = false; // tts.end received: no more audio is coming for this utterance
+  let firstAt = 0;
+  let queuedS = 0;
+  let endTimer: ReturnType<typeof setTimeout> | null = null;
   let nod: ReturnType<typeof setInterval> | null = null;
+  const finish = (u: number) => {
+    if (u !== utt || ended) return;
+    ended = true;
+    if (endTimer) clearTimeout(endTimer);
+    endTimer = null;
+    sp.onEnded?.();
+  };
   const sp: Speaker = {
     kind: "talkinghead",
     onStarted: null,
@@ -155,21 +174,47 @@ export async function createTalkingHeadSpeaker(
       if (!streaming || sr !== sampleRate) {
         void head.streamStart(
           { sampleRate, lipsyncType: "visemes", waitForAudioChunks: true, gain: 1 },
-          () => sp.onStarted?.(),
-          () => sp.onEnded?.(),
+          undefined,
+          // The library also reports "ended" when playback catches up with synthesis mid-utterance
+          // (buffer underrun between sentences); only honour it once all audio has been received.
+          // It can also fire before the queued audio has played out, so never end before that.
+          () => { if (endRequested && performance.now() >= firstAt + queuedS * 1000 - 150) finish(utt); },
         );
         streaming = true;
         sr = sampleRate;
       }
+      utt += 1;
+      started = false;
+      ended = false;
+      endRequested = false;
+      queuedS = 0;
+      if (endTimer) clearTimeout(endTimer);
+      endTimer = null;
     },
     push(pcm) {
+      if (ended) return;
+      queuedS += pcm.byteLength / 2 / sr; // measure first: streamAudio transfers (detaches) the buffer
       head.streamAudio({ audio: pcm });
+      if (!started) {
+        started = true;
+        firstAt = performance.now();
+        sp.onStarted?.();
+      }
     },
     end() {
+      endRequested = true;
       head.streamNotifyEnd();
+      const u = utt;
+      if (!started) return finish(u);
+      // fallback in case the library's end callback doesn't fire for this utterance
+      const remaining = firstAt + queuedS * 1000 - performance.now();
+      endTimer = setTimeout(() => finish(u), Math.max(0, remaining) + 400);
     },
     interrupt() {
       head.streamInterrupt();
+      ended = true;
+      if (endTimer) clearTimeout(endTimer);
+      endTimer = null;
     },
     setState(s) {
       if (nod) { clearInterval(nod); nod = null; }
@@ -198,6 +243,7 @@ export async function createTalkingHeadSpeaker(
     },
     destroy() {
       if (nod) clearInterval(nod);
+      if (endTimer) clearTimeout(endTimer);
       try { head.streamStop(); head.stop(); } catch { /* already stopped */ }
       el.replaceChildren();
     },

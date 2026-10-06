@@ -97,3 +97,22 @@ React mounts effects twice in development. The first, cancelled TalkingHead inst
 - A follow-up's quote that is not verbatim is replaced with the candidate's real words it overlaps (at least half of the quote's words, at least three), logged as a correction. Otherwise the reply is still rejected. The stored anchor is always verbatim, which is stricter than before: an 80% bag-of-words match used to be stored as the model wrote it.
 - The evidence job runs one interview per job (20 jobs), because one 20-minute simulated interview takes up to an hour on CPU.
 - `from_dict` deep-copies its input.
+
+## D9. Interviewer playback is tracked per utterance in the client (2026-10-06)
+
+**Measured** (local E2E, protocol event log in the `?debug=1` panel): TalkingHead's stream callbacks fire once per stream session, not per utterance. Its "ended" callback also fired about 4 s into an 8.1 s question when synthesis fell behind playback. And `streamAudio` transfers (detaches) the PCM buffer, so measuring it afterwards read 0 bytes. Together these made the room start listening while the interviewer was still talking, and disabled barge-in after the first question.
+
+**Chosen:**
+- The Speaker counts queued audio before handing it over.
+- It reports "started" on the first chunk of each utterance.
+- It reports "ended" only after the server's `tts.end` and once the queued duration has played. The library callback can confirm the end but never shortens it.
+- Barge-in uses Silero VAD, plus an energy fast path: 400 ms at or above about -32 dBFS while the interviewer's audio is playing. The fast path covers moments when VAD inference lags on a busy main thread.
+- A `software` quality tier (10 fps, half resolution, lighter vision sampling) applies when WebGL runs on the CPU (SwiftShader, llvmpipe).
+
+## D10. E2E speech goes through an injected fake microphone (2026-10-06)
+
+Chrome's `--use-fake-device-for-media-stream` flags exist only in Chromium and can't be timed to the conversation. The E2E suite instead replaces `getUserMedia` with a Web Audio destination plus a canvas camera, and plays recorded WAVs into it when the interviewer is listening. Everything after the microphone is real: the AudioWorklet, the WebSocket, the server VAD, sherpa-onnx recognition, the agent, Kokoro and the avatar.
+
+The WAVs are synthetic (Kokoro voices, including two Hindi voices speaking English) and labelled as such in `apps/web/tests/fixtures/speech/README.md`. Real recorded voices are a request in `NEEDS_FROM_KASHYAP.md`.
+
+The same test runs on Chromium (CI web job), and on Firefox, WebKit, Edge and the Pixel 7 and iPhone 14 viewports (`e2e.yml`). It runs once more with a real LLM, where any backup question fails the run (`e2e.yml`, job `full`).

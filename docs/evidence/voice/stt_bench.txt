@@ -1,0 +1,8 @@
+zipformer-en-2023-06-26 (int8)     WER  12.7%  RTF 0.139  first-partial median 0.80s audio  per-voice af_heart:10% am_michael:11% bf_emma:13% hf_alpha:14% hm_omega:15%
+   sample: MY BIGGEST WEAKNESS IS THAT I SOMETIMES TAKE ON TOO MUCH MYSELF SO NOW I BREAK WORK INTO TICKETS AND DELEGATE EARLIER
+nemo-fastconformer-streaming-80ms  WER   6.7%  RTF 0.833  first-partial median 0.60s audio  per-voice af_heart:5% am_michael:7% bf_emma:7% hf_alpha:7% hm_omega:7%
+   sample: my biggest weakness is that i sometimes take on too much myself so now i break work into tickets and delegate earlier
+nemotron-streaming-0.6b-560ms int8 WER   2.4%  RTF 0.330  first-partial median 0.70s audio  per-voice af_heart:2% am_michael:3% bf_emma:4% hf_alpha:1% hm_omega:2%
+   sample: My biggest weakness is that I sometimes take on too much myself, so now I break work into tickets and delegate earlier
+parakeet-tdt-0.6b-v2 int8          WER   0.0%  RTF 0.074  (offline final pass) per-voice af_heart:0% am_michael:0% bf_emma:0% hf_alpha:0% hm_omega:0%
+   sample: My biggest weakness is that I sometimes take on too much myself. So now I break work into tickets and delegate earlier.
