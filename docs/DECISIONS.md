@@ -305,3 +305,11 @@ Tests:
 - `test_fresh_angle_skips_angles_already_asked_about`
 
 **Evidence video.** A CI job log keeps only its last 5,000 lines. The real-LLM interview runs about 15 minutes on a CI CPU, and its real-time video did not fit. The `evidence-log` job now prints a 4× time-lapse (560 px, 5 fps) and labels it as one.
+
+## D20. Model downloads resume after a dropped connection (2026-10-06)
+
+**Measured.** A fresh `docker compose up` in the build sandbox failed: the proxy dropped the connection while the `models` init service was downloading, and the service exited with `BrokenPipeError`. The test written for this showed a second problem. When a connection closes early, Python's `http.client` returns a short read without raising, so a truncated file would have been treated as complete. The checksum would then have failed it, without any retry.
+
+**Chosen.** `assets.fetch` checks the remaining `Content-Length` after copying and treats any shortfall as an interruption. It then resumes with an HTTP `Range` request, up to 6 attempts with exponential backoff. If the server ignores the range, it restarts the download from the beginning. The SHA-256 check still runs on the finished file. URLs that are not HTTP(S) are refused.
+
+Test: `test_fetch_resumes_after_dropped_connections` uses a local server that cuts the first two responses short.

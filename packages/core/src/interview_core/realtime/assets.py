@@ -10,11 +10,14 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import http.client
 import os
 import shutil
 import sys
 import tarfile
 import tempfile
+import time
+import urllib.error
 import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
@@ -101,6 +104,38 @@ def _sha256(path: Path) -> str:
     return h.hexdigest()
 
 
+def fetch(url: str, dest: Path, *, attempts: int = 6, backoff_s: float = 2.0) -> None:
+    """Download ``url`` to ``dest``, resuming with an HTTP Range request when the connection drops
+    (the larger models are hundreds of MB; one reset should not restart or fail the install)."""
+    if not url.startswith(("https://", "http://")):
+        raise ValueError(f"refusing to download from a non-HTTP URL: {url}")
+    for attempt in range(attempts):
+        have = dest.stat().st_size if dest.exists() else 0
+        req = urllib.request.Request(url, headers={"Range": f"bytes={have}-"} if have else {})  # noqa: S310 - scheme checked above
+        try:
+            with urllib.request.urlopen(req, timeout=60) as r:  # noqa: S310 - scheme checked above
+                resumed = have and r.status == 206
+                with dest.open("ab" if resumed else "wb") as f:
+                    shutil.copyfileobj(r, f, length=1 << 20)
+                if r.length:  # the connection closed early: http.client returns a short read silently
+                    raise http.client.IncompleteRead(b"", r.length)
+            return
+        except urllib.error.HTTPError as e:
+            if e.code == 416 and have:  # nothing left to fetch
+                return
+            if e.code < 500 or attempt == attempts - 1:
+                raise
+        except (OSError, http.client.HTTPException):
+            if attempt == attempts - 1:
+                raise
+        delay = backoff_s * 2**attempt
+        print(
+            f"download interrupted at {dest.stat().st_size if dest.exists() else 0} bytes; resuming in {delay:g}s",
+            flush=True,
+        )
+        time.sleep(delay)
+
+
 def download(key: str, root: Path | None = None, *, verify: bool = True) -> Path:
     a = ASSETS[key]
     root = root or models_dir()
@@ -110,8 +145,7 @@ def download(key: str, root: Path | None = None, *, verify: bool = True) -> Path
     root.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(dir=root) as tmp:
         tmp_file = Path(tmp) / "download"
-        with urllib.request.urlopen(a.url, timeout=60) as r, tmp_file.open("wb") as f:  # noqa: S310 - pinned https URL
-            shutil.copyfileobj(r, f, length=1 << 20)
+        fetch(a.url, tmp_file)
         digest = _sha256(tmp_file)
         if verify and digest != a.sha256:
             raise RuntimeError(f"checksum mismatch for {key}: expected {a.sha256}, got {digest}")
