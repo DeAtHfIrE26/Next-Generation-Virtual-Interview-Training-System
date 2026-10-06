@@ -65,6 +65,14 @@ jobs:
             edge) npx playwright install --with-deps msedge ;;
             *) npx playwright install --with-deps chromium ;;
           esac
+      # Firefox and WebKit only run Web Audio with an output device; runners have none.
+      - name: Virtual audio device (PulseAudio null sink)
+        run: |
+          sudo apt-get install -y --no-install-recommends pulseaudio
+          pulseaudio -D --exit-idle-time=-1
+          pactl load-module module-null-sink sink_name=virtual_speaker
+          pactl set-default-sink virtual_speaker
+          pactl info | grep -i "default sink"
       - run: npx playwright test --project=${{ matrix.project }}
       - uses: actions/upload-artifact@v4
         if: always()

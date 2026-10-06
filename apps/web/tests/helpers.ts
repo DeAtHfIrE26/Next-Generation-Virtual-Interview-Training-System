@@ -32,7 +32,9 @@ export async function installFakeMedia(page: Page) {
       const mic: FakeMic = {
         ctx, dest, playing: 0,
         async play(b64: string) {
-          await ctx.resume();
+          // resume() can hang forever without an audio output device; fail loudly instead
+          await Promise.race([ctx.resume(), new Promise((r) => setTimeout(r, 3000))]);
+          if (ctx.state !== "running") throw new Error(`fake microphone AudioContext is ${ctx.state} (no audio device on this machine?)`);
           const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
           const buf = await ctx.decodeAudioData(bytes.buffer);
           const src = ctx.createBufferSource();
@@ -64,26 +66,56 @@ export async function installFakeMedia(page: Page) {
       }, 100);
       return (c as HTMLCanvasElement & { captureStream(fps: number): MediaStream }).captureStream(10).getVideoTracks();
     };
-    const md = navigator.mediaDevices;
-    if (!md) return;
-    md.getUserMedia = async (c?: MediaStreamConstraints) => {
+    const getUserMedia = async (c?: MediaStreamConstraints) => {
       const mic = ensure();
       const tracks: MediaStreamTrack[] = [];
       if (c?.audio) tracks.push(...mic.dest.stream.getAudioTracks().map((t) => t.clone()));
       if (c?.video) tracks.push(...fakeCamera());
       return new MediaStream(tracks);
     };
-    md.enumerateDevices = async () => [
+    const enumerateDevices = async () => [
       { deviceId: "fake-mic", kind: "audioinput", label: "Fake microphone (test)", groupId: "g", toJSON() { return this; } },
       { deviceId: "fake-cam", kind: "videoinput", label: "Fake camera (test)", groupId: "g", toJSON() { return this; } },
     ] as MediaDeviceInfo[];
+    overrideMediaDevices({ getUserMedia, enumerateDevices });
+
+    // Plain assignment to navigator.mediaDevices.getUserMedia is ignored by WebKit (the page then gets
+    // the browser's own mock devices), so define the methods on the prototype and the instance.
+    function overrideMediaDevices(fns: Record<string, unknown>) {
+      const targets = [typeof MediaDevices !== "undefined" ? MediaDevices.prototype : null, navigator.mediaDevices ?? null];
+      for (const t of targets) {
+        if (!t) continue;
+        for (const [k, v] of Object.entries(fns)) Object.defineProperty(t, k, { value: v, configurable: true, writable: true });
+      }
+    }
   });
+}
+
+/** Makes every getUserMedia call fail the way a browser does when the user blocks the microphone. */
+export async function blockMedia(page: Page) {
+  await page.addInitScript(() => {
+    const denied = async () => { throw new DOMException("Permission denied", "NotAllowedError"); };
+    const targets = [typeof MediaDevices !== "undefined" ? MediaDevices.prototype : null, navigator.mediaDevices ?? null];
+    for (const t of targets) if (t) Object.defineProperty(t, "getUserMedia", { value: denied, configurable: true, writable: true });
+  });
+}
+
+/** Collects browser console errors and page errors; print them when a test fails. */
+export function captureConsole(page: Page): string[] {
+  const lines: string[] = [];
+  page.on("console", (m) => { if (m.type() === "error" || m.type() === "warning") lines.push(`[console.${m.type()}] ${m.text()}`); });
+  page.on("pageerror", (e) => lines.push(`[pageerror] ${e.message}`));
+  return lines;
 }
 
 /** Plays a fixture WAV into the fake microphone; resolves with its duration in seconds. */
 export async function speak(page: Page, file: string): Promise<number> {
   const b64 = fs.readFileSync(path.join(SPEECH_DIR, file)).toString("base64");
-  return page.evaluate((b) => (window as unknown as { __fakeMic: { play(b: string): Promise<number> } }).__fakeMic.play(b), b64);
+  return page.evaluate((b) => {
+    const mic = (window as unknown as { __fakeMic?: { play(b: string): Promise<number> } }).__fakeMic;
+    if (!mic) throw new Error("the page never opened the fake microphone (getUserMedia was not called through the test override)");
+    return mic.play(b);
+  }, b64);
 }
 
 /** Registers, grants data-processing consent and creates a session through the web proxy. */

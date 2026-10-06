@@ -66,7 +66,9 @@ interface TalkingHeadLike {
   audioAnalyzerNode: AnalyserNode;
   renderer?: { setPixelRatio(r: number): void };
   mtAvatar: Record<string, { newvalue: number; needsUpdate: boolean }>;
-  opt: { update: ((dt: number) => void) | null; modelFPS: number };
+  opt: { update: ((dt: number) => void) | null; modelFPS: number; modelPixelRatio: number };
+  animFrameDur: number;
+  workletLoaded?: boolean;
   armature?: { traverse(fn: (o: { isMesh?: boolean; material?: { name?: string; color?: { set(c: string): void } } }) => void): void };
   initAudioGraph?(sampleRate?: number | null): void;
   showAvatar(avatar: Record<string, unknown>, onprogress?: (e: ProgressEvent) => void): Promise<void>;
@@ -86,6 +88,7 @@ interface TalkingHeadLike {
 
 /** Sample rate of the default TTS (Kokoro). Other providers trigger an automatic re-wire. */
 const TTS_SAMPLE_RATE = 24000;
+const PLAYBACK_WORKLET = "/vendor/talkinghead/playback-worklet.js";
 
 export interface Look { skin?: string; hair?: string; top?: string }
 
@@ -154,8 +157,12 @@ export async function createTalkingHeadSpeaker(
       dbg.calls += 1;
       dbg.max = Math.max(dbg.max, value);
       if (t) dbg.keys.add(key);
-      if (value > 0.15) visemeUpdates += 1;
     };
+    // Count the visemes the worklet detects in the played audio (not rendered frames, which a busy
+    // device draws at 1-2 fps): the lip-sync signal itself. Runs after HeadAudio's own handler.
+    node.port.addEventListener("message", (e: MessageEvent) => {
+      if (e.data?.event === "viseme" && node.visemeActive !== -1) visemeUpdates += 1;
+    });
     try { ha?.disconnect(); } catch { /* old context closed */ }
     ha = node;
   };
@@ -164,10 +171,24 @@ export async function createTalkingHeadSpeaker(
     return wiring;
   };
   head.initAudioGraph?.(TTS_SAMPLE_RATE);
+  // TalkingHead loads its playback worklet on the first streamStart with a 5 s timeout, which a
+  // busy device can miss (the interviewer would then be silent). Load it here, without a timeout,
+  // while the avatar is loading anyway.
+  const loadPlayback = async () => {
+    await head.audioCtx.audioWorklet.addModule(PLAYBACK_WORKLET);
+    head.workletLoaded = true;
+  };
+  await loadPlayback();
   await ensureWired();
   let frames = 0;
   let last = performance.now();
   let measured = quality.fps;
+  // Adaptive quality: if the device can't hold half the target frame rate for 3 s, render fewer,
+  // smaller frames (up to twice). The avatar shares the main thread with audio capture, barge-in
+  // detection and the UI; those must not starve behind the renderer.
+  let slowSeconds = 0;
+  let degraded = 0;
+  let pixelRatio = quality.dpr;
   head.opt.update = (dt: number) => {
     ha?.update(dt);
     frames += 1;
@@ -176,6 +197,17 @@ export async function createTalkingHeadSpeaker(
       measured = (frames * 1000) / (now - last);
       frames = 0;
       last = now;
+      slowSeconds = measured < head.opt.modelFPS * 0.5 ? slowSeconds + 1 : 0;
+      if (slowSeconds >= 3 && degraded < 2) {
+        degraded += 1;
+        slowSeconds = 0;
+        const dpr = window.devicePixelRatio || 1;
+        pixelRatio = Math.max(0.25 / dpr, pixelRatio * 0.6); // a multiplier of devicePixelRatio, as in TalkingHead
+        head.opt.modelPixelRatio = pixelRatio; // kept on resize
+        head.renderer?.setPixelRatio(pixelRatio * dpr);
+        head.opt.modelFPS = Math.max(5, Math.round(head.opt.modelFPS * 0.6));
+        head.animFrameDur = 1000 / head.opt.modelFPS;
+      }
     }
   };
 
@@ -188,8 +220,11 @@ export async function createTalkingHeadSpeaker(
   let started = false;
   let ended = true;
   let endRequested = false; // tts.end received: no more audio is coming for this utterance
-  let firstAt = 0;
   let queuedS = 0;
+  // When synthesis runs slower than real time, playback stalls between chunks, so the audio ends
+  // later than first chunk + queuedS. playEnd models the play-out: each chunk starts when it arrives or
+  // when the previous one finishes, whichever is later.
+  let playEnd = 0;
   let endTimer: ReturnType<typeof setTimeout> | null = null;
   let nod: ReturnType<typeof setInterval> | null = null;
   const finish = (u: number) => {
@@ -205,15 +240,19 @@ export async function createTalkingHeadSpeaker(
     onEnded: null,
     start(sampleRate) {
       if (!streaming || sr !== sampleRate) {
-        const stream = head.streamStart(
-          { sampleRate, lipsyncType: "visemes", waitForAudioChunks: true, gain: 1 },
-          undefined,
-          // The library also reports "ended" when playback catches up with synthesis mid-utterance
-          // (buffer underrun between sentences); only honour it once all audio has been received.
-          // It can also fire before the queued audio has played out, so never end before that.
-          () => { if (endRequested && performance.now() >= firstAt + queuedS * 1000 - 150) finish(utt); },
-        );
-        void Promise.resolve(stream).then(() => ensureWired()); // the context may have been rebuilt
+        // The library also reports "ended" when playback catches up with synthesis mid-utterance
+        // (buffer underrun between sentences); only honour it once all audio has been received.
+        // It can also fire before the queued audio has played out, so never end before that.
+        const onStreamEnd = () => { if (endRequested && performance.now() >= playEnd - 150) finish(utt); };
+        const stream = head.streamStart({ sampleRate, lipsyncType: "visemes", waitForAudioChunks: true, gain: 1 }, undefined, onStreamEnd);
+        void Promise.resolve(stream)
+          .catch(async () => {
+            // worklet load timed out inside the library: load it without a timeout and retry once
+            await loadPlayback();
+            await head.streamStart({ sampleRate, lipsyncType: "visemes", waitForAudioChunks: true, gain: 1 }, undefined, onStreamEnd);
+          })
+          .then(() => ensureWired()) // the context may have been rebuilt
+          .catch((e) => console.warn("interviewer audio stream failed", e));
         streaming = true;
         sr = sampleRate;
       }
@@ -222,16 +261,18 @@ export async function createTalkingHeadSpeaker(
       ended = false;
       endRequested = false;
       queuedS = 0;
+      playEnd = 0;
       if (endTimer) clearTimeout(endTimer);
       endTimer = null;
     },
     push(pcm) {
       if (ended) return;
-      queuedS += pcm.byteLength / 2 / sr; // measure first: streamAudio transfers (detaches) the buffer
+      const dur = pcm.byteLength / 2 / sr; // measure first: streamAudio transfers (detaches) the buffer
+      queuedS += dur;
+      playEnd = Math.max(playEnd, performance.now()) + dur * 1000;
       head.streamAudio({ audio: pcm });
       if (!started) {
         started = true;
-        firstAt = performance.now();
         sp.onStarted?.();
       }
     },
@@ -241,7 +282,7 @@ export async function createTalkingHeadSpeaker(
       const u = utt;
       if (!started) return finish(u);
       // fallback in case the library's end callback doesn't fire for this utterance
-      const remaining = firstAt + queuedS * 1000 - performance.now();
+      const remaining = playEnd - performance.now();
       endTimer = setTimeout(() => finish(u), Math.max(0, remaining) + 400);
     },
     interrupt() {
@@ -278,7 +319,7 @@ export async function createTalkingHeadSpeaker(
       head.audioAnalyzerNode.getByteTimeDomainData(buf2);
       let peak = 0;
       for (const v of buf2) peak = Math.max(peak, Math.abs(v - 128));
-      return { ctx: head.audioCtx.state, peak, haCalls: dbg.calls, haMax: dbg.max, keys: [...dbg.keys].slice(0, 5), streaming };
+      return { ctx: head.audioCtx.state, peak, haCalls: dbg.calls, haMax: dbg.max, keys: [...dbg.keys].slice(0, 5), streaming, degraded, modelFPS: head.opt.modelFPS };
     },
     async unlock() {
       if (head.audioCtx.state === "suspended") await head.audioCtx.resume().catch(() => undefined);

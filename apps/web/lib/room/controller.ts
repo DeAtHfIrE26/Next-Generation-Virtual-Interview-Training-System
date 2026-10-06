@@ -168,6 +168,7 @@ export class RoomController {
 
   // ---------------------------------------------------------------- mic + VAD
   private loudFrames = 0;
+  private bargedUtt = -1;
 
   private onMicFrame(pcm: ArrayBuffer) {
     this.diag.micLevel = this.mic?.level ?? 0;
@@ -187,8 +188,12 @@ export class RoomController {
     this.set({ userSpeaking: true });
     // Barge-in: the candidate talks over the interviewer. Only once audio is actually playing, so a
     // cough during "thinking" doesn't cancel the next question before it starts.
+    if (this.state.phase === "speaking" && !(this.allowBargeIn && this.speakerStarted && !this.isClosingTurn())) {
+      this.log(`speech while speaking (no barge-in: ${!this.allowBargeIn ? "disabled" : !this.speakerStarted ? "audio not started" : "closing turn"})`);
+    }
     if (this.allowBargeIn && this.state.phase === "speaking" && this.speakerStarted && !this.isClosingTurn()) {
-      this.diag.bargeIns += 1;
+      if (this.bargedUtt !== this.playingUtt) this.diag.bargeIns += 1;
+      this.bargedUtt = this.playingUtt;
       this.log("barge-in");
       this.speaker?.interrupt();
       this.stopCaptionClock(true);
@@ -255,7 +260,9 @@ export class RoomController {
         if (m.utterance === this.audioUtt) { this.speaker?.interrupt(); this.stopCaptionClock(true); }
         break;
       case "barge_in": // detected by the server's VAD (the browser's may lag on a busy device)
-        this.diag.bargeIns += 1;
+        if (this.bargedUtt !== this.playingUtt) this.diag.bargeIns += 1; // one barge-in, two detectors
+        this.bargedUtt = this.playingUtt;
+        this.log("barge-in (server)");
         this.speaker?.interrupt();
         this.stopCaptionClock(true);
         break;

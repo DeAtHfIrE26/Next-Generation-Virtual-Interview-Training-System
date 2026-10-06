@@ -6,10 +6,20 @@
 // single flagged backup question fails the test. Without it (no LLM configured), the test instead
 // checks that backup questions are clearly flagged in the UI.
 import { expect, test, type Page } from "@playwright/test";
-import { installFakeMedia, newSession, speak } from "./helpers";
+import { blockMedia, captureConsole, installFakeMedia, newSession, speak } from "./helpers";
 
 const REQUIRE_LLM = process.env.E2E_REQUIRE_LLM === "1";
 const LLM_TIMEOUT = REQUIRE_LLM ? 300_000 : 60_000;
+
+// On failure, print what the browser logged and the room's protocol trace (CI artifacts are not
+// always reachable, the job log is).
+let consoleLines: string[] = [];
+test.beforeEach(({ page }) => { consoleLines = captureConsole(page); });
+test.afterEach(async ({ page }, info) => {
+  if (info.status === info.expectedStatus) return;
+  const events = await page.evaluate(() => (window as unknown as { __room?: { diag: { events: string[] } } }).__room?.diag.events ?? []).catch(() => []);
+  console.log(`[${info.project.name}] FAILED "${info.title}"\nprotocol events:\n${events.join("\n")}\nbrowser console:\n${consoleLines.slice(-60).join("\n")}`);
+});
 
 async function interviewerLines(page: Page) {
   return page.getByTestId("transcript").locator("li").filter({ hasNotText: /^You/ }).count();
@@ -44,20 +54,25 @@ test("spoken interview: speech in, live captions, LLM follow-ups, spoken questio
   // Answer 1 (US English voice): live captions while speaking, final transcript afterwards
   const d1 = await speak(page, "answer-1-us.wav");
   await expect(page.getByTestId("captions")).toContainText(/billing|nightly|batch/i, { timeout: 20_000 });
-  await page.waitForTimeout(d1 * 1000);
-  await expect(page.getByTestId("transcript")).toContainText(/(forty|40) minutes/i, { timeout: 60_000 });
 
   // Next question, generated after the answer. Barge-in: talk over it while its audio is playing.
-  await page.waitForFunction(() => document.querySelector('[data-testid="stage"]')?.getAttribute("data-audio") === "playing", null, { timeout: LLM_TIMEOUT, polling: 50 });
-  expect(await interviewerLines(page)).toBeGreaterThanOrEqual(2);
+  // Watch the room's state rather than the DOM: on a busy machine the page can re-render seconds
+  // after the audio has started.
+  await page.waitForFunction(() => {
+    const room = (window as unknown as { __room?: { getSnapshot(): { audioPlaying: boolean; transcript: { role: string }[] } } }).__room;
+    const s = room?.getSnapshot();
+    return !!s && s.audioPlaying && s.transcript.filter((t) => t.role === "interviewer").length >= 2;
+  }, null, { timeout: LLM_TIMEOUT + d1 * 1000, polling: 50 });
   const d2 = await speak(page, "answer-2-in.wav"); // Indian-English voice, started while the question plays
-  await phase(page, "Listening", 10_000);
+  await expect(page.getByTestId("transcript")).toContainText(/(forty|40) minutes/i, { timeout: 60_000 });
+  expect(await interviewerLines(page)).toBeGreaterThanOrEqual(2);
+  await phase(page, "Listening", 30_000);
   await page.screenshot({ path: info.outputPath("03-barge-in.png") });
   await page.waitForTimeout(d2 * 1000);
   await expect(page.getByTestId("transcript")).toContainText(/design review|trade.?offs|versioned/i, { timeout: 60_000 });
   const events = await page.evaluate(() => (window as unknown as { __room?: { diag: { events: string[] } } }).__room?.diag.events ?? []);
   await info.attach("protocol-events", { body: events.join("\n"), contentType: "text/plain" });
-  if (process.env.E2E_DEBUG) console.log(events.join("\n"));
+  console.log(`[${info.project.name}] protocol events:\n${events.join("\n")}`);
   await expect(page.getByTestId("diag")).toContainText(/barge-ins\s*[1-9]/);
   if (info.project.name === "chromium") {
     // the 3D avatar's mouth is driven by the interviewer audio that actually played
@@ -84,9 +99,7 @@ test("spoken interview: speech in, live captions, LLM follow-ups, spoken questio
 });
 
 test("microphone blocked: clear recovery steps and typing still works", async ({ page }) => {
-  await page.addInitScript(() => {
-    navigator.mediaDevices.getUserMedia = async () => { throw new DOMException("denied", "NotAllowedError"); };
-  });
+  await blockMedia(page);
   await page.goto("/");
   const id = await newSession(page, { role: "Product Manager", interview_type: "behavioral", duration_minutes: "5" });
   await page.goto(`/interview/${id}`);

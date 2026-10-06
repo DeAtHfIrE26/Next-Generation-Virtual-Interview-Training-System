@@ -8,6 +8,11 @@ on:
 permissions:
   contents: read
 
+# A newer push supersedes a running check of the same branch.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   python:
     runs-on: ubuntu-latest

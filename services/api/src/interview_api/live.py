@@ -255,6 +255,7 @@ class Conversation:
                     gate, gate_utt = (self.stt_provider.gate() if self.stt_provider else None), item[1]
                 elif isinstance(item, tuple) and item[0] == "gate_audio":
                     if gate is not None and gate.accept(item[1]):
+                        log.info("server VAD heard the candidate over utterance %d", gate_utt)
                         self._post(self.server_barge_in(gate_utt))
                         gate = None
                 elif isinstance(item, tuple) and item[0] == "discard":
@@ -438,7 +439,8 @@ class Conversation:
             await self.send(
                 {"type": "tts.end", "utterance": utt, "audio": total_s > 0, "duration": round(total_s, 3)}
             )
-            self._arm_playback_timer(utt, total_s + 3.0)
+            # fallback for clients that never report the end; generous, as a busy client plays late
+            self._arm_playback_timer(utt, total_s + max(5.0, total_s / 2))
 
     def _arm_playback_timer(self, utt: int, seconds: float) -> None:
         """If the client never reports playback end (audio blocked, tab hidden), move on anyway."""

@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import re
 import time
 from dataclasses import dataclass, field
@@ -113,6 +114,20 @@ def ground_quote(quote: str, answer: str) -> str | None:
     if best >= 3 and best / len(qset) >= 0.5:
         return " ".join(words[span[0] : span[1] + 1]).strip(" ,;:.")
     return None
+
+
+def ground_by_topic(quote: str, say: str, answer: str, min_shared: int = 3) -> str | None:
+    """Second grounding pass for a paraphrased quote: the answer clause sharing the most content
+    words with the model's quote and question together. Accepted only with ``min_shared`` distinct
+    shared content words, so the follow-up demonstrably refers to something the candidate said; the
+    stored anchor is still the candidate's own words, verbatim."""
+    target = content_words(f"{quote} {say}")
+    best, best_n = None, 0
+    for clause in answer_clauses(answer, limit=64):
+        n = len(content_words(clause) & target)
+        if n > best_n:
+            best, best_n = clause, n
+    return best if best_n >= min_shared else None
 
 
 def turn_schema(ids: list[str], forced: str | None, needs_last_answer: bool) -> dict[str, Any]:
@@ -290,6 +305,19 @@ def _extract_json(text: str) -> dict[str, Any]:
 # ----------------------------------------------------------------------------- agent
 
 
+LOCAL_PROVIDERS = {"ollama", "openai_compat"}
+
+
+def llm_timeout_s(chain: list[ChatLLM]) -> float:
+    """Per-request timeout for the interviewer LLM. ``LLM_TIMEOUT_S`` wins; otherwise 30 s for hosted
+    APIs and 240 s when the chain includes a self-hosted model, whose prompt evaluation on a CPU
+    can take minutes before the first token."""
+    env = os.getenv("LLM_TIMEOUT_S", "").strip()
+    if env:
+        return float(env)
+    return 240.0 if any(getattr(c, "name", "") in LOCAL_PROVIDERS for c in chain) else 30.0
+
+
 class InterviewerAgent:
     def __init__(
         self,
@@ -329,10 +357,9 @@ class InterviewerAgent:
             sys_prompt = system + json_note if use_schema else system
             corrections: list[str] = []
             repairs = 0
-            tries = 0
+            transient = 0  # counted per attempt: a timeout during a repair still gets its retry
             cur_schema = schema
             while True:
-                tries += 1
                 t0 = time.monotonic()
                 msgs = messages
                 if corrections:
@@ -360,8 +387,9 @@ class InterviewerAgent:
                     )
                 except TransientLLMError as e:
                     self._record(llm, False, t0, str(e))
-                    if tries <= self.transient_retries:
-                        time.sleep(0.4 * tries)
+                    if transient < self.transient_retries:
+                        transient += 1
+                        time.sleep(0.4 * transient)
                         continue
                     break
                 except (PermanentLLMError, RefusalError) as e:
@@ -374,6 +402,7 @@ class InterviewerAgent:
                 if repairs >= self.max_repairs:
                     break
                 repairs += 1
+                transient = 0
                 corrections = errors
                 if use_schema and repair_schema is not None:
                     cur_schema = repair_schema(errors) or schema
@@ -552,7 +581,9 @@ class InterviewerAgent:
                 if not quote:
                     errs.append(f"{action} needs an anchor_quote from the last answer")
                 elif " ".join(_norm_tokens(quote)) not in " ".join(_norm_tokens(last_answer or "")):
-                    real = ground_quote(quote, last_answer or "")
+                    real = ground_quote(quote, last_answer or "") or ground_by_topic(
+                        quote, say, last_answer or ""
+                    )
                     if real is None:
                         errs.append("anchor_quote must be copied verbatim from the candidate's last answer")
                     else:

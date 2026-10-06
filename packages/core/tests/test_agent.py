@@ -12,7 +12,9 @@ from interview_core.agent.interviewer import (
     InterviewerAgent,
     answer_clauses,
     enforce_difficulty,
+    ground_by_topic,
     ground_quote,
+    llm_timeout_s,
     parse_reply,
     quote_matches,
     repair_turn_hint,
@@ -406,3 +408,55 @@ def test_repair_hint_names_a_new_competency_and_fixes_missing_questions():
     assert "c1 (" not in h
     assert "'?'" in repair_turn_hint(["say must ask the candidate a question"], st, "c1")
     assert repair_turn_hint(["difficulty must be an integer 1-5"], st, "c1") == ""
+
+
+def test_paraphrased_quote_is_grounded_to_the_clause_the_question_is_about():
+    answer = (
+        "We rebuilt the billing export last spring. The nightly batch job took forty minutes, "
+        "so we partitioned the invoices table by month and the job now finishes in six minutes."
+    )
+    # the model paraphrased: no verbatim span, but the question is clearly about the partitioning
+    got = ground_by_topic(
+        "we split the invoice table into monthly partitions",
+        "Why did you partition invoices by month rather than by customer?",
+        answer,
+    )
+    assert got is not None and got in answer and "partitioned the invoices table by month" in got
+    # a question unrelated to anything the candidate said is still rejected
+    assert ground_by_topic("we used Kafka", "Why Kafka over RabbitMQ?", answer) is None
+
+
+def test_transient_error_during_a_repair_still_gets_its_retry():
+    llm = Scripted(
+        "primary",
+        [
+            json.dumps(BLUEPRINT),
+            reply("open"),
+            reply(
+                "follow_up",
+                say="You mentioned Kafka. Why Kafka?",
+                quote="we used Kafka",
+                last={"score": 3, "strengths": "", "gaps": "", "vague": False},
+            ),
+            TransientLLMError("ReadTimeout"),  # the repair attempt times out once
+            reply(
+                "follow_up",
+                say="You said the cache was stale. How did you notice?",
+                quote="the cache was stale",
+                last={"score": 3, "strengths": "", "gaps": "", "vague": False},
+            ),
+        ],
+    )
+    ag = InterviewerAgent([llm])
+    st = state()
+    ag.next_turn(st, now=0.5)
+    t = ag.next_turn(st, Answer("Honestly the cache was stale for hours.", seconds=10), now=30)
+    assert not t.emergency and t.anchor_quote == "the cache was stale"
+
+
+def test_llm_timeout_defaults(monkeypatch):
+    monkeypatch.delenv("LLM_TIMEOUT_S", raising=False)
+    assert llm_timeout_s([Scripted("anthropic", [])]) == 30.0
+    assert llm_timeout_s([Scripted("ollama", [])]) == 240.0
+    monkeypatch.setenv("LLM_TIMEOUT_S", "90")
+    assert llm_timeout_s([Scripted("ollama", [])]) == 90.0

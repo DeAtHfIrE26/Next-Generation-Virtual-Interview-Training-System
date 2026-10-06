@@ -166,3 +166,62 @@ Tests: `test_server_detects_barge_in_and_keeps_the_interrupting_words` and `test
 - Level and diagnostics always read the current analyser.
 
 **After the fix:** viseme updates with five distinct viseme shapes and a peak weight of 0.75 in the same run. The E2E now asserts `visemes > 0` on Chromium.
+
+## D16. Grounding a paraphrased anchor, per-attempt retries, and a timeout that fits self-hosted models (2026-10-06)
+
+**Measured.** Agent-evidence run 5 (48e3da0, Qwen2.5-7B on CPU) and the real-LLM E2E on e30b833.
+
+In interview 02, 7 of 19 attempts were rejected:
+- 5 for "anchor_quote must be copied verbatim";
+- 2 for repeating an earlier question;
+- 1 for an Ollama `ReadTimeout` (240 s).
+
+The one backup question in that interview came from a turn where the first reply was rejected and the repair then timed out. Two code defects made a single timeout fatal:
+1. **Shared retry counter.** Transient-error retries were counted across the whole turn, so a timeout during a repair was never retried.
+2. **Fixed 30 s timeout.** The API built the agent with a 30 s request timeout. A CPU-hosted 7B model can take longer than that before its first token on a 3–4k-token prompt. That is the likely cause of the one backup question in the real-LLM E2E run.
+
+**Chosen:**
+- **Second grounding pass.** If `ground_quote` cannot find the model's quote in the candidate's last answer, `ground_by_topic` picks the answer clause that shares the most content words with the quote and the question together. It accepts that clause only when at least 3 distinct content words are shared.
+  - The stored anchor is still the candidate's own words, verbatim.
+  - A follow-up that refers to nothing the candidate said is still rejected and repaired. The follow-up mechanism keeps its check; the check now verifies what the question is about instead of failing on the model's copying accuracy.
+- **Per-attempt retries.** Transient retries are counted per attempt, so a timeout during a repair gets its own retry.
+- **Configurable timeout.** `LLM_TIMEOUT_S` sets the request timeout. When it is not set, the default is 30 s for hosted APIs and 240 s when the chain contains `ollama` or `openai_compat`.
+
+Tests:
+- `test_paraphrased_quote_is_grounded_to_the_clause_the_question_is_about`
+- `test_transient_error_during_a_repair_still_gets_its_retry`
+- `test_llm_timeout_defaults`
+
+## D17. Playback end follows the audio actually played; the avatar sheds load on a starved device (2026-10-06)
+
+**Measured.** Local E2E pinned to 2 cores (`taskset -c 0,1`, about the size of a CI runner):
+- **TTS slower than real time.** Kokoro needed 17.7 s to synthesise 8.1 s of speech, so playback stalls between chunks.
+- **Starved main thread.** Software WebGL ran at about 1 fps, and React rendered the transcript about 15 s late. The client also handled WebSocket messages late.
+- **Fallback timer fired early.** The server's fallback timer for "the client never reported playback end" was `tts.end + duration + 3 s`. It fired while the lagging client was still playing, so the server switched to listening before the client reported "audio ended" (protocol trace: `phase listening` 48.6 s, `audio ended` 50.1 s).
+- **Client estimate ignored stalls.** The client's own end estimate, `first chunk + total queued audio`, assumed no stalls either.
+
+**Chosen:**
+1. **Play-out model and fallback timer.**
+   - The speaker models play-out per chunk: each chunk starts when it arrives or when the previous chunk ends, whichever is later. "Ended" is reported only after the modelled end.
+   - The server's fallback timer allows `duration + max(5 s, duration / 2)` after `tts.end`. It covers clients that never report; a client that is merely slow is no longer cut off.
+2. **Adaptive avatar quality.**
+   - Trigger: the avatar holds less than half its target frame rate for 3 s.
+   - Response: it renders smaller frames (pixel ratio × 0.6) at a lower rate (fps × 0.6, minimum 5), at most twice.
+   - Why: audio capture, barge-in detection and the UI share the main thread, and they come first.
+   - Visibility: `?debug=1` shows the degradation level.
+3. **E2E barge-in check.**
+   - Old method: waiting for the stage's `data-audio` attribute, which a starved page renders late.
+   - New method: wait on the room controller's state.
+   - Diagnostics: a failing test prints the protocol trace and the browser console into the job log.
+4. **Fake microphone and browser setup.**
+   - The fake microphone is installed with `Object.defineProperty` on `MediaDevices.prototype` and on the instance. WebKit ignores plain assignment and hands the page its own mock devices.
+   - The fake microphone fails with a clear message instead of hanging when the browser has no audio device.
+   - CI gives Firefox and WebKit a PulseAudio null sink.
+5. **Playback worklet preloaded.**
+   - Problem: on the starved device, TalkingHead's own 5 s timeout for loading its playback worklet fired ("Worklet loading timed out"), and the interviewer's audio stream failed to start.
+   - Fix: the worklet is now loaded without a timeout while the avatar loads. If the library's own load still fails, the stream is retried once.
+6. **Lip-sync counter measures detection, not rendering.**
+   - The `?debug=1` viseme counter counts the non-silence visemes HeadAudio detects in the played audio, not rendered frames, which a starved device draws at 1–2 fps.
+   - Barge-ins are counted once per utterance, even when both the browser and the server detect them.
+
+**After:** the full spoken-interview E2E passes on the same 2-core pin (barge-in, lip-sync, report), where it previously failed at barge-in and then at lip-sync.

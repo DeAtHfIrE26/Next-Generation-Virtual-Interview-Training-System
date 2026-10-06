@@ -14,7 +14,7 @@ from typing import Any
 
 import numpy as np
 from interview_core.adapters import factory
-from interview_core.agent.interviewer import Answer, InterviewerAgent
+from interview_core.agent.interviewer import Answer, InterviewerAgent, llm_timeout_s
 from interview_core.agent.state import AgentState, Turn
 from interview_core.crypto import EncryptedBlob, decrypt_template
 from interview_core.delivery import compute as delivery_metrics
@@ -116,7 +116,7 @@ def agent_for(db: Session, user: User, s: InterviewSession) -> InterviewerAgent:
     """The configured provider chain, or none once the session's hard cost cap is reached (the agent
     then uses flagged emergency questions; the UI shows the badge)."""
     chain = [] if metering.over_cap(db, user, s) else list(runtime.llm_chain())
-    return InterviewerAgent(chain)
+    return InterviewerAgent(chain, timeout_s=llm_timeout_s(chain))
 
 
 def answer_signals(
