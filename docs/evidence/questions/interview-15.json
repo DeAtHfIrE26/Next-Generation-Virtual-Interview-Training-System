@@ -1,0 +1,670 @@
+{
+ "checks": {
+  "questions": 10,
+  "bank_overlap": 0,
+  "follow_ups": 6,
+  "follow_ups_referencing_answer": 6,
+  "difficulty_tracks_performance": true,
+  "difficulty_transitions": [
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   }
+  ],
+  "difficulty_corrections_by_code": 5,
+  "emergency_questions": 0,
+  "fresh_questions": 0,
+  "rejected_attempts": {
+   "follow_up must ask about what the candidate just said (the a": 1,
+   "to return to an earlier answer use action revisit": 1,
+   "say must ask the candidate a question": 1,
+   "repeats an earlier question": 2,
+   "ollama": 4
+  },
+  "emergency_blueprint": false,
+  "repeats": 0,
+  "closed_on_time": true,
+  "passed": true
+ },
+ "state": {
+  "session_id": "mock-15",
+  "params": {
+   "role": "Security Engineer",
+   "seniority": "senior",
+   "company": "CrowdStrike",
+   "company_style": "Threat modelling and incident response",
+   "job_description": "",
+   "resume_context": "",
+   "skills": [
+    "Threat modelling"
+   ],
+   "interview_type": "technical",
+   "round": "onsite",
+   "difficulty": "auto",
+   "language": "en",
+   "duration_minutes": 15,
+   "persona": "maya"
+  },
+  "blueprint": {
+   "summary": "This interview will assess the candidate's expertise in threat modelling and their ability to apply it in real-world scenarios, which is critical for a senior Security Engineer at CrowdStrike, known for its deep focus on incident response and security engineering.",
+   "competencies": [
+    {
+     "id": "c1",
+     "name": "Threat Modelling",
+     "why": "Essential for designing secure systems and proactively mitigating risks, as highlighted in the job description.",
+     "weight": 0.5,
+     "minutes": 7.0,
+     "signals": [
+      "clearly defined threat models",
+      "real-world application"
+     ]
+    },
+    {
+     "id": "c2",
+     "name": "Incident Response",
+     "why": "Key to CrowdStrike's core competencies and a critical skill for a senior Security Engineer.",
+     "weight": 0.25,
+     "minutes": 3.0,
+     "signals": [
+      "incident handling procedures",
+      "post-incident analysis"
+     ]
+    },
+    {
+     "id": "c3",
+     "name": "Technical Leadership",
+     "why": "Important for mentoring junior engineers and leading complex projects, as implied by the senior role.",
+     "weight": 0.15,
+     "minutes": 2.0,
+     "signals": [
+      "team management",
+      "project leadership"
+     ]
+    }
+   ],
+   "opening": "Welcome. Let's start by discussing your experience with threat modelling. Can you walk us through a recent project where you applied threat modelling principles?",
+   "style_notes": "The interview will be conducted in a warm and encouraging manner, focusing on precise probes and real-world applications. The tone will be technical and inquisitive, with a mix of open-ended and directed questions to assess the candidate's depth of knowledge and practical experience.",
+   "start_difficulty": 4,
+   "emergency": false,
+   "provider": "ollama"
+  },
+  "turns": [
+   {
+    "index": 0,
+    "action": "open",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "Hi there, welcome to the interview. My name is Maya. Let's start by discussing your experience with threat modelling. Can you walk us through a recent project where you applied threat modelling principles?",
+    "anchor_quote": "",
+    "reason": "Introducing the topic and starting the interview. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000000.0,
+    "answer": "Sure, Maya. In my previous role at a financial services firm, we were looking to enhance our threat model for a new payment processing system. The system was complex, involving multiple layers of authentication and encryption. To ensure we covered all bases, I led a team to conduct a comprehensive threat model using the STRIDE framework (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege). We identified the most critical threats, which were primarily related to authentication and data integrity. I proposed implementing multi-factor authentication and real-time integrity checks. To test our model, we ran a series of penetration tests and found that our system was indeed more resilient against the identified threats. By the end of the project, we had reduced the risk of a data breach by 70% and improved our system's overall security posture.",
+    "answer_words": [],
+    "answer_seconds": 55.6,
+    "answered_at": 1000063.6,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a detailed example of applying threat modelling principles and showed measurable results.",
+     "gaps": "Could have included more specific technical details about the implementation and tests.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 1,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "That's a great example. Could you elaborate on the technical details of how you implemented multi-factor authentication and real-time integrity checks? Also, how did you validate that these changes effectively reduced the risk of a data breach by 70%?",
+    "anchor_quote": "We identified the most critical threats, which were primarily related to authentication and data integrity.",
+    "reason": "Need to dig deeper into the specific technical aspects and the validation process of the threat model. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000063.6,
+    "answer": "Certainly, Maya. For multi-factor authentication, we integrated an SMS-based verification step after the initial password input. This ensured that even if a user's password was compromised, an attacker would still need access to the user's phone to proceed. For real-time integrity checks, we implemented HMAC (Hash-based Message Authentication Code) to verify the integrity of each transaction packet. This way, any tampering could be immediately detected. To validate the effectiveness, we conducted a series of controlled penetration tests. We simulated various attack vectors, such as man-in-the-middle attacks and replay attacks, to see how our system would respond. We also set up蜜钥监控系统来实时监控任何异常行为。测试结果显示，系统在这些攻击中的表现显著提升，成功阻止了所有预设的攻击场景，从而验证了我们的安全改进确实降低了70%的数据泄露风险。通过这些具体的技术措施和测试验证，我们确保了系统的安全性得到了显著提升。",
+    "answer_words": [],
+    "answer_seconds": 40.0,
+    "answered_at": 1000111.6,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided specific technical details and validated the effectiveness of the implemented measures.",
+     "gaps": "",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "difficulty 3->4 (score 4, previous 4)"
+    ]
+   },
+   {
+    "index": 2,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "Interesting. Can you tell me more about the specific attack vectors you considered during your penetration tests? How did you decide which vectors to focus on?",
+    "anchor_quote": "we conducted a series of controlled penetration tests. We simulated various attack vectors, such as man-in-the-middle attacks and replay attacks, to see how our system would respond.",
+    "reason": "To delve deeper into the testing process and the specific attack vectors considered. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000111.6,
+    "answer": "Certainly, Maya. During the penetration tests, we focused on the STRIDE threats I mentioned earlier. We started with a thorough risk assessment to identify the most likely and impactful attack vectors. For authentication, we considered password cracking and session hijacking. For data integrity, we looked at replay attacks and man-in-the-middle attacks. We also included social engineering attacks to simulate more sophisticated threats. To ensure we covered all bases, we used a combination of automated tools and manual testing. For example, we used a password cracking tool to test the strength of our multi-factor authentication process. For the real-time integrity checks, we manually injected tampered data packets to see how the system handled them. We documented each test and the outcomes, which helped us validate that the changes we made, like multi-factor authentication and HMAC implementation, were effective. This process not only reduced the risk of a data breach by 70% but also improved our overall security posture.",
+    "answer_words": [],
+    "answer_seconds": 62.8,
+    "answered_at": 1000182.4,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided a detailed explanation of the threat model and the specific technical measures taken, including multi-factor authentication and real-time integrity checks. They also described the validation process through penetration tests.",
+     "gaps": "No specific metrics or quantitative data were provided to substantiate the 70% reduction in risk.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 3,
+    "action": "revisit",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "We also included social engineering attacks to simulate more sophisticated threats. How did you decide on the specific social engineering attack vectors to simulate, and why were they chosen over other potential threats? ?",
+    "anchor_quote": "We also included social engineering attacks to simulate more sophisticated threats",
+    "reason": "To delve deeper into the specific attack vectors and the rationale behind their selection, as mentioned in the recent example provided by the candidate. This will help in understanding the thoroughness of their threat modeling process and their ability to consider a wide range of potential threats,  [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000182.4,
+    "answer": "During the risk assessment, we identified social engineering as a critical threat due to its high impact and potential for widespread damage. We focused on vectors like phishing and pretexting because they are prevalent and can compromise both technical and non-technical aspects of security. For phishing, we simulated an attack where a user received a fake email from their bank, asking them to verify their account information by clicking a link. This helped us test the effectiveness of our employee training and email filtering systems. For pretexting, we set up a scenario where an attacker posed as a contractor to gain physical access to our servers. This tested our physical security measures and access control policies. These vectors were chosen because they are highly realistic and can exploit human vulnerabilities, which are often overlooked in traditional technical security measures. By simulating these specific social engineering attacks, we were able to identify weak points in our security culture and infrastructure, allowing us to make targeted improvements.",
+    "answer_words": [],
+    "answer_seconds": 66.0,
+    "answered_at": 1000256.4,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided detailed examples of threat vectors and their rationale, showing a deep understanding of the threat modeling process.",
+     "gaps": "No specific metrics or quantitative data were mentioned regarding the effectiveness of the social engineering test.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "difficulty 3->4 (score 4, previous 4)"
+    ]
+   },
+   {
+    "index": 4,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "That's very detailed. Can you provide some quantitative data or metrics on how effective the social engineering tests were, specifically in terms of the number of successful phishing attempts prevented or the reduction in the time taken to detect and respond to such threats? Also, how did you integrate these findings into your threat model at CrowdStrike?",
+    "anchor_quote": "This helped us test the effectiveness of our employee training and email filtering systems.",
+    "reason": "Need to understand the impact of the social engineering tests more quantitatively and explore the candidate's approach further in a specific context at CrowdStrike. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000256.4,
+    "answer": "Certainly, Maya. In the social engineering tests, we saw a significant improvement in the detection and response times. For phishing, we conducted controlled email campaigns and monitored the click-through rates. Before implementing our new training and filtering systems, the click-through rate on simulated phishing emails was around 15%. After the improvements, this rate dropped to 2%. This means we prevented approximately 13% of potential phishing attacks from succeeding. In terms of response times, our average time to detect a phishing attempt dropped from 48 hours to just 12 hours, a 75% reduction. Regarding the integration into our threat model at CrowdStrike, we documented these findings in a detailed report. The report included a risk matrix that highlighted the effectiveness of our new measures against various attack vectors. We also updated our threat model to include specific countermeasures for social engineering, such as enhanced email filtering and regular phishing awareness training for all employees. This integration ensured that our threat model was more comprehensive and reflected the real-world effectiveness of our security practices.",
+    "answer_words": [],
+    "answer_seconds": 68.8,
+    "answered_at": 1000333.2000000001,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided detailed quantitative data and integration into the threat model.",
+     "gaps": "Candidate could provide more specific examples of post-incident analysis.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 5,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "You mentioned documenting these findings in a detailed report. Can you walk us through how you integrated the post-incident analysis into the threat model and incident response procedures at CrowdStrike?",
+    "anchor_quote": "we documented these findings in a detailed report.",
+    "reason": "Candidate provided good data, follow up on post-incident analysis within the company context. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000333.2000000001,
+    "answer": "Certainly, Maya. After the social engineering tests, we conducted a thorough post-incident analysis to identify any gaps or weaknesses. We documented the entire process, including the types of threats simulated, the measures taken to prevent them, and the outcomes of each test. This report was shared with the incident response team and security leadership at CrowdStrike. In the threat model, we incorporated specific recommendations based on the post-incident analysis. For example, we added new indicators of compromise (IoCs) to our threat intelligence feeds and updated our threat hunting playbooks to include social engineering tactics. We also implemented a new multi-layered approach to email security, including advanced filtering and user education modules. For the incident response procedures, we created a standardized playbook that detailed the steps to follow in case of a social engineering breach. This playbook included real-time notifications, escalation protocols, and a clear process for containing and mitigating the incident. We also established a regular training cycle for all employees, focusing on recognizing and responding to social engineering attempts. The integration of these findings ensured that our threat model and incident response procedures were more robust and better aligned with the actual threats we faced. This approach not only reduced the risk of future breaches but also improved our overall security posture.",
+    "answer_words": [],
+    "answer_seconds": 85.2,
+    "answered_at": 1000426.4,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided detailed examples of threat modelling, including technical implementations and validation methods. They also discussed post-incident analysis and its integration into threat models and incident response procedures.",
+     "gaps": "The answer could benefit from more specific metrics and examples of quantitative data, such as exact numbers of phishing attempts prevented.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 6,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "That's great. You mentioned a significant improvement in detection and response times. Could you provide some specific numbers or metrics to quantify this improvement, such as the exact reduction in time taken to detect and respond to phishing attempts? Additionally, how did you integrate these findings specifically into the threat model and incident response procedures at CrowdStrike, perhaps with any specific tools or technologies used?",
+    "anchor_quote": "For the incident response procedures",
+    "reason": "Revisit the post-incident analysis with more specific data to ensure robustness of the answer and follow up on the integration with technical specifics at CrowdStrike. :  [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000426.4,
+    "answer": "Absolutely, Maya. In the social engineering tests, we saw a significant improvement in the detection and response times. Specifically, before implementing our new training and filtering systems, the average time to detect a phishing attempt was 48 hours. After the improvements, this time dropped to 12 hours, representing a 75% reduction in detection time. For response times, the average time to respond to and contain a phishing incident was reduced from 36 hours to 10 hours, a 72% decrease. These improvements were quantified through detailed logs and post-incident reports that tracked the entire lifecycle of each simulated phishing attempt. To integrate these findings into the threat model and incident response procedures at CrowdStrike, we created a comprehensive report that highlighted the effectiveness of our new measures. We incorporated specific countermeasures into our threat model, such as adding new indicators of compromise (IoCs) to our threat intelligence feeds and updating our threat hunting playbooks to include social engineering tactics. In terms of tools and technologies, we leveraged advanced filtering technologies and user education modules. For instance, we implemented a multi-layered email security solution that included real-time filters to block suspicious emails and a user education program that trained employees to recognize phishing attempts. Additionally, we developed a new incident response playbook that detailed the steps to follow in the event of a social engineering breach. This playbook included real-time notifications to ensure immediate action, escalation protocols for senior leadership, and a clear process for containment and mitigation. These specific tools and integrated procedures were documented and shared with the entire security team at CrowdStrike. The integration ensured that our threat model was more robust and better aligned with the real-world effectiveness of our security practices.",
+    "answer_words": [],
+    "answer_seconds": 113.6,
+    "answered_at": 1000548.0,
+    "score": 4,
+    "assessment": {
+     "strengths": "Provided detailed metrics and a comprehensive approach to integrating findings.",
+     "gaps": "No specific tools or technologies mentioned for integration.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote 'we saw a significant improvement in the detection and response times')"
+    ]
+   },
+   {
+    "index": 7,
+    "action": "new_topic",
+    "competency": "c2",
+    "difficulty": 4,
+    "say": "Can you walk us through your experience with incident response procedures at CrowdStrike, particularly how you handle and manage incidents?",
+    "anchor_quote": "Can you walk us through your experience with incident response procedures at CrowdStrike, particularly how you handle and manage incidents?",
+    "reason": "Explores incident response procedures, which is key for a senior Security Engineer at CrowdStrike. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000548.0,
+    "answer": "Certainly, Maya. At CrowdStrike, incident response procedures are a critical part of our security strategy. When an incident occurs, the first step is to establish a clear incident response team, which includes representatives from various security teams like threat intelligence, engineering, and legal. We follow a structured playbook that outlines the steps to be taken, from initial detection to containment and resolution. For example, if a phishing attempt is detected, the first notification is sent to the security operations center (SOC) using our automated incident reporting system. The SOC then triages the incident based on severity and potential impact. If the incident is deemed critical, it is escalated to the incident response team. We use a tool like Splunk for real-time monitoring and log analysis, which helps us quickly identify the source and scope of the incident. We also leverage our threat intelligence feeds to cross-reference any known malicious activities and to identify any indicators of compromise (IoCs). Once the incident is contained, we conduct a thorough post-incident analysis to understand the root cause and any lessons learned. This analysis is documented and shared with relevant teams to improve our threat model and incident response procedures. For instance, after a recent incident, we identified a specific phishing tactic and updated our training modules to include this information. Additionally, we maintain a regular incident response drill schedule to ensure that all team members are prepared and familiar with the procedures. These drills are crucial for maintaining our readiness and improving our response times. Overall, our incident response procedures at CrowdStrike are designed to be flexible yet thorough, ensuring that we can effectively manage and mitigate any security incidents that may arise.",
+    "answer_words": [],
+    "answer_seconds": 112.0,
+    "answered_at": 1000668.0,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided detailed metrics and specific examples of improvements in detection and response times, as well as integration into procedures.",
+     "gaps": "Candidate could have elaborated more on the specific tools and technologies used for incident response.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 8,
+    "action": "follow_up",
+    "competency": "c2",
+    "difficulty": 4,
+    "say": "That's great. Could you provide more details on the specific tools and technologies you use in the incident response procedures at CrowdStrike, particularly in the context of handling and managing incidents?",
+    "anchor_quote": "our incident response procedures at CrowdStrike are designed to be flexible yet thorough",
+    "reason": "To ensure a balanced coverage of both threat modeling and incident response. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000668.0,
+    "answer": "Certainly, Maya. At CrowdStrike, we use a variety of tools and technologies to handle and manage incidents effectively. For real-time monitoring and log analysis, we rely heavily on Splunk, which helps us quickly identify the source and scope of an incident. For threat intelligence, we use Threat Connect, which provides us with real-time data and alerts on potential threats and vulnerabilities. We also use a SIEM (Security Information and Event Management) solution, like Siemplify, to correlate and analyze events from different sources, which aids in spotting patterns and anomalies. In the context of phishing attempts, we use advanced email filtering solutions like Proofpoint to block suspicious emails before they reach employees. For training and awareness, we utilize tools like PhishMe, which simulates phishing attacks to train employees and test their ability to recognize and respond to such threats. Additionally, we have a dedicated SOC that uses tools like FireEye to monitor network traffic and detect any unauthorized activities. For incident containment and resolution, we have a streamlined process that involves using our own security automation tools, like CrowdStrike Falcon, to isolate affected systems and prevent the spread of the threat. We also use incident management software like Jira to track the progress of each incident and ensure that all necessary actions are taken in a timely manner. These tools and technologies work together to create a robust incident response framework. They help us respond quickly and effectively to incidents, ensuring that any security breaches are contained and mitigated as soon as possible.",
+    "answer_words": [],
+    "answer_seconds": 100.8,
+    "answered_at": 1000776.8,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided detailed tools and technologies used for incident response, including Splunk, Threat Connect, Siemplify, Proofpoint, PhishMe, FireEye, and CrowdStrike Falcon.",
+     "gaps": "Could benefit from more specific examples of incidents and how these tools were used in real scenarios.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote 'Can you walk us through your experience with incident response procedures at Cro')",
+     "difficulty 3->4 (score 4, previous 4)"
+    ]
+   },
+   {
+    "index": 9,
+    "action": "close",
+    "competency": "c2",
+    "difficulty": 4,
+    "say": "Thank you for the detailed insights into the tools and technologies you use for incident response at CrowdStrike. It sounds like a well-rounded approach. Given the time, we can conclude the interview here. Thank you for your participation, and we appreciate your expertise.",
+    "anchor_quote": "That's great. Could you provide more details on the specific tools and technologies you use in the incident response procedures at CrowdStrike, particularly in the context of handling and managing incidents?",
+    "reason": "The candidate has provided a comprehensive overview of the tools and technologies used, and there are no more specific questions that can be asked within the remaining time without repeating or rephrasing previous questions. The candidate has demonstrated a strong understanding of incident response ",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000776.8,
+    "answer": null,
+    "answer_words": [],
+    "answer_seconds": 0.0,
+    "answered_at": null,
+    "score": null,
+    "assessment": null,
+    "evaluation": null,
+    "corrections": []
+   }
+  ],
+  "difficulty": 4,
+  "started_at": 1000000.0,
+  "finished": true,
+  "events": [
+   {
+    "t": 1791320077.342,
+    "kind": "turn",
+    "turn": 0,
+    "provider": "ollama",
+    "ms": 126774.9,
+    "action": "open"
+   },
+   {
+    "t": 1791320190.786,
+    "kind": "correction",
+    "turn": 1,
+    "detail": "difficulty 3->4 (score 4, previous 4)"
+   },
+   {
+    "t": 1791320190.786,
+    "kind": "turn",
+    "turn": 1,
+    "provider": "ollama",
+    "ms": 72017.5,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320318.452,
+    "kind": "turn",
+    "turn": 2,
+    "provider": "ollama",
+    "ms": 75097.1,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320516.212,
+    "kind": "correction",
+    "turn": 3,
+    "detail": "difficulty 3->4 (score 4, previous 4)"
+   },
+   {
+    "t": 1791320516.212,
+    "kind": "turn",
+    "turn": 3,
+    "provider": "ollama",
+    "ms": 143720.5,
+    "action": "revisit"
+   },
+   {
+    "t": 1791320665.753,
+    "kind": "turn",
+    "turn": 4,
+    "provider": "ollama",
+    "ms": 96657.1,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320822.328,
+    "kind": "turn",
+    "turn": 5,
+    "provider": "ollama",
+    "ms": 95091.0,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321016.776,
+    "kind": "correction",
+    "turn": 6,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote 'we saw a significant improvement in the detection and response times')"
+   },
+   {
+    "t": 1791321016.776,
+    "kind": "turn",
+    "turn": 6,
+    "provider": "ollama",
+    "ms": 122368.0,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321808.803,
+    "kind": "turn",
+    "turn": 7,
+    "provider": "ollama",
+    "ms": 696942.0,
+    "action": "new_topic"
+   },
+   {
+    "t": 1791322279.632,
+    "kind": "correction",
+    "turn": 8,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote 'Can you walk us through your experience with incident response procedures at Cro')"
+   },
+   {
+    "t": 1791322279.632,
+    "kind": "correction",
+    "turn": 8,
+    "detail": "difficulty 3->4 (score 4, previous 4)"
+   },
+   {
+    "t": 1791322279.632,
+    "kind": "turn",
+    "turn": 8,
+    "provider": "ollama",
+    "ms": 369122.5,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791322774.744,
+    "kind": "turn",
+    "turn": 9,
+    "provider": "ollama",
+    "ms": 400722.9,
+    "action": "close"
+   }
+  ]
+ },
+ "attempts": [
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 113923.3,
+   "error": "",
+   "input_tokens": 600,
+   "output_tokens": 388
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 126774.9,
+   "error": "",
+   "input_tokens": 1454,
+   "output_tokens": 84
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 72017.5,
+   "error": "",
+   "input_tokens": 1700,
+   "output_tokens": 184
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 75097.1,
+   "error": "",
+   "input_tokens": 2021,
+   "output_tokens": 155
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 79081.6,
+   "error": "follow_up must ask about what the candidate just said (the anchor_quote); to return to an earlier answer use action revisit; say must ask the candidate a question",
+   "input_tokens": 2300,
+   "output_tokens": 160
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 64638.4,
+   "error": "",
+   "input_tokens": 2398,
+   "output_tokens": 274
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 96657.1,
+   "error": "",
+   "input_tokens": 2590,
+   "output_tokens": 224
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 95090.9,
+   "error": "",
+   "input_tokens": 2959,
+   "output_tokens": 156
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 122367.9,
+   "error": "",
+   "input_tokens": 3309,
+   "output_tokens": 254
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 134977.3,
+   "error": "repeats an earlier question: \"That's great. You mentioned a significant improvement in detection and response \"",
+   "input_tokens": 3832,
+   "output_tokens": 206
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240106.1,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 41792.8,
+   "error": "repeats an earlier question: \"That's great. You mentioned a significant improvement in detection and response \"",
+   "input_tokens": 4061,
+   "output_tokens": 168
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240107.5,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 39154.9,
+   "error": "",
+   "input_tokens": 4061,
+   "output_tokens": 156
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240016.9,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 128704.2,
+   "error": "",
+   "input_tokens": 3979,
+   "output_tokens": 174
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240118.3,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 160203.0,
+   "error": "",
+   "input_tokens": 4071,
+   "output_tokens": 274
+  }
+ ],
+ "qualities": [
+  "strong",
+  "strong",
+  "strong",
+  "strong",
+  "strong",
+  "strong",
+  "strong",
+  "strong",
+  "strong"
+ ]
+}

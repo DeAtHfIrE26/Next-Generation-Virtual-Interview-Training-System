@@ -82,7 +82,9 @@ The owner's report is accurate:
 
 Several of these pass their unit tests only because they run under offline defaults, and the one end-to-end test types its answers instead of speaking. The rebuild order follows from this: voice pipeline, then question engine, then avatar, then UI.
 
-## Run 2: after the rebuild (2026-10-06, commit `f1a2634`)
+## Run 2: after the rebuild (2026-10-06, final commit `3e0f5b1`)
+
+Evidence was gathered on commits `f1a2634` to `3e0f5b1`; each linked item names the commit it ran on. The CI runs below all ran on `3e0f5b1`, the final interviewer code.
 
 **How it was run.** Same questions as Run 1, answered by running the product the way a user would and by the automated runs that do the same, each linked below.
 - Stack: `docker compose up -d --build` from empty volumes, with the `.env.example` defaults. The only sandbox-specific addition is a proxy override that is not committed. Log: [`compose-up.log`](evidence/compose/compose-up.log).
@@ -100,13 +102,13 @@ Several of these pass their unit tests only because they run under offline defau
 
 | Question asked | Answer | Evidence |
 |---|---|---|
-| Does question text come from a static list? | **NO. WORKS.** | The question bank is gone. Every question is written live by the LLM interviewer agent from a blueprint, the candidate's parameters and their answers. *(Mock-interview pass rate: pending the final run.)* The real-LLM E2E fails on any backup question, and it passed (*pending: final CI run*). With no LLM configured (the compose default), questions are clearly badged backup questions, never silent. |
+| Does question text come from a static list? | **NO. WORKS.** | The question bank is gone. Every question is written live by the LLM interviewer agent from a blueprint, the candidate's parameters and their answers. 20 of 20 real-LLM mock interviews passed every check: 279 questions, 0 repeats, 0 overlap with the old bank, 0 emergency questions ([`evidence/questions/`](evidence/questions/), [agent-evidence run 37528464751](https://github.com/DeAtHfIrE26/Next-Generation-Virtual-Interview-Training-System/actions/runs/37528464751)). The real-LLM E2E fails on any backup question, and it passed ([E2E run 37528464728](https://github.com/DeAtHfIrE26/Next-Generation-Virtual-Interview-Training-System/actions/runs/37528464728)). With no LLM configured (the compose default), questions are clearly badged backup questions, never silent. |
 | Does the mic actually capture audio? | **YES. WORKS.** | AudioWorklet capture at 16 kHz over the WebSocket. The spoken E2E passes on Chromium, Firefox, WebKit, Edge, mobile Chrome and mobile Safari (CI `browsers` jobs). |
 | Does voice activity detection end the turn on its own? | **YES. WORKS.** | Silero VAD on the server ends the turn after the WAV answer finishes. The protocol log shows `stt.final` then `phase thinking` without any click (E2E failure dumps and the `?debug=1` panel). |
 | Does speech-to-text return real transcripts? | **YES. WORKS.** | Local sherpa-onnx: Nemotron streaming for live captions, Parakeet for the final transcript. On the synthetic 5-voice set, WER is 2.4% streaming and 0.0% final ([`stt_bench.txt`](evidence/voice/stt_bench.txt)). That set is synthetic speech, not human recordings, so it is not a field accuracy figure. Captions and transcript are visible in `04-transcript.png`. |
 | Does text-to-speech play? | **YES. WORKS.** | Kokoro neural TTS (local, 7 voices), streamed sentence by sentence. `tts.start` → `audio started` → `audio ended` events appear in every browser run. |
 | Does the avatar's mouth move in sync with the audio? | **YES. WORKS.** | A TalkingHead 3D avatar whose visemes are derived from the audio actually playing (HeadAudio). The compose run counted 729 visemes (`03-barge-in.png`, diagnostics panel). |
-| Is the feedback derived from the answer? | **YES. WORKS.** | Each answer is scored by the LLM rubric, and every score cites the candidate's own words. Answers not scored yet show "offline scoring" until the LLM finishes (D21). The real-LLM E2E fails if any answer is left with offline scoring (*pending: final CI run*). |
+| Is the feedback derived from the answer? | **YES. WORKS.** | Each answer is scored by the LLM rubric, and every score cites the candidate's own words. Answers not scored yet show "offline scoring" until the LLM finishes (D21). The real-LLM E2E fails if any answer is left with offline scoring, and it passed ([E2E run 37528464728](https://github.com/DeAtHfIrE26/Next-Generation-Virtual-Interview-Training-System/actions/runs/37528464728)). |
 
 ### Everything else
 
@@ -114,7 +116,8 @@ Several of these pass their unit tests only because they run under offline defau
 |---|---|---|
 | Landing, sign-up, consent, dashboard | **WORKS** | [`evidence/ui/`](evidence/ui/): 12 screens × 3 viewports × dark/light. |
 | Interview set-up (role, JD, resume) | **WORKS** | Role, seniority, company and its interview style, JD, resume PDF, skills to probe, interview type, round, difficulty, language, duration and persona (`new-interview--*.jpg`). |
-| Adaptive difficulty and follow-ups | **WORKS** | Follow-ups must quote the previous answer and ask about it. Difficulty moves at most one step per turn and never against the score. Both are checked by code in every mock interview (*(pending: final mock-interview run)*). |
+| Interviews in languages other than English | **PARTIAL: not validated** | The set-up offers Hindi, Spanish, French and German, and the interviewer is told the language. In the one Hindi mock interview (case 14), the 7B model wrote English mixed with romanized Hindi, with some garbled words, and no Devanagari. No check covers the language or script, and the speech models are English-only. Non-English interviews need a language check, multilingual speech models and a stronger LLM before they can be called working. |
+| Adaptive difficulty and follow-ups | **WORKS** | Follow-ups must quote the previous answer and ask about it. Difficulty moves at most one step per turn and never against the score. Both are checked by code in every mock interview: 165 of 165 follow-ups quoted and asked about the previous answer, and difficulty never moved against the score in 20 interviews. |
 | Interview blueprint or plan | **WORKS** | Planned at session creation while the candidate checks devices (D18). Shown in the room's sidebar and in the report's "By skill". |
 | Streaming STT with partial captions | **WORKS** | Live captions while the candidate speaks (E2E asserts them). |
 | Streaming TTS | **WORKS** | First audio after a sentence, not the whole reply. On the CPU-only sandbox, TTS first audio was p50 2.4 s. |
@@ -129,7 +132,7 @@ Several of these pass their unit tests only because they run under offline defau
 | Report and share link (E9) | **WORKS** | The spoken E2E ends on the report (`05-report.png`). Share links are revocable and hide the transcript (`test_full_session_with_signals_and_report`). |
 | Design quality | **WORKS** | [`docs/DESIGN.md`](DESIGN.md) design system, dark and light, WCAG AA contrast. Lighthouse mobile: landing 94 / 100, report 98 / 100 (performance / accessibility; [`evidence/lighthouse/`](evidence/lighthouse/)). |
 | End-to-end test through voice | **WORKS** | `interview.e2e.ts` speaks into the microphone. The old typed-answer test is gone. |
-| Cross-browser tests (Firefox, WebKit, mobile) | **WORKS** | CI `browsers` matrix: Firefox, WebKit, Edge, mobile Chrome (Pixel 7) and mobile Safari (iPhone 14), each with a virtual audio device (*pending: final CI run*). |
+| Cross-browser tests (Firefox, WebKit, mobile) | **WORKS** | CI `browsers` matrix: Firefox, WebKit, Edge, mobile Chrome (Pixel 7) and mobile Safari (iPhone 14), each with a virtual audio device. All green on `3e0f5b1` ([E2E run 37528464728](https://github.com/DeAtHfIrE26/Next-Generation-Virtual-Interview-Training-System/actions/runs/37528464728)). |
 | Hosted preview (Vercel) | **NOT LIVE: needs a realtime host (owner decision)** | The web app's preview builds, but Vercel functions cannot host the realtime speech service (WebSocket, speech models, LLM). Going live needs a container host and an LLM key, chosen and paid for by the owner. |
 | Legacy desktop prototypes (`legacy/`) | **Kept as reference, not run** | Their algorithms are preserved in `interview_core.legacy` and pinned by characterization tests against the original code. |
 
@@ -148,8 +151,8 @@ Several of these pass their unit tests only because they run under offline defau
 - Python: 180 passed (core, API and eval, including the live speech-model tests; 96 s on 3e0f5b1).
 - Web unit: 13 passed.
 - Spoken E2E: 3 per browser on 6 browser projects in CI, plus the compose run.
-- Real-LLM E2E: *pending: final CI run*.
-- Mock interviews with the real LLM: *(pending: final mock-interview run)*.
+- Real-LLM E2E: passed on `3e0f5b1` ([E2E run 37528464728](https://github.com/DeAtHfIrE26/Next-Generation-Virtual-Interview-Training-System/actions/runs/37528464728)) and on `85c14ba`, whose recording is in [`evidence/e2e/real-llm/`](evidence/e2e/real-llm/).
+- Mock interviews with the real LLM: 20/20 passed on `3e0f5b1` ([agent-evidence run 37528464751](https://github.com/DeAtHfIrE26/Next-Generation-Virtual-Interview-Training-System/actions/runs/37528464751)). Accepted LLM replies took p50 88.7 s and p95 216.7 s on CPU-only runners.
 
 ### Verdict
 
@@ -163,5 +166,7 @@ Every item the owner reported is fixed and observed working:
 Two items are not WORKS by default, and both need an owner decision rather than code:
 - **Face and voice verification** need licensed models.
 - **Hosting** needs a server for the realtime service and an LLM key.
+
+Interviews in languages other than English are not validated (see the table above).
 
 Accuracy is still not measured on real users. No consented evaluation data exists (`docs/EVAL_REPORT.md`), so every score in the product is labelled "experimental".

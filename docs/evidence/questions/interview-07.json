@@ -1,0 +1,795 @@
+{
+ "checks": {
+  "questions": 13,
+  "bank_overlap": 0,
+  "follow_ups": 7,
+  "follow_ups_referencing_answer": 7,
+  "difficulty_tracks_performance": true,
+  "difficulty_transitions": [
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 2
+   },
+   {
+    "score": 4,
+    "from": 2,
+    "to": 2
+   },
+   {
+    "score": 3,
+    "from": 2,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   }
+  ],
+  "difficulty_corrections_by_code": 4,
+  "emergency_questions": 0,
+  "fresh_questions": 2,
+  "rejected_attempts": {
+   "Maya is your own name": 4,
+   "say must ask the candidate a question": 1,
+   "repeats an earlier question": 5
+  },
+  "emergency_blueprint": false,
+  "repeats": 0,
+  "closed_on_time": true,
+  "passed": true
+ },
+ "state": {
+  "session_id": "mock-07",
+  "params": {
+   "role": "Registered Nurse",
+   "seniority": "mid",
+   "company": "Apollo Hospitals",
+   "company_style": "Clinical scenarios and patient-safety judgement",
+   "job_description": "Provide patient care in a 30-bed surgical ward; medication administration, patient education, escalation of deteriorating patients.",
+   "resume_context": "",
+   "skills": [],
+   "interview_type": "mixed",
+   "round": "screening",
+   "difficulty": "auto",
+   "language": "en",
+   "duration_minutes": 12,
+   "persona": "maya"
+  },
+  "blueprint": {
+   "summary": "This screening interview assesses core competencies for a mid-level Registered Nurse role at Apollo Hospitals, focusing on patient care and safety.",
+   "competencies": [
+    {
+     "id": "c1",
+     "name": "Patient Care",
+     "why": "Ensures the candidate can provide comprehensive and quality patient care in a busy surgical ward.",
+     "weight": 0.4,
+     "minutes": 4.0,
+     "signals": [
+      "Ability to manage multiple patients efficiently",
+      "Attention to detail in medication administration and patient education"
+     ]
+    },
+    {
+     "id": "c2",
+     "name": "Critical Thinking",
+     "why": "Evaluates the candidate's ability to make quick and accurate judgments in critical situations, relevant for patient safety in a busy ward.",
+     "weight": 0.3,
+     "minutes": 3.0,
+     "signals": [
+      "Experience in escalating patients when needed",
+      "Description of past critical incidents and actions taken"
+     ]
+    },
+    {
+     "id": "c3",
+     "name": "Team Collaboration",
+     "why": "Assesses the candidate's ability to work effectively with a multidisciplinary team, crucial for patient care in a busy surgical ward.",
+     "weight": 0.3,
+     "minutes": 4.0,
+     "signals": [
+      "Examples of teamwork and coordination with other healthcare professionals",
+      "Description of how they contribute to the team"
+     ]
+    }
+   ],
+   "opening": "Hi there, I’m excited to discuss your experience in patient care and how you can contribute to our team at Apollo Hospitals. Let's start by talking about your experience in providing care in a busy surgical ward.",
+   "style_notes": "The interview will use a warm and encouraging tone, focusing on the candidate's experience and skills. The depth will be moderate, with specific questions about past experiences and actions taken in critical situations.",
+   "start_difficulty": 3,
+   "emergency": false,
+   "provider": "ollama"
+  },
+  "turns": [
+   {
+    "index": 0,
+    "action": "open",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Can you tell me about a time when you provided exceptional patient care?",
+    "anchor_quote": "",
+    "reason": "focused fresh-question call (Ability to manage multiple patients efficiently) [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000000.0,
+    "answer": "Sure. One time, a patient was experiencing severe anxiety and was having trouble breathing. I noticed she was struggling to catch her breath, so I immediately offered her reassurance and guided her through some breathing exercises. I also called the nurse on duty and asked for an oxygen mask. With my help, she started to feel better within a few minutes. It was a small but impactful moment that made a big difference for her.",
+    "answer_words": [],
+    "answer_seconds": 30.0,
+    "answered_at": 1000038.0,
+    "score": 3,
+    "assessment": {
+     "strengths": "The candidate provided a concrete example of patient care, showed attentiveness and quick action, and resulted in a positive outcome.",
+     "gaps": "The detail on the patient's condition could have been more specific, and the contribution of the nurse on duty was not elaborated.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "written by the focused fresh-question call after the full turn failed validation"
+    ]
+   },
+   {
+    "index": 1,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "That's a great example. Could you tell me more about the patient's condition before you intervened? What specific symptoms were you observing, and how did the patient's condition change after you provided those breathing exercises?",
+    "anchor_quote": "her reassurance and guided her through some breathing exercises. I",
+    "reason": "Expand on the patient's condition and the nurse's role. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000038.0,
+    "answer": "Absolutely. Before I intervened, the patient was visibly very anxious and was having difficulty catching her breath. Her skin was pale, and she was hyperventilating. After I guided her through some breathing exercises and provided an oxygen mask, her breathing started to improve, and she looked more relaxed. Her color returned to normal, and she seemed much more at ease. It was a clear sign that the quick intervention made a big difference in her condition.",
+    "answer_words": [],
+    "answer_seconds": 30.4,
+    "answered_at": 1000076.4,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a specific example of patient care and described the intervention and its outcome.",
+     "gaps": "Details on the patient's condition before and after the intervention could be more detailed.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote 'I guided her through some breathing exercises.')"
+    ]
+   },
+   {
+    "index": 2,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "That sounds like a challenging situation. Could you describe more about what the patient's breathing looked like before and after the breathing exercises? Also, did the patient mention any specific reasons for her anxiety, and how did you address those?",
+    "anchor_quote": "After I guided her through some breathing exercises",
+    "reason": "Deepen the understanding of the patient's condition and the impact of the intervention to strengthen the example further for patient care competency c1. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000076.4,
+    "answer": "Before the breathing exercises, the patient was really struggling to breathe. She was gulping for air, and her chest was moving rapidly. After a few minutes of guided breathing exercises, her breathing slowed down, and she seemed to be more composed. She mentioned feeling overwhelmed with a lot going on at home. I tried to be a good listener and gave her some space to talk about her concerns. I also reassured her that we were there to help and that she could take things one step at a time. That made a big difference in her overall demeanor.",
+    "answer_words": [],
+    "answer_seconds": 39.6,
+    "answered_at": 1000124.0,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a detailed example of patient care, including symptoms and outcomes.",
+     "gaps": "Could have quantified the impact, like patient's vital signs before and after.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote 'Sure. One time, a patient was experiencing severe anxiety and was having trouble')"
+    ]
+   },
+   {
+    "index": 3,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Could you share any specific measurements or metrics that showed the patient's improvement, such as heart rate or oxygen levels?",
+    "anchor_quote": "her breathing slowed down, and she seemed to be more composed.",
+    "reason": "To quantify the impact and get more details. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000124.0,
+    "answer": "While I didn't have access to specific measurements like heart rate or oxygen levels at the time, I did notice that the patient's breathing improved significantly. Her breathing slowed down, and she seemed more relaxed. However, in a typical clinical setting, we would use a pulse oximeter to measure oxygen levels and a stethoscope to check heart rate. In this case, the patient's color returned to normal, and she was less anxious, which are good indicators of improvement.",
+    "answer_words": [],
+    "answer_seconds": 31.2,
+    "answered_at": 1000163.2,
+    "score": 3,
+    "assessment": {
+     "strengths": "Provided a clear example of handling a patient in distress, demonstrated empathy and quick action.",
+     "gaps": "No specific measurements or metrics were mentioned.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 4,
+    "action": "new_topic",
+    "competency": "c2",
+    "difficulty": 2,
+    "say": "Can you describe a time when you had to quickly make a decision that impacted patient safety?",
+    "anchor_quote": "",
+    "reason": "Exploring critical thinking and decision-making in critical situations. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000163.2,
+    "answer": "Certainly. One instance was when I was on shift and noticed a patient with a history of heart issues suddenly clutching their chest. I could see they were in distress, so I immediately called for help and started CPR while waiting for the ambulance. After a few minutes, the patient regained some color, and the paramedics took over. It was a critical moment, and swift action was necessary to ensure the patient's safety.",
+    "answer_words": [],
+    "answer_seconds": 29.2,
+    "answered_at": 1000200.3999999999,
+    "score": 4,
+    "assessment": {
+     "strengths": "Provided a clear and specific example of quick, critical decision-making.",
+     "gaps": "No specific measurements or metrics mentioned.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 5,
+    "action": "new_topic",
+    "competency": "c3",
+    "difficulty": 2,
+    "say": "Can you describe a specific instance where you worked closely with other healthcare professionals to ensure a patient's care was well-coordinated?",
+    "anchor_quote": "",
+    "reason": "Exploring team collaboration after a strong critical thinking example. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000200.3999999999,
+    "answer": "Sure. I had a patient who was a diabetic with a wound that wasn't healing well. The care plan involved multiple professionals, including a nurse, a doctor, and a dietician. I coordinated with the doctor to adjust the patient's medication, worked with the dietician to ensure the patient was eating a balanced diet, and communicated regularly with the wound care specialist. By keeping everyone updated and working together, we were able to address all the aspects of the patient's care effectively. The patient's wound started showing signs of improvement, and I was glad we could provide comprehensive care.",
+    "answer_words": [],
+    "answer_seconds": 39.2,
+    "answered_at": 1000247.5999999999,
+    "score": 3,
+    "assessment": {
+     "strengths": "The candidate provided a clear example of teamwork and coordination, highlighting the importance of communication and multidisciplinary collaboration.",
+     "gaps": "No specific metrics or measurements were mentioned, which could strengthen the example.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 6,
+    "action": "follow_up",
+    "competency": "c3",
+    "difficulty": 3,
+    "say": "That's a great example of teamwork. Could you tell me more about the specific outcomes or metrics that showed the patient's wound was improving due to the coordinated care?",
+    "anchor_quote": "I coordinated with the doctor to adjust the patient's medication, worked with the dietician to ensure the patient was eating a balanced diet, and communicated regularly with the wound care specialist.",
+    "reason": "Needs to further emphasize the impact of their actions. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000247.5999999999,
+    "answer": "Certainly. We saw the patient's wound start to heal over a few weeks. The redness and swelling decreased, and new tissue began to form. I documented these changes in the patient's chart and discussed the progress with the wound care specialist during our weekly meetings. The patient also reported feeling better and more confident in the care they were receiving. While we didn't have specific measurements like wound size or depth, the improvement was clear to both the patient and the medical team. It was a team effort that made a real difference in the patient's recovery.",
+    "answer_words": [],
+    "answer_seconds": 38.8,
+    "answered_at": 1000294.3999999999,
+    "score": 3,
+    "assessment": {
+     "strengths": "The candidate provided a clear example of teamwork and the positive outcomes of the coordinated care.",
+     "gaps": "More specific metrics or measurements would have strengthened the answer.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 7,
+    "action": "follow_up",
+    "competency": "c3",
+    "difficulty": 3,
+    "say": "Could you provide more specific measurements or metrics that showed the patient's wound was improving, such as the size or depth of the wound before and after the care plan?",
+    "anchor_quote": "Certainly. We saw the patient's wound start to heal over a few weeks. The redness and swelling decreased, and new tissue began to form.",
+    "reason": "To explore further details and specific metrics. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000294.3999999999,
+    "answer": "While we didn't have specific measurements like the exact size or depth of the wound, we did track the wound's progress through photographs and notes in the patient's chart. We noticed that the wound area reduced in size, and the redness and swelling decreased over time. The patient's overall condition improved, and they reported feeling more comfortable. While these weren't precise measurements, they were clear indicators of progress. We also worked with the wound care specialist to monitor the wound, and they confirmed the improvement during their evaluations.",
+    "answer_words": [],
+    "answer_seconds": 35.2,
+    "answered_at": 1000337.5999999999,
+    "score": null,
+    "assessment": null,
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 8,
+    "action": "new_topic",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "Can you describe a situation where you had to escalate a patient's care to a more senior colleague or department because of a worsening condition?",
+    "anchor_quote": "",
+    "reason": "focused fresh-question call (Experience in escalating patients when needed) [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000337.5999999999,
+    "answer": "Sure. One time, I was monitoring a patient with a respiratory infection who showed signs of respiratory distress. I noticed they were struggling to breathe and their oxygen saturation levels were dropping. I initially provided supplemental oxygen and encouraged them to take deep, slow breaths, but their condition wasn't improving. I knew we needed to escalate this quickly, so I immediately called the respiratory therapist and the on-call doctor. The respiratory therapist came in to provide advanced breathing support, and the doctor arrived to reassess the patient and consider additional treatment options. Thanks to the quick intervention, the patient's condition stabilized, and they were able to receive the appropriate care.",
+    "answer_words": [],
+    "answer_seconds": 44.0,
+    "answered_at": 1000389.5999999999,
+    "score": 4,
+    "assessment": {
+     "strengths": "Detailed and specific example of escalating care with clear actions taken.",
+     "gaps": "No mention of patient outcomes or metrics, but generally strong.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "written by the focused fresh-question call after the full turn failed validation"
+    ]
+   },
+   {
+    "index": 9,
+    "action": "challenge",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "Could you tell me more about the outcome for the patient after you escalated their care? Did their condition improve as a result of the quick intervention?",
+    "anchor_quote": "I initially provided supplemental oxygen and encouraged them to take deep, slow breaths, but their condition wasn't improving.",
+    "reason": "Needs to show impact and outcome. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000389.5999999999,
+    "answer": "Certainly. After I escalated the patient's care, the respiratory therapist provided advanced oxygen support, and the on-call doctor arrived to reassess the patient. The doctor decided to administer a nebulizer treatment, which helped to open up the patient's airways. Within a few minutes, the patient's breathing started to improve, and their oxygen saturation levels rose back to normal. They were able to relax and breathe more comfortably. The patient's condition stabilized, and they were monitored closely for a few hours. By the next morning, they were doing much better and had no further respiratory issues. It was a relief to see the quick intervention make such a positive difference for the patient.",
+    "answer_words": [],
+    "answer_seconds": 44.8,
+    "answered_at": 1000442.3999999999,
+    "score": 4,
+    "assessment": {
+     "strengths": "Clear description of the escalation process and the positive outcome for the patient.",
+     "gaps": "No specific measurements or metrics provided.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 10,
+    "action": "follow_up",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "That's great to hear. Could you walk me through the specific steps you took to escalate the patient's care and the thought process behind your decision to do so?",
+    "anchor_quote": "the patient's condition stabilized, and they were monitored closely for a few hours.",
+    "reason": "To get more details on the decision-making process and the impact of the escalation. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000442.3999999999,
+    "answer": "Certainly. When I noticed the patient's condition deteriorating, I first assessed the situation and provided immediate care such as supplemental oxygen and breathing exercises. However, since the patient's oxygen saturation levels were continuing to drop, I recognized that more specialized care was needed. I quickly documented the patient's condition and symptoms in their chart and called the respiratory therapist and the on-call doctor. My decision to escalate was based on the patient's deteriorating oxygen levels and the need for advanced support. The respiratory therapist and the doctor arrived promptly and were able to provide the necessary treatments, which helped the patient's condition to stabilize. It was important to act quickly to ensure the patient received the appropriate care in a timely manner.",
+    "answer_words": [],
+    "answer_seconds": 48.8,
+    "answered_at": 1000499.2,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a clear example of escalating care and described the steps taken.",
+     "gaps": "Candidate could have included more specific metrics or measurements.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 11,
+    "action": "wrap_up",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "That's a clear example of your critical thinking in action. Let's wrap up the interview here. Thank you for sharing your experiences and for your dedication to patient care. Do you have any questions for us?",
+    "anchor_quote": "I recognized that more specialized care was needed. I quickly documented the patient's condition and symptoms in their chart and called the respiratory therapist and the on-call doctor.",
+    "reason": "Closing the interview with a strong example of critical thinking. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000499.2,
+    "answer": "Thank you for the opportunity to share my experiences. I do have a couple of questions. Could you tell me more about the training and development opportunities available for nurses at Apollo Hospitals? Also, how does the hospital support the mental health and well-being of its staff?",
+    "answer_words": [],
+    "answer_seconds": 18.8,
+    "answered_at": 1000526.0,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a clear example of their critical thinking and the steps they took to escalate patient care, showing their ability to make quick and accurate judgments.",
+     "gaps": "No quantitative metrics were provided to support the patient's improvement.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 12,
+    "action": "close",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "Thank you for your insightful responses. It was great to hear about your experience and dedication to patient care. We appreciate your interest in Apollo Hospitals. Goodbye.",
+    "anchor_quote": "Could you tell me more about the outcome for the patient after you escalated their care? Did their condition improve as a result of the quick intervention?",
+    "reason": "Thanking the candidate and ending the interview.",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000526.0,
+    "answer": null,
+    "answer_words": [],
+    "answer_seconds": 0.0,
+    "answered_at": null,
+    "score": null,
+    "assessment": null,
+    "evaluation": null,
+    "corrections": []
+   }
+  ],
+  "difficulty": 3,
+  "started_at": 1000000.0,
+  "finished": true,
+  "events": [
+   {
+    "t": 1791319873.239,
+    "kind": "fresh_question",
+    "turn": 0,
+    "provider": "ollama",
+    "reason": "focused fresh-question call (Ability to manage multiple patients efficiently)"
+   },
+   {
+    "t": 1791319956.003,
+    "kind": "correction",
+    "turn": 1,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote 'I guided her through some breathing exercises.')"
+   },
+   {
+    "t": 1791319956.003,
+    "kind": "turn",
+    "turn": 1,
+    "provider": "ollama",
+    "ms": 58925.2,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320051.796,
+    "kind": "correction",
+    "turn": 2,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote 'Sure. One time, a patient was experiencing severe anxiety and was having trouble')"
+   },
+   {
+    "t": 1791320051.796,
+    "kind": "turn",
+    "turn": 2,
+    "provider": "ollama",
+    "ms": 70030.2,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320149.429,
+    "kind": "turn",
+    "turn": 3,
+    "provider": "ollama",
+    "ms": 65294.2,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320302.464,
+    "kind": "turn",
+    "turn": 4,
+    "provider": "ollama",
+    "ms": 122508.6,
+    "action": "new_topic"
+   },
+   {
+    "t": 1791320450.373,
+    "kind": "turn",
+    "turn": 5,
+    "provider": "ollama",
+    "ms": 121290.0,
+    "action": "new_topic"
+   },
+   {
+    "t": 1791320565.281,
+    "kind": "turn",
+    "turn": 6,
+    "provider": "ollama",
+    "ms": 82948.4,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320683.957,
+    "kind": "turn",
+    "turn": 7,
+    "provider": "ollama",
+    "ms": 84167.8,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320955.957,
+    "kind": "fresh_question",
+    "turn": 8,
+    "provider": "ollama",
+    "reason": "focused fresh-question call (Experience in escalating patients when needed)"
+   },
+   {
+    "t": 1791321082.338,
+    "kind": "turn",
+    "turn": 9,
+    "provider": "ollama",
+    "ms": 88434.7,
+    "action": "challenge"
+   },
+   {
+    "t": 1791321216.062,
+    "kind": "turn",
+    "turn": 10,
+    "provider": "ollama",
+    "ms": 92349.2,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321362.902,
+    "kind": "turn",
+    "turn": 11,
+    "provider": "ollama",
+    "ms": 103610.1,
+    "action": "wrap_up"
+   },
+   {
+    "t": 1791321497.488,
+    "kind": "turn",
+    "turn": 12,
+    "provider": "ollama",
+    "ms": 106062.9,
+    "action": "close"
+   }
+  ]
+ },
+ "attempts": [
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 117101.7,
+   "error": "",
+   "input_tokens": 624,
+   "output_tokens": 404
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 121364.4,
+   "error": "Maya is your own name: do not call the candidate Maya (you do not know their name)",
+   "input_tokens": 1493,
+   "output_tokens": 68
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 17185.4,
+   "error": "Maya is your own name: do not call the candidate Maya (you do not know their name); say must ask the candidate a question",
+   "input_tokens": 1526,
+   "output_tokens": 69
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 22699.9,
+   "error": "Maya is your own name: do not call the candidate Maya (you do not know their name)",
+   "input_tokens": 1551,
+   "output_tokens": 97
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 9285.5,
+   "error": "Maya is your own name: do not call the candidate Maya (you do not know their name)",
+   "input_tokens": 99,
+   "output_tokens": 17
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 5237.6,
+   "error": "",
+   "input_tokens": 132,
+   "output_tokens": 15
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 58925.1,
+   "error": "",
+   "input_tokens": 1599,
+   "output_tokens": 175
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 70030.2,
+   "error": "",
+   "input_tokens": 1804,
+   "output_tokens": 193
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 65294.1,
+   "error": "",
+   "input_tokens": 2038,
+   "output_tokens": 138
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 79025.8,
+   "error": "repeats an earlier question: \"Could you share any specific measurements or metrics that showed the patient's i\"",
+   "input_tokens": 2210,
+   "output_tokens": 202
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 43482.6,
+   "error": "",
+   "input_tokens": 2424,
+   "output_tokens": 119
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 75096.1,
+   "error": "repeats an earlier question: \"That's a great example. Could you tell me more about the patient's condition bef\"",
+   "input_tokens": 2362,
+   "output_tokens": 177
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 46193.7,
+   "error": "",
+   "input_tokens": 2602,
+   "output_tokens": 120
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 82948.4,
+   "error": "",
+   "input_tokens": 2561,
+   "output_tokens": 179
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 84167.8,
+   "error": "",
+   "input_tokens": 2768,
+   "output_tokens": 162
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 86567.3,
+   "error": "repeats an earlier question: \"Could you provide more specific measurements or metrics that showed the patient'\"",
+   "input_tokens": 2969,
+   "output_tokens": 165
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 59259.8,
+   "error": "repeats an earlier question: 'Can you describe a time when you had to quickly make a decision that impacted pa'",
+   "input_tokens": 3284,
+   "output_tokens": 135
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 67725.7,
+   "error": "repeats an earlier question: 'Can you describe a time when you had to quickly make a decision that impacted pa'",
+   "input_tokens": 3287,
+   "output_tokens": 177
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 24784.8,
+   "error": "",
+   "input_tokens": 347,
+   "output_tokens": 28
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 88434.7,
+   "error": "",
+   "input_tokens": 3180,
+   "output_tokens": 145
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 92349.2,
+   "error": "",
+   "input_tokens": 3405,
+   "output_tokens": 149
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 103610.1,
+   "error": "",
+   "input_tokens": 3643,
+   "output_tokens": 173
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 106062.9,
+   "error": "",
+   "input_tokens": 3842,
+   "output_tokens": 174
+  }
+ ],
+ "qualities": [
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average"
+ ]
+}

@@ -1,0 +1,916 @@
+{
+ "checks": {
+  "questions": 16,
+  "bank_overlap": 0,
+  "follow_ups": 11,
+  "follow_ups_referencing_answer": 11,
+  "difficulty_tracks_performance": true,
+  "difficulty_transitions": [
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   }
+  ],
+  "difficulty_corrections_by_code": 6,
+  "emergency_questions": 0,
+  "fresh_questions": 0,
+  "rejected_attempts": {
+   "anchor_quote must be copied verbatim from the candidate's la": 1,
+   "repeats an earlier question": 2,
+   "follow_up must ask about what the candidate just said (the a": 1,
+   "to return to an earlier answer use action revisit": 1
+  },
+  "emergency_blueprint": false,
+  "repeats": 0,
+  "closed_on_time": true,
+  "passed": true
+ },
+ "state": {
+  "session_id": "mock-02",
+  "params": {
+   "role": "Senior Data Scientist",
+   "seniority": "senior",
+   "company": "Swiggy",
+   "company_style": "Case-style product analytics plus ML depth",
+   "job_description": "Develop forecasting and experimentation (A/B testing) for a marketplace; Python, SQL, causal inference, stakeholder communication.",
+   "resume_context": "M.Sc Statistics. 3 years data scientist at an e-commerce company: demand forecasting (Prophet, LightGBM), ran 40+ A/B tests.",
+   "skills": [
+    "A/B testing",
+    "Forecasting"
+   ],
+   "interview_type": "mixed",
+   "round": "onsite",
+   "difficulty": "auto",
+   "language": "en",
+   "duration_minutes": 18,
+   "persona": "maya"
+  },
+  "blueprint": {
+   "summary": "This interview will assess the candidate's expertise in forecasting and A/B testing, as well as their ability to communicate technical solutions to non-technical stakeholders, essential for a senior data scientist role at Swiggy.",
+   "competencies": [
+    {
+     "id": "c1",
+     "name": "Forecasting Expertise",
+     "why": "Essential skill for developing accurate demand forecasts in a marketplace setting, as stated in the job description.",
+     "weight": 0.4,
+     "minutes": 7.0,
+     "signals": [
+      "Strong understanding of time series analysis and model selection",
+      "Experience with tools like Prophet and LightGBM"
+     ]
+    },
+    {
+     "id": "c2",
+     "name": "A/B Testing Experience",
+     "why": "Critical for validating hypotheses and making data-driven decisions in a dynamic marketplace, as per the job description.",
+     "weight": 0.3,
+     "minutes": 6.0,
+     "signals": [
+      "Ability to design and execute A/B tests",
+      "Experience with statistical significance and effect size"
+     ]
+    },
+    {
+     "id": "c3",
+     "name": "Stakeholder Communication",
+     "why": "Important for bridging the gap between technical solutions and business needs, as highlighted in the job description.",
+     "weight": 0.2,
+     "minutes": 4.0,
+     "signals": [
+      "Clear and concise explanation of technical concepts",
+      "Experience with presenting findings to non-technical audiences"
+     ]
+    }
+   ],
+   "opening": "Hi, welcome to the interview. Let's start by discussing your experience with forecasting models.",
+   "style_notes": "The interview will follow a warm and encouraging tone, focusing on precise probes for ownership and measurable impact. Expect a mix of technical questions and discussions on practical applications.",
+   "start_difficulty": 3,
+   "emergency": false,
+   "provider": "ollama"
+  },
+  "turns": [
+   {
+    "index": 0,
+    "action": "open",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Hi there, I'm Maya. Let's start by discussing your experience with forecasting models. Could you walk me through a project where you developed a forecasting model for a marketplace?",
+    "anchor_quote": "",
+    "reason": "Start with an open question to gauge forecasting experience. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000000.0,
+    "answer": "Hi Maya, in my previous role as a Data Scientist at [Previous Company], I led the development of a demand forecasting model for our e-commerce platform. We used Prophet and LightGBM to predict product demand for our top 500 SKUs. The model helped us optimize inventory levels, reducing stockouts by 30% and holding costs by 15%. We integrated this model into our daily reporting and decision-making processes. By leveraging historical sales data and external factors like promotions and seasonality, we were able to make more accurate forecasts. This not only improved our operational efficiency but also enhanced customer satisfaction by ensuring that products were available when customers wanted them.",
+    "answer_words": [],
+    "answer_seconds": 43.6,
+    "answered_at": 1000051.6,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a specific example with clear metrics and impact, using tools like Prophet and LightGBM.",
+     "gaps": "While the example is strong, it would be beneficial to have more details on the model selection process and the validation steps.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 1,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "That's great to hear. Could you elaborate on how you chose between Prophet and LightGBM? Were there any specific factors or considerations that influenced your decision?",
+    "anchor_quote": "We used Prophet and LightGBM to predict product demand for our top 500 SKUs.",
+    "reason": "Need more context on the model selection and validation process to gauge the candidate's depth of knowledge in forecasting expertise. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000051.6,
+    "answer": "Sure, we chose Prophet because it handled seasonality and holidays well, which was important for our business. But LightGBM was faster and gave better results in some cases, so we used both depending on the situation.",
+    "answer_words": [],
+    "answer_seconds": 14.4,
+    "answered_at": 1000074.0,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided specific details about choosing between Prophet and LightGBM based on the project's needs.",
+     "gaps": "No quantifiable metrics were provided for the benefits of using both models.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 2,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Could you provide some numbers to quantify the benefits of using both models in your project?",
+    "anchor_quote": "Sure, we chose Prophet because it handled seasonality and holidays well, which was important for our business. But LightGBM was faster and gave better results in some cases, so we used both depending on the situation",
+    "reason": "Need to quantify the impact of using both models. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000074.0,
+    "answer": "Absolutely, in our project, we found that using both Prophet and LightGBM improved our overall forecasting accuracy. Specifically, Prophet was particularly effective for capturing seasonality and holiday effects, leading to a 25% improvement in accuracy for those periods. On the other hand, LightGBM was more efficient in handling large datasets and complex patterns, contributing to a 20% improvement in accuracy for our general demand forecasts. By combining the strengths of both models, we achieved a 35% reduction in forecast error compared to using either model alone. This dual approach not only enhanced our decision-making but also resulted in a 10% increase in inventory turnover and a 12% decrease in excess inventory, translating to significant cost savings and improved operational efficiency.",
+    "answer_words": [],
+    "answer_seconds": 48.0,
+    "answered_at": 1000130.0,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided detailed numbers and specific examples to quantify the benefits of using both Prophet and LightGBM, demonstrating a clear understanding of the models' strengths and their combined impact.",
+     "gaps": "",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote 'Sure, we chose Prophet because it handled seasonality and holidays well, but Lig')"
+    ]
+   },
+   {
+    "index": 3,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "That's very insightful. Could you walk me through the process of how you decided which model to use for different periods? For instance, how did you determine which models were better suited for capturing seasonality versus handling complex patterns?",
+    "anchor_quote": "specifically, Prophet was particularly effective for capturing seasonality and holiday effects, leading to a 25% improvement in accuracy for those periods. On the other hand, LightGBM was more efficient in handling large datasets and complex patterns, contributing to a 20% improvement in accuracy fo",
+    "reason": "The candidate provided a good explanation but could benefit from a more detailed breakdown of the model selection process. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000130.0,
+    "answer": "We usually started with Prophet for its ease in capturing seasonality and holidays. But for more complex patterns, we used LightGBM. It worked well for large datasets. Mostly, we just tried both and saw which gave better results for each case.",
+    "answer_words": [],
+    "answer_seconds": 16.4,
+    "answered_at": 1000154.4,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided specific examples and metrics, demonstrating a good understanding of model selection and application in a practical setting.",
+     "gaps": "Candidate could benefit from more detailed steps in the model selection process and a deeper explanation of the validation methods used.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 4,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "That's interesting. Could you elaborate on the validation methods you used to ensure the accuracy and reliability of these models? How did you validate the performance of Prophet and LightGBM, and what criteria did you use to decide on their application in different scenarios?",
+    "anchor_quote": "We usually started with Prophet for its ease in capturing seasonality and holidays. But for more complex patterns, we used LightGBM.",
+    "reason": "Candidate mentioned both models but could provide more details on the process and validation methods used in the selection and application of these models in a practical setting. This will help us gauge their depth of knowledge and practical experience in model selection and validation. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000154.4,
+    "answer": "Certainly, to validate the accuracy and reliability of Prophet and LightGBM, we implemented a rigorous cross-validation process. For each model, we split the historical data into training and validation sets. We used a rolling horizon approach, where we iteratively trained the model on the training set and validated it on the next time period of the validation set. This helped us assess how well the models would perform on unseen data. For Prophet, we focused on its built-in seasonality and holiday effects and used metrics like Mean Absolute Error (MAE) and Root Mean Squared Error (RMSE) to evaluate its performance. We found that Prophet performed particularly well during peak season periods, showing a 25% improvement in accuracy. For LightGBM, we used more complex evaluation metrics such as Mean Absolute Percentage Error (MAPE) and adjusted R-squared, as it was better suited for handling large datasets and complex patterns. LightGBM showed a 20% improvement in accuracy for these scenarios. Based on these metrics, we decided to use Prophet for periods with high seasonality and holidays, and LightGBM for more complex patterns. We also conducted a few A/B tests by comparing the forecasts and actual sales data to ensure the models were reliable. This dual validation approach helped us make informed decisions about which model to use in different scenarios, ultimately leading to a 35% reduction in forecast error and significant operational improvements.",
+    "answer_words": [],
+    "answer_seconds": 92.0,
+    "answered_at": 1000254.4,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided detailed insights into the validation process and the dual model approach, demonstrating strong technical expertise.",
+     "gaps": "",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 5,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "That's great to hear. Could you tell me more about the A/B testing process you mentioned? How did you ensure the reliability of the models using this approach?",
+    "anchor_quote": "and holidays, and LightGBM for more complex patterns. We also conducted a few A/B tests by comparing the forecasts and actual sales data to ensure the models were reliable",
+    "reason": "Expanding on the A/B testing process to ensure robustness and reliability of the models used in the project. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000254.4,
+    "answer": "Sure, we ran about 40 A/B tests to validate the models. We would split the data into two groups, use one group to forecast with Prophet and the other with LightGBM, then compare the accuracy using metrics like MAE and RMSE. We did this multiple times to ensure the models were reliable.",
+    "answer_words": [],
+    "answer_seconds": 20.8,
+    "answered_at": 1000283.2000000001,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided detailed validation metrics and methods, and explained the A/B testing process.",
+     "gaps": "Could benefit from more specific examples of the A/B testing approach.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote 'we conducted a few A/B tests by comparing the forecasts and actual sales data to')"
+    ]
+   },
+   {
+    "index": 6,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "That's great to hear. Could you provide more details on the A/B testing process you mentioned? Specifically, how did you design and implement these tests, and what were the key outcomes and learnings from these A/B tests?",
+    "anchor_quote": "we ran about 40 A/B tests to validate the models",
+    "reason": "Expand on the A/B testing process and its impact on model reliability and decision-making processes in the organization. This will help cover the A/B testing competency and ensure a balanced discussion on both forecasting and A/B testing skills. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000283.2000000001,
+    "answer": "Certainly, we designed and implemented the A/B tests by splitting the historical data into two equal parts—80% for training the models and 20% for testing. For each test, we used the training data to fit both Prophet and LightGBM models. Then, we used these models to predict the demand for the test period. We compared the predicted values with the actual sales data using metrics like Mean Absolute Error (MAE) and Root Mean Squared Error (RMSE). To ensure the reliability of the models, we conducted multiple iterations of these tests, varying the split points and the time periods. This helped us understand the model performance under different conditions. The key outcomes from these tests were that Prophet excelled in capturing seasonal and holiday effects, showing a 25% improvement in accuracy during such periods. On the other hand, LightGBM performed better for complex patterns and larger datasets, reducing forecast errors by 20%. By combining the strengths of both models, we achieved a 35% reduction in overall forecast error. The learnings from these tests were invaluable as they helped us fine-tune our model selection process. We realized the importance of using a hybrid approach, where Prophet was ideal for simpler, seasonally driven forecasts, while LightGBM was better for complex, data-intensive scenarios. This dual-model strategy significantly enhanced our forecasting accuracy and operational efficiency.",
+    "answer_words": [],
+    "answer_seconds": 88.0,
+    "answered_at": 1000379.2000000001,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided specific details on model selection, validation, and A/B testing.",
+     "gaps": "Could benefit from more quantitative comparison of model performance.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 7,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "Could you quantify the specific performance improvements of Prophet and LightGBM in your A/B tests? For instance, what were the exact MAE and RMSE values for each model in the test period?",
+    "anchor_quote": "Certainly, we designed and implemented the A/B tests by splitting the historical data into two equal parts—80% for training the models and 20% for testing.",
+    "reason": "Candidate needs to quantify performance more. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000379.2000000001,
+    "answer": "Sure, in our A/B tests, Prophet had an MAE of around 15 and an RMSE of about 20 during the test period. For LightGBM, the MAE was closer to 12 and the RMSE was around 18. Overall, the combination of both models improved our forecast accuracy, with a 35% reduction in error compared to using either model alone.",
+    "answer_words": [],
+    "answer_seconds": 23.2,
+    "answered_at": 1000410.4,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided specific metrics and a clear process for A/B testing.",
+     "gaps": "Candidate could provide more detail on the exact time periods and conditions of the A/B tests.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 8,
+    "action": "follow_up",
+    "competency": "c2",
+    "difficulty": 4,
+    "say": "Thank you for that detailed explanation. Moving on to your experience with A/B testing, could you share a specific instance where you designed and implemented an A/B test to validate a hypothesis or decision within your forecasting project?",
+    "anchor_quote": "an RMSE of about 20 during the test period",
+    "reason": "Need more details on the A/B testing process and outcomes to cover the A/B testing experience competency thoroughly before moving on to stakeholder communication and other areas of the interview blueprint. Given the specific metrics provided, we can now move to a different aspect of the role and job [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000410.4,
+    "answer": "Certainly, one specific instance where we implemented an A/B test was to validate whether adjusting our inventory levels based on real-time sales data could improve our stock management. We split our dataset into two groups: one group where we used historical data to make inventory decisions, and another where we used real-time sales data to make those decisions using our Prophet and LightGBM models. We then compared the stockouts and holding costs between the two groups over a six-month period. The results showed that by using real-time data, we reduced stockouts by 28% and holding costs by 10%. We also observed a 15% increase in sales during periods when our inventory was well-managed. These findings supported our hypothesis and helped us implement a more dynamic inventory management strategy, which led to a 5% increase in overall profitability. This A/B test was crucial as it not only validated our approach but also provided a clear roadmap for integrating real-time data into our decision-making process.",
+    "answer_words": [],
+    "answer_seconds": 65.2,
+    "answered_at": 1000483.6,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided a detailed example of an A/B test and quantified its impact, demonstrating strong analytical and decision-making skills.",
+     "gaps": "Candidate could provide more specific metrics for the test, but overall the answer was strong.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote 'Could you quantify the specific performance improvements of Prophet and LightGBM')"
+    ]
+   },
+   {
+    "index": 9,
+    "action": "follow_up",
+    "competency": "c2",
+    "difficulty": 4,
+    "say": "That's very insightful. Could you share more details about the real-time data integration you mentioned? How did you integrate the Prophet and LightGBM models into your decision-making process, and what were the key steps in implementing this dynamic inventory management strategy?",
+    "anchor_quote": "We also observed a 15% increase in sales during periods when our inventory was",
+    "reason": "Further explore the A/B testing experience with a specific example. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000483.6,
+    "answer": "Sure, we integrated the models by setting up a real-time data pipeline that fed into our decision-making tools. We used APIs to pull data from our sales system every few minutes. Then, our models would process this data to generate forecasts and recommendations. We set up alerts for when stock levels were low, so we could reorder inventory. The key steps were setting up the data pipeline, fine-tuning the models, and integrating the output into our inventory management software. This helped us make quicker, more informed decisions, reducing stockouts and holding costs.",
+    "answer_words": [],
+    "answer_seconds": 36.8,
+    "answered_at": 1000528.4,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a clear explanation of integrating real-time data and the steps involved.",
+     "gaps": "Lack of specific numbers or metrics on the real-time integration.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote 'we observed a 15% increase in sales during periods when our inventory was well-m')"
+    ]
+   },
+   {
+    "index": 10,
+    "action": "new_topic",
+    "competency": "c3",
+    "difficulty": 4,
+    "say": "How do you ensure that your technical findings are communicated clearly to non-technical stakeholders, such as business leaders or operations teams, in a way that they can understand and act upon?",
+    "anchor_quote": "",
+    "reason": "Explore stakeholder communication further by asking about the clear and concise explanation of technical concepts and experience with presenting findings to non-technical audiences, as highlighted in the job description and blueprint criteria for competency c3 (Stakeholder Communication). This will  [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000528.4,
+    "answer": "To ensure that my technical findings are communicated clearly to non-technical stakeholders, I use simple language and avoid jargon. I always start by summarizing the key results and their impact in layman's terms. For example, I might say, \"Our demand forecasting model reduced stockouts by 30% and saved us $X in holding costs.\" Then, I provide visual aids like charts and graphs to illustrate the data more clearly. I also make sure to highlight the business value, such as \"This improvement in forecast accuracy directly translates to a 5% increase in profitability.\" Additionally, I schedule regular meetings where I present the findings and walk through the data step-by-step. I encourage feedback and questions to ensure that everyone understands the implications and can act on the insights. By breaking down the technical details into actionable points, I help stakeholders make informed decisions and drive better business outcomes.",
+    "answer_words": [],
+    "answer_seconds": 58.4,
+    "answered_at": 1000594.8,
+    "score": 4,
+    "assessment": {
+     "strengths": "Provided clear methods for communicating technical findings to non-technical stakeholders, including using simple language, visual aids, and emphasizing business value.",
+     "gaps": "Lacks specific examples of communication challenges and how they were addressed.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "difficulty 3->4 (score 4, previous 4)"
+    ]
+   },
+   {
+    "index": 11,
+    "action": "follow_up",
+    "competency": "c3",
+    "difficulty": 4,
+    "say": "That's very helpful. Could you give an example of a time when you faced a challenge in communicating your findings to non-technical stakeholders, and how you overcame it?",
+    "anchor_quote": "Then, I provide visual aids like charts and graphs to illustrate the data more clearly.",
+    "reason": "Expanding on the communication methods and addressing potential challenges. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000594.8,
+    "answer": "Sure, once we launched a new inventory management system, and the IT team had a hard time understanding how the Prophet and LightGBM models worked. They were concerned about the complexity and wanted to know how it would affect their daily operations. To address this, I created a simple explanation and a demo. I used basic terms and analogies, like comparing the models to traffic lights that help manage inventory levels. I also set up a training session with the IT team, where I walked them through the system step-by-step. This helped them see how the models worked and how they could use the system to their advantage. By being patient and explaining things clearly, we were able to get everyone on board and use the system effectively.",
+    "answer_words": [],
+    "answer_seconds": 51.2,
+    "answered_at": 1000654.0,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided a clear example of A/B testing and its impact, but could benefit from more details on the design and statistical significance.",
+     "gaps": "Lack of specific metrics and a deeper dive into the hypothesis testing process.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "difficulty 3->4 (score 4, previous 4)"
+    ]
+   },
+   {
+    "index": 12,
+    "action": "new_topic",
+    "competency": "c2",
+    "difficulty": 4,
+    "say": "Could you share more details about the design and statistical significance of the A/B test you implemented to validate the hypothesis about the inventory management system?",
+    "anchor_quote": "we were able to get everyone on board",
+    "reason": "Exploring the design and statistical significance of A/B tests further. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000654.0,
+    "answer": "Certainly, during the A/B test to validate the hypothesis about the inventory management system, we split our dataset into two equal parts. The first group used historical data to make inventory decisions, while the second group used real-time data from the new Prophet and LightGBM models. To ensure statistical significance, we used a significance level of 0.05 (95% confidence level). We ran the test over a six-month period, collecting daily sales data and comparing stockout rates and holding costs between the two groups. We used statistical tests, such as the Chi-squared test, to determine if the differences in stockouts and holding costs were significant. The results showed that the group using real-time data had a 28% reduction in stockouts and a 10% reduction in holding costs compared to the group using historical data. These results were statistically significant, as the p-value was below our threshold of 0.05. The test not only validated our hypothesis but also provided clear evidence to support the implementation of the new system, leading to a 5% increase in overall profitability.",
+    "answer_words": [],
+    "answer_seconds": 70.0,
+    "answered_at": 1000732.0,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided detailed insights into their A/B testing process, including statistical validation and specific performance improvements.",
+     "gaps": "Could benefit from more specific examples of stakeholder communication and challenges faced.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 13,
+    "action": "follow_up",
+    "competency": "c2",
+    "difficulty": 4,
+    "say": "That's very insightful. Could you explain more about the statistical methods you used to validate the significance of the differences in stockouts and holding costs between the two groups?",
+    "anchor_quote": "the group using real-time data had a 28% reduction in stockouts and a 10% reduction in holding costs compared to the group using historical data.",
+    "reason": "To delve deeper into the statistical methods and outcomes of the A/B test. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000732.0,
+    "answer": "Sure, we used the Chi-squared test to validate the significance of the differences. We compared the observed stockout rates and holding costs against the expected rates based on our models. The Chi-squared test helped us determine if the differences were statistically significant at a 95% confidence level. The p-value from the test was below 0.05, confirming that the improvements in stockouts and holding costs were not due to chance.",
+    "answer_words": [],
+    "answer_seconds": 27.6,
+    "answered_at": 1000767.6,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided detailed explanation of statistical methods used to validate the significance of the A/B test results.",
+     "gaps": "",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 14,
+    "action": "wrap_up",
+    "competency": "c2",
+    "difficulty": 4,
+    "say": "That's very insightful. Moving on to your experience with stakeholder communication, could you provide an example of a time when you had to present complex technical findings to a non-technical audience, and how you ensured they understood and acted on the insights?",
+    "anchor_quote": "We used the Chi-squared test to validate the significance of the differences. The p-value from the test was below 0.05, confirming that the improvements in stockouts and holding costs were not due to chance.",
+    "reason": "A/B testing experience is covered; moving to stakeholder communication. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000767.6,
+    "answer": "Certainly, one example was when I presented the findings of our demand forecasting model to the executive team. Initially, they were concerned about the complexity of the models and how it would affect their decision-making. To ensure they understood, I prepared a simplified presentation that included: 1. **Key Metrics**: I focused on key metrics like MAE and RMSE, explaining them in simple terms. For instance, I said, \"Our model reduced forecast errors by 30%,\" and provided visual aids like charts showing the pre- and post-model forecast accuracy. 2. **Business Impact**: I highlighted the business benefits in layman's terms. For example, I said, \"This improvement directly translates to a 10% reduction in holding costs and a 5% increase in sales.\" 3. **Real-Life Examples**: I used real-life examples. For instance, I showed a scenario where a product was in high demand during a holiday season and how our model predicted and managed the stock levels to avoid stockouts. 4. **Interactive Q&A**: I scheduled a Q&A session where I answered questions and clarified any doubts. This helped everyone understand the implications and feel comfortable with the model. 5. **Actionable Steps**: I provided clear, actionable steps they could take, such as integrating the model into their daily reporting and decision-making processes. By breaking down the technical details and focusing on the business value, the executive team was able to see the practical benefits and felt confident in adopting the model.",
+    "answer_words": [],
+    "answer_seconds": 94.4,
+    "answered_at": 1000870.0,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a detailed and specific example of a successful A/B testing process and clearly explained the statistical methods used to validate the significance of the results.",
+     "gaps": "The candidate could have elaborated more on the challenges faced during the implementation and how they were overcome.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 15,
+    "action": "close",
+    "competency": "c3",
+    "difficulty": 4,
+    "say": "Thank you for sharing that example. It was clear and practical. You have a strong track record in both forecasting and A/B testing, and you've effectively communicated your findings to non-technical stakeholders. It was a pleasure interviewing you. Goodbye.",
+    "anchor_quote": "This improvement directly translates to a 10% reduction in holding costs and a 5% increase in sales.",
+    "reason": "The candidate provided a thorough and practical example of stakeholder communication, aligning with the job description's emphasis on clear and concise technical communication.",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000870.0,
+    "answer": null,
+    "answer_words": [],
+    "answer_seconds": 0.0,
+    "answered_at": null,
+    "score": null,
+    "assessment": null,
+    "evaluation": null,
+    "corrections": []
+   }
+  ],
+  "difficulty": 4,
+  "started_at": 1000000.0,
+  "finished": true,
+  "events": [
+   {
+    "t": 1791319756.729,
+    "kind": "turn",
+    "turn": 0,
+    "provider": "ollama",
+    "ms": 132906.2,
+    "action": "open"
+   },
+   {
+    "t": 1791319866.344,
+    "kind": "turn",
+    "turn": 1,
+    "provider": "ollama",
+    "ms": 72037.0,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791319953.646,
+    "kind": "correction",
+    "turn": 2,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote 'Sure, we chose Prophet because it handled seasonality and holidays well, but Lig')"
+   },
+   {
+    "t": 1791319953.646,
+    "kind": "turn",
+    "turn": 2,
+    "provider": "ollama",
+    "ms": 62017.3,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320085.608,
+    "kind": "turn",
+    "turn": 3,
+    "provider": "ollama",
+    "ms": 85259.4,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320205.635,
+    "kind": "turn",
+    "turn": 4,
+    "provider": "ollama",
+    "ms": 87397.8,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320380.31,
+    "kind": "correction",
+    "turn": 5,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote 'we conducted a few A/B tests by comparing the forecasts and actual sales data to')"
+   },
+   {
+    "t": 1791320380.31,
+    "kind": "turn",
+    "turn": 5,
+    "provider": "ollama",
+    "ms": 99222.2,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320522.729,
+    "kind": "turn",
+    "turn": 6,
+    "provider": "ollama",
+    "ms": 92076.8,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320722.953,
+    "kind": "turn",
+    "turn": 7,
+    "provider": "ollama",
+    "ms": 109837.4,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320912.618,
+    "kind": "correction",
+    "turn": 8,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote 'Could you quantify the specific performance improvements of Prophet and LightGBM')"
+   },
+   {
+    "t": 1791320912.618,
+    "kind": "turn",
+    "turn": 8,
+    "provider": "ollama",
+    "ms": 134659.0,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321115.04,
+    "kind": "correction",
+    "turn": 9,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote 'we observed a 15% increase in sales during periods when our inventory was well-m')"
+   },
+   {
+    "t": 1791321115.04,
+    "kind": "turn",
+    "turn": 9,
+    "provider": "ollama",
+    "ms": 121081.0,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321425.043,
+    "kind": "correction",
+    "turn": 10,
+    "detail": "difficulty 3->4 (score 4, previous 4)"
+   },
+   {
+    "t": 1791321425.043,
+    "kind": "turn",
+    "turn": 10,
+    "provider": "ollama",
+    "ms": 252164.2,
+    "action": "new_topic"
+   },
+   {
+    "t": 1791321625.14,
+    "kind": "correction",
+    "turn": 11,
+    "detail": "difficulty 3->4 (score 4, previous 4)"
+   },
+   {
+    "t": 1791321625.14,
+    "kind": "turn",
+    "turn": 11,
+    "provider": "ollama",
+    "ms": 125332.0,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321915.702,
+    "kind": "turn",
+    "turn": 12,
+    "provider": "ollama",
+    "ms": 224335.1,
+    "action": "new_topic"
+   },
+   {
+    "t": 1791322145.339,
+    "kind": "turn",
+    "turn": 13,
+    "provider": "ollama",
+    "ms": 144839.7,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791322347.676,
+    "kind": "turn",
+    "turn": 14,
+    "provider": "ollama",
+    "ms": 141172.2,
+    "action": "wrap_up"
+   },
+   {
+    "t": 1791322633.275,
+    "kind": "turn",
+    "turn": 15,
+    "provider": "ollama",
+    "ms": 181053.0,
+    "action": "close"
+   }
+  ]
+ },
+ "attempts": [
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 121495.3,
+   "error": "",
+   "input_tokens": 660,
+   "output_tokens": 390
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 132906.2,
+   "error": "",
+   "input_tokens": 1521,
+   "output_tokens": 81
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 72037.0,
+   "error": "",
+   "input_tokens": 1719,
+   "output_tokens": 191
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 62017.3,
+   "error": "",
+   "input_tokens": 1857,
+   "output_tokens": 159
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 85259.4,
+   "error": "",
+   "input_tokens": 2076,
+   "output_tokens": 228
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 87397.8,
+   "error": "",
+   "input_tokens": 2247,
+   "output_tokens": 239
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 99222.2,
+   "error": "",
+   "input_tokens": 2667,
+   "output_tokens": 168
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 92076.8,
+   "error": "",
+   "input_tokens": 2829,
+   "output_tokens": 204
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 109837.4,
+   "error": "",
+   "input_tokens": 3232,
+   "output_tokens": 170
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 134659.0,
+   "error": "",
+   "input_tokens": 3427,
+   "output_tokens": 314
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 121080.9,
+   "error": "",
+   "input_tokens": 3742,
+   "output_tokens": 186
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 125961.9,
+   "error": "anchor_quote must be copied verbatim from the candidate's last answer; repeats an earlier question: \"That's great to hear. Could you provide more details on the A/B testing process \"",
+   "input_tokens": 3982,
+   "output_tokens": 212
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 126202.0,
+   "error": "",
+   "input_tokens": 4341,
+   "output_tokens": 349
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 125332.0,
+   "error": "",
+   "input_tokens": 4263,
+   "output_tokens": 166
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 140868.8,
+   "error": "follow_up must ask about what the candidate just said (the anchor_quote); to return to an earlier answer use action revisit; repeats an earlier question: \"That's very helpful. Could you give an example of a time when you faced a challe\"",
+   "input_tokens": 4510,
+   "output_tokens": 205
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 83466.0,
+   "error": "",
+   "input_tokens": 4922,
+   "output_tokens": 155
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 144839.6,
+   "error": "",
+   "input_tokens": 4820,
+   "output_tokens": 179
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 141172.2,
+   "error": "",
+   "input_tokens": 5006,
+   "output_tokens": 190
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 181052.9,
+   "error": "",
+   "input_tokens": 5474,
+   "output_tokens": 213
+  }
+ ],
+ "qualities": [
+  "strong",
+  "weak",
+  "strong",
+  "weak",
+  "strong",
+  "weak",
+  "strong",
+  "weak",
+  "strong",
+  "weak",
+  "strong",
+  "weak",
+  "strong",
+  "weak",
+  "strong"
+ ]
+}

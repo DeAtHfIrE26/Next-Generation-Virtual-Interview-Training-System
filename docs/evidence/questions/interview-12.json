@@ -1,0 +1,728 @@
+{
+ "checks": {
+  "questions": 12,
+  "bank_overlap": 0,
+  "follow_ups": 7,
+  "follow_ups_referencing_answer": 7,
+  "difficulty_tracks_performance": true,
+  "difficulty_transitions": [
+   {
+    "score": 4,
+    "from": 3,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   }
+  ],
+  "difficulty_corrections_by_code": 3,
+  "emergency_questions": 0,
+  "fresh_questions": 0,
+  "rejected_attempts": {
+   "anchor_quote must be copied verbatim from the candidate's la": 3,
+   "repeats an earlier question": 2
+  },
+  "emergency_blueprint": false,
+  "repeats": 0,
+  "closed_on_time": true,
+  "passed": true
+ },
+ "state": {
+  "session_id": "mock-12",
+  "params": {
+   "role": "Data Analyst",
+   "seniority": "intern",
+   "company": "Zomato",
+   "company_style": "SQL and business sense, friendly",
+   "job_description": "",
+   "resume_context": "",
+   "skills": [
+    "SQL",
+    "Excel"
+   ],
+   "interview_type": "technical",
+   "round": "screening",
+   "difficulty": "auto",
+   "language": "en",
+   "duration_minutes": 10,
+   "persona": "maya"
+  },
+  "blueprint": {
+   "summary": "This screening interview assesses the candidate’s SQL and Excel skills, as well as their ability to demonstrate business acumen, which are crucial for a Data Analyst role at Zomato.",
+   "competencies": [
+    {
+     "id": "c1",
+     "name": "SQL",
+     "why": "Data Analysts need strong SQL skills to manipulate and analyze large datasets.",
+     "weight": 0.4,
+     "minutes": 4.0,
+     "signals": [
+      "Effective use of SQL queries for data retrieval",
+      "Optimizing query performance"
+     ]
+    },
+    {
+     "id": "c2",
+     "name": "Excel",
+     "why": "Proficiency in Excel is essential for Data Analysts to perform complex data analysis and visualization.",
+     "weight": 0.3,
+     "minutes": 3.0,
+     "signals": [
+      "Use of pivot tables, formulas, and macros",
+      "Handling large datasets efficiently"
+     ]
+    },
+    {
+     "id": "c3",
+     "name": "Business Acumen",
+     "why": "Demonstrating an understanding of how data analysis can drive business decisions is critical for this role.",
+     "weight": 0.3,
+     "minutes": 3.0,
+     "signals": [
+      "Connecting data insights to business objectives",
+      "Proposing actionable solutions based on data"
+     ]
+    },
+    {
+     "id": "c4",
+     "name": "Problem-Solving",
+     "why": "Proving the ability to tackle complex problems using data analysis is important for the role.",
+     "weight": 0.0,
+     "minutes": 0.0,
+     "signals": []
+    }
+   ],
+   "opening": "Hello! Welcome to our screening interview. Let's start by discussing your background and how you got interested in data analysis.",
+   "style_notes": "The tone will be warm and encouraging, with a friendly approach that still maintains a professional and precise manner. We will focus on practical examples and demonstrate how your skills can be applied in a business context.",
+   "start_difficulty": 3,
+   "emergency": false,
+   "provider": "ollama"
+  },
+  "turns": [
+   {
+    "index": 0,
+    "action": "open",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Hi there! I'm Maya. Let's start by discussing your SQL skills. Can you walk me through a specific project where you used SQL to retrieve or manipulate data?",
+    "anchor_quote": "",
+    "reason": "Starting with SQL as it’s the primary tool for data manipulation. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000000.0,
+    "answer": "Sure, Maya. I worked on a project where we needed to analyze customer feedback on restaurant services. I used SQL to extract feedback data from our CRM system, filtering out any irrelevant entries. Then, I cleaned the data to get a clear view of the positive and negative comments. With SQL queries, I grouped the feedback by restaurant and month, which helped us identify trends over time. This allowed us to focus on areas needing improvement and measure the effectiveness of our changes.",
+    "answer_words": [],
+    "answer_seconds": 33.2,
+    "answered_at": 1000041.2,
+    "score": 4,
+    "assessment": {
+     "strengths": "Provided a specific example with clear steps and impact.",
+     "gaps": "Could mention the tools or databases used.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 1,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "That's great! Could you tell me more about the tools or databases you used in this project?",
+    "anchor_quote": "Sure, Maya. I worked on a project where we needed to analyze customer feedback on restaurant services.",
+    "reason": "Expand on the tools and databases used. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000041.2,
+    "answer": "Certainly! For this project, I used MySQL as our main database. I also leveraged Python for some data manipulation tasks, particularly when I needed to join data from different sources. I found that combining SQL with Python made it easier to handle large datasets and perform complex queries more efficiently.",
+    "answer_words": [],
+    "answer_seconds": 20.0,
+    "answered_at": 1000069.2,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided a specific example with clear steps and mentioned the use of Python.",
+     "gaps": "No specific metrics or impact on the business were mentioned.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 2,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "That's great! You mentioned using MySQL. Could you elaborate on why you chose MySQL for this project and how it fit into the overall data analysis process?",
+    "anchor_quote": "I used MySQL as our main database",
+    "reason": "Expand on the database and tools used. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000069.2,
+    "answer": "Sure, Maya. I chose MySQL because it's robust and widely used, making it easy to get support and resources. It also supports complex queries, which was crucial for filtering and cleaning the data. For the project, I used MySQL to store and manage the customer feedback data, then wrote SQL queries to extract the relevant information. This fit well into the data analysis process as it allowed us to efficiently handle and manipulate the data, ensuring we could quickly identify trends and areas for improvement.",
+    "answer_words": [],
+    "answer_seconds": 34.0,
+    "answered_at": 1000111.2,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided a clear example of using SQL for data analysis and explained the choice of tools effectively.",
+     "gaps": "Could provide more specific details on the SQL queries used and the impact of the analysis.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 3,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "That's great. Could you share some specific SQL queries you used in this project and how they contributed to the analysis and insights?",
+    "anchor_quote": "I chose MySQL because it's robust and widely used, making it easy to get support and resources.",
+    "reason": "Candidate provided a good example but could elaborate more on the SQL queries and outcomes. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000111.2,
+    "answer": "Sure, Maya. For this project, I used a few key SQL queries. One of them was to extract feedback data by restaurant and month: ```sql SELECT restaurant_id, DATE_FORMAT(feedback_date, '%Y-%m') AS month, COUNT(*) AS feedback_count FROM customer_feedback GROUP BY restaurant_id, month ORDER BY restaurant_id, month; ``` This query helped us see the number of feedback entries for each restaurant over time. Another query I used was to filter out irrelevant entries: ```sql SELECT * FROM customer_feedback WHERE feedback_date BETWEEN '2022-01-01' AND '2023-01-01' AND feedback_text LIKE '%service%'; ``` This one focused on feedback containing the word \"service\" within a specific time frame. These queries were instrumental in identifying trends and understanding customer opinions, which in turn helped us improve our service quality.",
+    "answer_words": [],
+    "answer_seconds": 48.0,
+    "answered_at": 1000167.2,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided specific examples of SQL queries and explained their impact on the analysis.",
+     "gaps": "None identified.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 4,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "Great! Can you walk me through the optimization techniques you used to ensure the SQL queries ran efficiently on large datasets?",
+    "anchor_quote": "Sure, Maya. For this project, I used a few key SQL queries.",
+    "reason": "To explore further SQL skills and their application. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000167.2,
+    "answer": "Certainly, Maya. To optimize the SQL queries, I made sure to create indexes on the columns that were frequently used in the WHERE and JOIN clauses. For example, I created an index on the `restaurant_id` and `feedback_date` columns in the `customer_feedback` table. This helped speed up the filtering and grouping processes. Additionally, I used appropriate data types and ensured that the data was normalized to reduce redundancy and improve query performance. I also made sure to limit the data being processed by adding specific date ranges and filtering out unnecessary data early in the query. Finally, I tested the queries on a smaller subset of data first to identify any performance bottlenecks. Once I found the issues, I adjusted the queries and retested until they ran smoothly and efficiently on larger datasets.",
+    "answer_words": [],
+    "answer_seconds": 52.8,
+    "answered_at": 1000228.0,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided detailed SQL queries and explained optimization techniques effectively.",
+     "gaps": "",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 5,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "That's excellent! You mentioned creating indexes to optimize the queries. Could you provide an example of how you determined which columns to index and the impact it had on query performance?",
+    "anchor_quote": "Maya. To optimize the SQL queries, I made sure to create indexes on the columns that were frequently used in the WHERE and JOIN clauses. For example, I created an index on the `restaurant_id` and `feedback_date` columns in",
+    "reason": "Expanding on the optimization techniques to ensure comprehensive coverage. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000228.0,
+    "answer": "Sure, Maya. In the project, I identified that the `restaurant_id` and `feedback_date` columns were frequently used in the WHERE and JOIN clauses. By creating indexes on these columns, I was able to significantly reduce the query execution time. For instance, the `restaurant_id` column was used to group feedback by restaurant, and the `feedback_date` column was used to filter feedback within specific time frames. This reduced the number of rows that needed to be scanned, making the queries much faster. The impact was noticeable; a query that previously took several minutes to execute could now run in just seconds. This improvement was crucial for real-time analysis and reporting, as it allowed us to get insights quickly and make timely decisions.",
+    "answer_words": [],
+    "answer_seconds": 47.6,
+    "answered_at": 1000283.6,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided specific examples of SQL queries and optimization techniques, clearly explaining their impact.",
+     "gaps": "Candidate could provide more detailed metrics on performance improvements.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote 'Sure, Maya. To optimize the SQL queries, I made sure to create indexes on the co')"
+    ]
+   },
+   {
+    "index": 6,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "That's great! Could you provide some specific metrics on the performance improvements you observed after applying these optimizations?",
+    "anchor_quote": "This improvement was crucial for real-time analysis",
+    "reason": "Discuss specific metrics to quantify the impact of optimizations. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000283.6,
+    "answer": "Certainly, Maya. After applying the optimizations, we observed a significant improvement in query performance. For example, a query that originally took about 30 seconds to run was reduced to just 3 seconds. This not only sped up our data analysis but also allowed us to run more complex queries in real-time. We saw a 95% reduction in query execution time, which was a substantial improvement. This efficiency gain was particularly useful for our real-time reporting dashboard, where quick data retrieval is crucial for making informed decisions.",
+    "answer_words": [],
+    "answer_seconds": 34.4,
+    "answered_at": 1000326.0,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided specific metrics and examples, showing a clear understanding of performance optimization.",
+     "gaps": "",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 7,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "Could you give me an example of a particularly challenging query you had to optimize? How did you approach it and what was the outcome?",
+    "anchor_quote": "After applying the optimizations, we observed a significant improvement in query performance.",
+    "reason": "To explore more specific examples and techniques used. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000326.0,
+    "answer": "Certainly, Maya. One particularly challenging query involved aggregating feedback data across multiple restaurants and calculating sentiment scores for each period. The initial query was quite complex and slow, running for several minutes. To optimize it, I first identified the bottlenecks by using EXPLAIN to analyze the query execution plan. I noticed that the query was performing full table scans and joining multiple large tables, which were time-consuming. To address this, I created indexes on the join columns and used more specific date ranges to limit the data. Additionally, I refactored the query to use temporary tables to store intermediate results, reducing the load on the main query. After these changes, the query's execution time dropped from several minutes to just a few seconds. This optimization not only improved the performance but also allowed us to run the query more frequently for real-time insights. The outcome was a much faster and more efficient data analysis process, enabling quicker decision-making.",
+    "answer_words": [],
+    "answer_seconds": 63.2,
+    "answered_at": 1000397.2,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided detailed examples of SQL queries and optimizations, demonstrating strong analytical and problem-solving skills.",
+     "gaps": "Candidate could elaborate more on the specific tools and techniques used for large dataset handling in SQL.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 8,
+    "action": "new_topic",
+    "competency": "c2",
+    "difficulty": 4,
+    "say": "That's great! Moving on to Excel, can you give me an example of how you used pivot tables, formulas, or macros to analyze or visualize data in a project?",
+    "anchor_quote": "",
+    "reason": "Transition to Excel proficiency to cover the second competency. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000397.2,
+    "answer": "Certainly, Maya. In a project where we needed to analyze sales data across different regions and time periods, I used pivot tables in Excel to summarize and visualize the data. I created a pivot table to aggregate sales figures by region and month, which helped us identify which regions were performing well and which needed more attention. For further analysis, I used formulas like VLOOKUP and INDEX-MATCH to cross-reference sales data with customer demographics, allowing us to see if there were any correlations between customer age groups and purchasing behavior. Additionally, I created macros to automate repetitive tasks, such as updating the pivot table with new data and generating reports. This automation saved a lot of time and helped us focus on more strategic analysis. Overall, Excel was a powerful tool that helped us make sense of large datasets and draw meaningful insights quickly.",
+    "answer_words": [],
+    "answer_seconds": 57.6,
+    "answered_at": 1000462.7999999999,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided detailed examples of SQL optimizations and their impact.",
+     "gaps": "Could benefit from more specific metrics or exact performance improvements.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "difficulty 3->4 (score 4, previous 4)"
+    ]
+   },
+   {
+    "index": 9,
+    "action": "new_topic",
+    "competency": "c3",
+    "difficulty": 4,
+    "say": "That's great! Let's talk about how data analysis can drive business decisions. Can you give me an example of how you connected data insights to specific business objectives in a project?",
+    "anchor_quote": "",
+    "reason": "Explore business acumen by connecting data insights to business objectives. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000462.7999999999,
+    "answer": "Sure, Maya. In one project, we were looking to improve customer satisfaction at our partner restaurants. I analyzed customer feedback data to identify common issues such as long wait times and poor service. By using SQL to group feedback by restaurant and month, I was able to pinpoint which restaurants had the most complaints. This data was then visualized in a dashboard using Excel, showing trends over time and highlighting the areas needing improvement. We shared these insights with the restaurant managers and provided them with specific action items, like increasing staff during peak hours or providing better training for service staff. As a result, the feedback complaints for the targeted restaurants decreased by 30% within three months. This improvement not only enhanced the customer experience but also helped the restaurants meet their business objectives of higher customer satisfaction and better revenue.",
+    "answer_words": [],
+    "answer_seconds": 56.8,
+    "answered_at": 1000527.6,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a specific example of how data analysis led to actionable business improvements, demonstrating strong business acumen.",
+     "gaps": "The example could have been more detailed with specific numbers or metrics for impact.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "difficulty 3->4 (score 4, previous 4)"
+    ]
+   },
+   {
+    "index": 10,
+    "action": "wrap_up",
+    "competency": "c3",
+    "difficulty": 4,
+    "say": "That's a great example! How do you feel about your overall skills in data analysis and how they can drive business decisions?",
+    "anchor_quote": "This improvement not only enhanced the customer experience but also helped the restaurants meet their business objectives of higher customer satisfaction and better revenue.",
+    "reason": "Closing the interview with a strong business acumen example. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000527.6,
+    "answer": "I feel really confident in my data analysis skills and how they can drive business decisions, Maya. I believe that by leveraging tools like SQL and Excel, I can extract meaningful insights from data that help guide strategic decisions. Whether it's optimizing customer feedback to improve service quality or analyzing sales data to make informed business choices, I'm always looking for ways to turn data into actionable steps. I think my ability to clean and manipulate data, combined with my experience in visualization and reporting, makes me well-equipped to contribute to data-driven decisions. I'm excited about the opportunity to bring these skills to Zomato and help drive growth and improvement in the business.",
+    "answer_words": [],
+    "answer_seconds": 45.2,
+    "answered_at": 1000580.7999999999,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a clear example of how data analysis can drive business decisions, showing confidence in their skills and understanding of the impact on the business.",
+     "gaps": "",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 11,
+    "action": "close",
+    "competency": "c3",
+    "difficulty": 4,
+    "say": "Thank you for sharing your insights. It was great discussing your skills and experience. We're excited to have you join us at Zomato!",
+    "anchor_quote": "I feel really confident in my data analysis skills and how they can drive business decisions, Maya.",
+    "reason": "Candidate has demonstrated strong competency in all areas covered and time is nearly up.",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000580.7999999999,
+    "answer": null,
+    "answer_words": [],
+    "answer_seconds": 0.0,
+    "answered_at": null,
+    "score": null,
+    "assessment": null,
+    "evaluation": null,
+    "corrections": []
+   }
+  ],
+  "difficulty": 4,
+  "started_at": 1000000.0,
+  "finished": true,
+  "events": [
+   {
+    "t": 1791319795.744,
+    "kind": "turn",
+    "turn": 0,
+    "provider": "ollama",
+    "ms": 125955.1,
+    "action": "open"
+   },
+   {
+    "t": 1791319878.765,
+    "kind": "turn",
+    "turn": 1,
+    "provider": "ollama",
+    "ms": 55817.8,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791319988.343,
+    "kind": "turn",
+    "turn": 2,
+    "provider": "ollama",
+    "ms": 88352.7,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320079.162,
+    "kind": "turn",
+    "turn": 3,
+    "provider": "ollama",
+    "ms": 67047.4,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320192.391,
+    "kind": "turn",
+    "turn": 4,
+    "provider": "ollama",
+    "ms": 70433.9,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320314.14,
+    "kind": "correction",
+    "turn": 5,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote 'Sure, Maya. To optimize the SQL queries, I made sure to create indexes on the co')"
+   },
+   {
+    "t": 1791320314.14,
+    "kind": "turn",
+    "turn": 5,
+    "provider": "ollama",
+    "ms": 77917.9,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320464.83,
+    "kind": "turn",
+    "turn": 6,
+    "provider": "ollama",
+    "ms": 107118.8,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320576.59,
+    "kind": "turn",
+    "turn": 7,
+    "provider": "ollama",
+    "ms": 76815.2,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320774.25,
+    "kind": "correction",
+    "turn": 8,
+    "detail": "difficulty 3->4 (score 4, previous 4)"
+   },
+   {
+    "t": 1791320774.25,
+    "kind": "turn",
+    "turn": 8,
+    "provider": "ollama",
+    "ms": 149687.1,
+    "action": "new_topic"
+   },
+   {
+    "t": 1791320985.532,
+    "kind": "correction",
+    "turn": 9,
+    "detail": "difficulty 3->4 (score 4, previous 4)"
+   },
+   {
+    "t": 1791320985.532,
+    "kind": "turn",
+    "turn": 9,
+    "provider": "ollama",
+    "ms": 159848.6,
+    "action": "new_topic"
+   },
+   {
+    "t": 1791321140.506,
+    "kind": "turn",
+    "turn": 10,
+    "provider": "ollama",
+    "ms": 103032.1,
+    "action": "wrap_up"
+   },
+   {
+    "t": 1791321287.86,
+    "kind": "turn",
+    "turn": 11,
+    "provider": "ollama",
+    "ms": 103755.6,
+    "action": "close"
+   }
+  ]
+ },
+ "attempts": [
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 115162.0,
+   "error": "",
+   "input_tokens": 603,
+   "output_tokens": 405
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 125955.0,
+   "error": "",
+   "input_tokens": 1529,
+   "output_tokens": 83
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 55817.8,
+   "error": "",
+   "input_tokens": 1683,
+   "output_tokens": 130
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 59366.5,
+   "error": "anchor_quote must be copied verbatim from the candidate's last answer",
+   "input_tokens": 1810,
+   "output_tokens": 157
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 28985.9,
+   "error": "",
+   "input_tokens": 1837,
+   "output_tokens": 136
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 67047.3,
+   "error": "",
+   "input_tokens": 2000,
+   "output_tokens": 161
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 70433.8,
+   "error": "",
+   "input_tokens": 2265,
+   "output_tokens": 131
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 77917.8,
+   "error": "",
+   "input_tokens": 2500,
+   "output_tokens": 150
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 75894.8,
+   "error": "anchor_quote must be copied verbatim from the candidate's last answer",
+   "input_tokens": 2748,
+   "output_tokens": 127
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 31223.7,
+   "error": "",
+   "input_tokens": 2775,
+   "output_tokens": 130
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 76815.2,
+   "error": "",
+   "input_tokens": 2926,
+   "output_tokens": 129
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 87345.2,
+   "error": "anchor_quote must be copied verbatim from the candidate's last answer; repeats an earlier question: \"That's great! Could you provide some specific metrics on the performance improve\"",
+   "input_tokens": 3198,
+   "output_tokens": 131
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 62341.6,
+   "error": "",
+   "input_tokens": 3536,
+   "output_tokens": 145
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 99077.2,
+   "error": "repeats an earlier question: \"That's great! Moving on to Excel, can you give me an example of how you used piv\"",
+   "input_tokens": 3463,
+   "output_tokens": 178
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 60771.3,
+   "error": "",
+   "input_tokens": 3795,
+   "output_tokens": 134
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 103032.0,
+   "error": "",
+   "input_tokens": 3740,
+   "output_tokens": 161
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 103755.6,
+   "error": "",
+   "input_tokens": 3966,
+   "output_tokens": 153
+  }
+ ],
+ "qualities": [
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average"
+ ]
+}

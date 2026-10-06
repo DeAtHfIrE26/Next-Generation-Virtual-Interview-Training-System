@@ -1,0 +1,756 @@
+{
+ "checks": {
+  "questions": 13,
+  "bank_overlap": 0,
+  "follow_ups": 10,
+  "follow_ups_referencing_answer": 10,
+  "difficulty_tracks_performance": true,
+  "difficulty_transitions": [
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   }
+  ],
+  "difficulty_corrections_by_code": 3,
+  "emergency_questions": 0,
+  "fresh_questions": 0,
+  "rejected_attempts": {
+   "say must ask the candidate a question": 1,
+   "repeats an earlier question": 1,
+   "close ends the interview, so it must not ask anything": 1
+  },
+  "emergency_blueprint": false,
+  "repeats": 0,
+  "closed_on_time": true,
+  "passed": true
+ },
+ "state": {
+  "session_id": "mock-05",
+  "params": {
+   "role": "Account Executive",
+   "seniority": "mid",
+   "company": "Razorpay",
+   "company_style": "Role-play discovery and objection handling",
+   "job_description": "Close mid-market deals for a payments product; run discovery calls, manage a pipeline in Salesforce, negotiate contracts.",
+   "resume_context": "",
+   "skills": [],
+   "interview_type": "behavioral",
+   "round": "technical",
+   "difficulty": "auto",
+   "language": "en",
+   "duration_minutes": 12,
+   "persona": "maya"
+  },
+  "blueprint": {
+   "summary": "This interview assesses the candidate’s ability to handle complex sales situations and manage pipeline effectively, which are key for closing mid-market deals as an Account Executive at Razorpay.",
+   "competencies": [
+    {
+     "id": "c1",
+     "name": "Discovery Call Execution",
+     "why": "Effective discovery calls are crucial for identifying client needs and closing deals. This role requires strong negotiation skills and a deep understanding of client requirements.",
+     "weight": 0.4,
+     "minutes": 5.0,
+     "signals": [
+      "demonstrates the ability to actively listen and uncover client pain points",
+      "shows how to tailor the conversation to client needs"
+     ]
+    },
+    {
+     "id": "c2",
+     "name": "Sales Pipeline Management",
+     "why": "Mid-level Account Executives must maintain and grow their pipeline by tracking deals and managing follow-ups. This competency ensures the candidate can systematically advance deals through the sales cycle.",
+     "weight": 0.3,
+     "minutes": 3.5,
+     "signals": [
+      "displays proficiency in using Salesforce for deal tracking and scheduling",
+      "outlines steps for maintaining and growing the pipeline"
+     ]
+    },
+    {
+     "id": "c3",
+     "name": "Negotiation Skills",
+     "why": "Negotiating contracts is a critical part of closing deals, especially in mid-market. This competency evaluates the candidate's ability to handle objections and close deals effectively.",
+     "weight": 0.3,
+     "minutes": 3.5,
+     "signals": [
+      "demonstrates strong objection handling techniques",
+      "shows how to leverage negotiation to close deals"
+     ]
+    }
+   ],
+   "opening": "Good day! Let's start by discussing how you would approach a discovery call with a potential mid-market client.",
+   "style_notes": "The interview will be role-play based, focusing on scenarios related to sales discovery and objection handling. The tone will be warm and encouraging, but the depth of questions will be precise and focused on demonstrating the candidate's skills.",
+   "start_difficulty": 3,
+   "emergency": false,
+   "provider": "ollama"
+  },
+  "turns": [
+   {
+    "index": 0,
+    "action": "open",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Hello! My name is Maya, and I'll be your interviewer today. Let's start by discussing how you would approach a discovery call with a potential mid-market client?",
+    "anchor_quote": "",
+    "reason": "Start with an open question about discovery calls. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000000.0,
+    "answer": "Absolutely, Maya. When approaching a discovery call with a mid-market client, I'd first aim to understand their specific pain points and goals. I’d leverage our product knowledge to tailor our solutions to their unique needs, ensuring a customized approach. Additionally, I’d focus on building rapport and establishing trust right from the start by listening actively and demonstrating expertise in the market. This helps in setting the stage for a productive and collaborative relationship.",
+    "answer_words": [],
+    "answer_seconds": 29.2,
+    "answered_at": 1000037.2,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate mentions understanding client pain points, tailoring solutions, and building rapport.",
+     "gaps": "Lacks specific examples or metrics to measure success.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 1,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "That's a great start. Can you give me an example of a time when you successfully tailored a solution to a client's specific needs during a discovery call? How did you measure the success of that interaction?",
+    "anchor_quote": "Absolutely, Maya. When approaching a discovery call with a mid-market client, I'd first aim to understand their specific pain points and goals.",
+    "reason": "Need more specificity and measurable outcomes. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000037.2,
+    "answer": "Certainly, Maya. In a recent discovery call, I tailored our solution by focusing on the client's specific pain points related to payment processing efficiency. I ensured the conversation revolved around their unique challenges, like frequent delays and high transaction fees. To measure the success, we discussed their goals and set clear objectives for improvement, which included reducing processing times by 20% and lowering transaction fees by 15%. The client seemed very engaged and confident in our ability to meet their needs, which was a strong indicator of success.",
+    "answer_words": [],
+    "answer_seconds": 35.2,
+    "answered_at": 1000080.3999999999,
+    "score": 3,
+    "assessment": {
+     "strengths": "The candidate provided a specific example and measured success by setting clear objectives.",
+     "gaps": "The example could be more detailed, and the candidate could have used quantifiable metrics.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 2,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "That's a good example. Could you provide more details on the specific pain points you identified and how you arrived at the 20% reduction in processing times and 15% reduction in transaction fees? Also, how did you ensure the client was satisfied with the proposed solution?",
+    "anchor_quote": "Certainly, Maya. In a recent discovery call, I tailored our solution by focusing on the client's specific pain points related to payment processing efficiency.",
+    "reason": "To elaborate on the pain points and outcomes. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000080.3999999999,
+    "answer": "Certainly, Maya. During the discovery call, we identified that the client was facing significant delays in transaction processing, often due to manual data entry and outdated systems. We also noticed that they were incurring higher transaction fees due to the complexity of their current payment gateway. By understanding these pain points, I was able to propose a solution that integrated our real-time transaction processing platform and a more cost-effective payment gateway. The 20% reduction in processing times and 15% reduction in transaction fees were based on our data and experience with similar clients. To ensure client satisfaction, we outlined a detailed implementation plan and provided a cost-benefit analysis upfront. This approach helped the client visualize the benefits and align their expectations, ensuring a strong foundation for our partnership.",
+    "answer_words": [],
+    "answer_seconds": 51.2,
+    "answered_at": 1000139.5999999999,
+    "score": 3,
+    "assessment": {
+     "strengths": "The candidate provided a clear example of tailoring a solution and measured success effectively.",
+     "gaps": "Could benefit from more specific numbers and a deeper dive into the negotiation process.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 3,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Could you walk me through the process of identifying these pain points? How did you gather this information during the call?",
+    "anchor_quote": "Certainly, Maya. During the discovery call, we identified that the client was facing significant delays in transaction processing, often due to manual data entry and outdated systems. We also noticed that they were incurring higher transaction fees due to the complexity of their current payment gate",
+    "reason": "Need more details on the specific pain points and the negotiation process to fully assess this competency. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000139.5999999999,
+    "answer": "Certainly, Maya. During the discovery call, I would start by asking open-ended questions to understand the client's current pain points and goals. For example, I might ask about their most significant challenges in payment processing or their key performance indicators. I would also gather information on their existing systems and processes to identify any inefficiencies. Additionally, I would use our pre-call research and any relevant industry insights to guide the conversation, ensuring that we address specific areas that are commonly problematic for mid-market clients. By actively listening and asking follow-up questions, I can pinpoint the exact pain points, which helps in crafting a tailored solution that resonates with the client's needs.",
+    "answer_words": [],
+    "answer_seconds": 44.4,
+    "answered_at": 1000191.9999999999,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a detailed example of tailoring a solution and identified pain points effectively.",
+     "gaps": "No specific metrics or tools used to measure success were mentioned.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 4,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Could you elaborate on the specific questions you asked to identify the client's pain points? Did you use any particular tools or methods to gather this information?",
+    "anchor_quote": "Certainly, Maya. During the discovery call, I would start by asking open-ended questions to understand the client's current pain points and goals.",
+    "reason": "Expand on the process of identifying pain points and gather information. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000191.9999999999,
+    "answer": "Certainly, Maya. During the discovery call, I would start by asking questions like, \"What are the biggest challenges you face in your payment processing?\" and \"How do you measure the success of your current payment solutions?\" These open-ended questions help in understanding their pain points and aligning them with our solutions. I also ask about their key performance indicators and any recent changes in their business that might impact their payment processes. To gather more detailed information, I might use our pre-discovery call questionnaire, which helps in identifying common pain points. Additionally, I leverage our CRM system to review their historical interactions and any feedback they've provided in the past. This comprehensive approach ensures that I have a deep understanding of their needs and can tailor our solutions effectively.",
+    "answer_words": [],
+    "answer_seconds": 51.6,
+    "answered_at": 1000251.5999999999,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a detailed example and explained the process of identifying pain points, which shows a structured approach.",
+     "gaps": "More specific tools or methods could have been mentioned.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 5,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "You mentioned using a pre-discovery call questionnaire and reviewing their CRM data. Could you elaborate on the specific tools or methods you used for pre-discovery call research to gather information about the client's pain points and goals?",
+    "anchor_quote": "Certainly, Maya. During the discovery call, I would start by asking questions like, ",
+    "reason": "Expand on the tools used for pre-discovery call research. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000251.5999999999,
+    "answer": "Certainly, Maya. For pre-discovery call research, I typically use a detailed questionnaire that includes questions about their current pain points, goals, and pain areas in payment processing. This helps in gathering structured information upfront. Additionally, I review their CRM data to understand their past interactions with us, any feedback they've provided, and any recent changes in their business. I also leverage our market research and industry insights to identify common pain points and tailor the questions accordingly. This comprehensive approach ensures that I have a well-rounded understanding of their needs before our call, making it easier to tailor our solutions effectively.",
+    "answer_words": [],
+    "answer_seconds": 40.4,
+    "answered_at": 1000299.9999999999,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a detailed response on the tools and methods used for pre-discovery call research.",
+     "gaps": "Could benefit from more specific examples of questions asked during the discovery call.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 6,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Could you provide some examples of the specific questions you asked during the discovery call to identify the client's pain points and goals?",
+    "anchor_quote": "Certainly, Maya. For pre-discovery call research, I typically use a detailed questionnaire that includes questions about their current pain points, goals, and pain areas in payment processing.",
+    "reason": "To get more specific examples of the questions used. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000299.9999999999,
+    "answer": "Certainly, Maya. During the discovery call, I typically start with questions like, \"What are the biggest challenges you face in your payment processing today?\" and \"How do you measure the success of your current payment solutions?\" I also ask about their specific pain points, such as, \"Are there any recurring issues with transaction delays or high fees?\" Additionally, I explore their goals by asking, \"What are your key objectives for improving your payment processes?\" and \"How do you envision a more streamlined payment solution benefiting your business?\" These questions help in understanding their pain points and aligning our solutions effectively.",
+    "answer_words": [],
+    "answer_seconds": 40.0,
+    "answered_at": 1000347.9999999999,
+    "score": 3,
+    "assessment": {
+     "strengths": "The candidate provided a detailed process for identifying pain points and goals during the discovery call.",
+     "gaps": "Could benefit from more specific examples of questions and tools used.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 7,
+    "action": "new_topic",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "Great! Let's shift our focus to sales pipeline management. Can you walk me through how you use Salesforce to track and manage deals in your pipeline?",
+    "anchor_quote": "",
+    "reason": "Moving to the next competency to ensure balanced coverage. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000347.9999999999,
+    "answer": "Absolutely, Maya. In Salesforce, I utilize various tools and features to track and manage deals effectively. I start by setting up clear deal stages and custom fields to capture relevant information, such as the client's decision-making timeline and pain points. Regularly updating these fields ensures a clear view of the deal's progress. I also leverage reporting and analytics to identify trends and potential bottlenecks. For instance, I can run reports to see which stages take the longest, helping me to optimize my follow-up strategies. Additionally, I use automated alerts and reminders to keep the team engaged and ensure timely actions. By maintaining a disciplined approach and keeping everyone informed, I can manage the pipeline efficiently and increase the chances of closing deals.",
+    "answer_words": [],
+    "answer_seconds": 48.8,
+    "answered_at": 1000404.7999999999,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a detailed explanation of using Salesforce for tracking and managing deals, including setting up clear deal stages, custom fields, and automated alerts.",
+     "gaps": "Could benefit from more specifics on how the candidate ensures team engagement and optimizes follow-up strategies.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 8,
+    "action": "follow_up",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "That's great to hear about your use of automated alerts and reminders. Could you give me an example of how you ensure team engagement and optimize your follow-up strategies in Salesforce?",
+    "anchor_quote": "to optimize my follow-up strategies. Additionally, I use automated alerts and reminders to keep the team engaged and ensure timely actions",
+    "reason": "To explore how the candidate ensures team engagement and optimizes follow-up strategies. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000404.7999999999,
+    "answer": "Certainly, Maya. To ensure team engagement and optimize follow-up strategies, I regularly schedule reminders for upcoming meetings and critical actions in Salesforce. For example, I set up automated reminders for upcoming calls or client touchpoints to keep the team proactive. I also foster a collaborative environment by sharing key insights and updates through team meetings and Slack channels, which helps in aligning everyone's efforts. Additionally, I encourage the team to provide feedback on the deals and share any relevant information that could influence the sales process. This collaborative approach ensures that everyone is aligned and working towards the same goals, making our follow-up strategies more effective and streamlined.",
+    "answer_words": [],
+    "answer_seconds": 43.2,
+    "answered_at": 1000455.9999999999,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided detailed insights into using automated reminders and fostering a collaborative environment in Salesforce.",
+     "gaps": "There's no specific example of optimizing follow-up strategies or dealing with objections.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote 'I also use automated alerts and reminders to keep the team engaged and ensure ti')"
+    ]
+   },
+   {
+    "index": 9,
+    "action": "follow_up",
+    "competency": "c3",
+    "difficulty": 3,
+    "say": "Could you give me an example of how you have handled an objection during a negotiation process in the past?",
+    "anchor_quote": "ensure team engagement and optimize follow-up strategies, I regularly schedule reminders for upcoming meetings and critical actions in Salesforce. For example, I set up",
+    "reason": "To explore negotiation skills and handling objections in more detail. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000455.9999999999,
+    "answer": "Certainly, Maya. During a recent negotiation process, I encountered an objection from a potential client who was concerned about the cost of our services. To handle this, I first listened actively to understand their specific concerns and the underlying reasons behind their objection. Then, I used our detailed cost-benefit analysis to demonstrate how the investment in our services would yield significant long-term benefits, such as improved payment processing efficiency and reduced transaction fees. I also highlighted our flexible payment options and customization capabilities, which could be tailored to fit their budget constraints. By addressing their concerns directly and providing clear, relevant information, I was able to overcome the objection and move the conversation towards a mutually beneficial agreement.",
+    "answer_words": [],
+    "answer_seconds": 47.2,
+    "answered_at": 1000511.1999999998,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a clear example of handling an objection, demonstrated active listening, and used data to support their argument.",
+     "gaps": "Could benefit from more specific metrics or outcomes to quantify the success.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote 'Could you give me an example of how you ensure team engagement and optimize your')"
+    ]
+   },
+   {
+    "index": 10,
+    "action": "follow_up",
+    "competency": "c3",
+    "difficulty": 3,
+    "say": "That's a great example. Could you provide more details on the specific metrics or outcomes that showed the investment in your services was worthwhile for the client?",
+    "anchor_quote": "To handle this, I first listened actively to understand their specific concerns and the underlying reasons behind their objection.",
+    "reason": "Expanding on the negotiation example with more details and outcomes. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000511.1999999998,
+    "answer": "Certainly, Maya. When addressing the client's concerns about cost, I focused on the specific metrics and outcomes that would demonstrate the value of our services. For instance, I highlighted that their transaction processing times improved by 20%, which directly reduced their operational costs and increased their customer satisfaction scores by 15%. Additionally, the reduction in transaction fees by 15% was a significant factor, as it allowed them to save on their overall expenses. To further emphasize the ROI, I provided a detailed case study that showed similar clients experienced an average return on investment within the first six months. This helped the client see that the initial investment would be quickly offset by the operational efficiencies and cost savings.",
+    "answer_words": [],
+    "answer_seconds": 47.6,
+    "answered_at": 1000566.7999999998,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided specific metrics and outcomes that demonstrated the value of their services.",
+     "gaps": "Candidate could have expanded on the negotiation process to show more strategic thinking and handling of objections.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 11,
+    "action": "follow_up",
+    "competency": "c3",
+    "difficulty": 3,
+    "say": "Could you walk me through the thought process and strategy you used to address the client's cost concerns and lead them to see the value in your services?",
+    "anchor_quote": "When addressing the client's concerns about cost",
+    "reason": "Candidate provided good metrics but could elaborate more on the negotiation process. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000566.7999999998,
+    "answer": "Certainly, Maya. When addressing the client's cost concerns, I first listened actively to understand their specific worries and the underlying reasons. Then, I focused on providing a detailed cost-benefit analysis, highlighting how our services would improve their payment processing efficiency and reduce transaction fees. I also emphasized our flexible payment options and customization capabilities, which could be tailored to fit their budget constraints. By using clear, relevant data and specific examples from similar clients, I was able to show the long-term benefits and justify the initial investment. This approach helped the client see the value in our services beyond the immediate cost, leading to a more informed and positive decision.",
+    "answer_words": [],
+    "answer_seconds": 44.0,
+    "answered_at": 1000618.7999999998,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a clear and practical example of handling objections during negotiations, emphasizing the use of data and specific metrics to justify the value of their services.",
+     "gaps": "The candidate could have elaborated more on the thought process behind addressing cost concerns and the specific strategies used to tailor the solution to the client's needs.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote 'Could you provide more details on the specific metrics or outcomes that showed t')"
+    ]
+   },
+   {
+    "index": 12,
+    "action": "close",
+    "competency": "c3",
+    "difficulty": 3,
+    "say": "Thank you for your time today, and for sharing your experiences with me. It was great to hear about your negotiation skills and how you effectively address client concerns. Have a wonderful day!",
+    "anchor_quote": "Could you walk me through the thought process and strategy you used to address the client's cost concerns and lead them to see the value in your services?",
+    "reason": "Time has run out and the candidate has provided a good example of negotiation skills.",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000618.7999999998,
+    "answer": null,
+    "answer_words": [],
+    "answer_seconds": 0.0,
+    "answered_at": null,
+    "score": null,
+    "assessment": null,
+    "evaluation": null,
+    "corrections": []
+   }
+  ],
+  "difficulty": 3,
+  "started_at": 1000000.0,
+  "finished": true,
+  "events": [
+   {
+    "t": 1791319746.553,
+    "kind": "turn",
+    "turn": 0,
+    "provider": "ollama",
+    "ms": 82517.0,
+    "action": "open"
+   },
+   {
+    "t": 1791319829.735,
+    "kind": "turn",
+    "turn": 1,
+    "provider": "ollama",
+    "ms": 56654.2,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791319928.689,
+    "kind": "turn",
+    "turn": 2,
+    "provider": "ollama",
+    "ms": 66986.9,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320051.335,
+    "kind": "turn",
+    "turn": 3,
+    "provider": "ollama",
+    "ms": 77073.0,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320160.699,
+    "kind": "turn",
+    "turn": 4,
+    "provider": "ollama",
+    "ms": 68234.7,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320279.551,
+    "kind": "turn",
+    "turn": 5,
+    "provider": "ollama",
+    "ms": 73456.7,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320393.821,
+    "kind": "turn",
+    "turn": 6,
+    "provider": "ollama",
+    "ms": 76003.7,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320606.339,
+    "kind": "turn",
+    "turn": 7,
+    "provider": "ollama",
+    "ms": 173878.9,
+    "action": "new_topic"
+   },
+   {
+    "t": 1791320737.857,
+    "kind": "correction",
+    "turn": 8,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote 'I also use automated alerts and reminders to keep the team engaged and ensure ti')"
+   },
+   {
+    "t": 1791320737.857,
+    "kind": "turn",
+    "turn": 8,
+    "provider": "ollama",
+    "ms": 85797.2,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320857.187,
+    "kind": "correction",
+    "turn": 9,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote 'Could you give me an example of how you ensure team engagement and optimize your')"
+   },
+   {
+    "t": 1791320857.187,
+    "kind": "turn",
+    "turn": 9,
+    "provider": "ollama",
+    "ms": 77692.1,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320986.59,
+    "kind": "turn",
+    "turn": 10,
+    "provider": "ollama",
+    "ms": 85072.3,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321120.837,
+    "kind": "correction",
+    "turn": 11,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote 'Could you provide more details on the specific metrics or outcomes that showed t')"
+   },
+   {
+    "t": 1791321120.837,
+    "kind": "turn",
+    "turn": 11,
+    "provider": "ollama",
+    "ms": 87474.2,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321552.675,
+    "kind": "turn",
+    "turn": 12,
+    "provider": "ollama",
+    "ms": 386790.8,
+    "action": "close"
+   }
+  ]
+ },
+ "attempts": [
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 134466.7,
+   "error": "",
+   "input_tokens": 621,
+   "output_tokens": 439
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 57861.8,
+   "error": "say must ask the candidate a question",
+   "input_tokens": 1529,
+   "output_tokens": 71
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 24655.0,
+   "error": "",
+   "input_tokens": 1567,
+   "output_tokens": 79
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 56654.2,
+   "error": "",
+   "input_tokens": 1675,
+   "output_tokens": 165
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 66986.9,
+   "error": "",
+   "input_tokens": 1895,
+   "output_tokens": 189
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 77073.0,
+   "error": "",
+   "input_tokens": 2191,
+   "output_tokens": 189
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 68234.7,
+   "error": "",
+   "input_tokens": 2400,
+   "output_tokens": 161
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 73456.7,
+   "error": "",
+   "input_tokens": 2641,
+   "output_tokens": 168
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 76003.7,
+   "error": "",
+   "input_tokens": 2878,
+   "output_tokens": 166
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 114604.8,
+   "error": "repeats an earlier question: 'Could you provide some examples of the specific questions you asked during the d'",
+   "input_tokens": 3079,
+   "output_tokens": 272
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 59274.0,
+   "error": "",
+   "input_tokens": 3412,
+   "output_tokens": 132
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 85797.2,
+   "error": "",
+   "input_tokens": 3314,
+   "output_tokens": 178
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 77692.1,
+   "error": "",
+   "input_tokens": 3539,
+   "output_tokens": 149
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 85072.3,
+   "error": "",
+   "input_tokens": 3747,
+   "output_tokens": 162
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 87474.1,
+   "error": "",
+   "input_tokens": 3977,
+   "output_tokens": 160
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 191115.2,
+   "error": "close ends the interview, so it must not ask anything: thank the candidate and say goodbye",
+   "input_tokens": 4037,
+   "output_tokens": 206
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 195675.4,
+   "error": "",
+   "input_tokens": 4069,
+   "output_tokens": 213
+  }
+ ],
+ "qualities": [
+  "vague",
+  "vague",
+  "vague",
+  "vague",
+  "vague",
+  "vague",
+  "vague",
+  "vague",
+  "vague",
+  "vague",
+  "vague",
+  "vague"
+ ]
+}

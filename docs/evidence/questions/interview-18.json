@@ -1,0 +1,620 @@
+{
+ "checks": {
+  "questions": 10,
+  "bank_overlap": 0,
+  "follow_ups": 4,
+  "follow_ups_referencing_answer": 4,
+  "difficulty_tracks_performance": true,
+  "difficulty_transitions": [
+   {
+    "score": 2,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 2,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 2,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 2,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   }
+  ],
+  "difficulty_corrections_by_code": 1,
+  "emergency_questions": 0,
+  "fresh_questions": 1,
+  "rejected_attempts": {
+   "say must ask the candidate a question": 5,
+   "follow_up must ask about what the candidate just said (the a": 4,
+   "to return to an earlier answer use action revisit": 4,
+   "Maya is your own name": 1
+  },
+  "emergency_blueprint": false,
+  "repeats": 0,
+  "closed_on_time": true,
+  "passed": true
+ },
+ "state": {
+  "session_id": "mock-18",
+  "params": {
+   "role": "Teacher (Mathematics)",
+   "seniority": "mid",
+   "company": "Delhi Public School",
+   "company_style": "Classroom scenarios and pedagogy",
+   "job_description": "",
+   "resume_context": "",
+   "skills": [],
+   "interview_type": "behavioral",
+   "round": "final",
+   "difficulty": "auto",
+   "language": "en",
+   "duration_minutes": 10,
+   "persona": "maya"
+  },
+  "blueprint": {
+   "summary": "This interview assesses the candidate's instructional leadership and classroom management skills, which are crucial for a mid-level mathematics teacher role at Delhi Public School, where effective pedagogy and student engagement are paramount.",
+   "competencies": [
+    {
+     "id": "c1",
+     "name": "Instructional Leadership",
+     "why": "Demonstrates the candidate's ability to lead and inspire a mathematics classroom, ensuring effective teaching and student engagement, which is critical for a mid-level role.",
+     "weight": 0.4,
+     "minutes": 4.0,
+     "signals": [
+      "Strong leadership in planning and delivering impactful lessons",
+      "Ability to foster a collaborative and inclusive learning environment"
+     ]
+    },
+    {
+     "id": "c2",
+     "name": "Classroom Management",
+     "why": "Evaluates the candidate's ability to maintain discipline and create a conducive learning environment, key for a mid-level teacher in a dynamic and sometimes challenging classroom setting.",
+     "weight": 0.3,
+     "minutes": 3.0,
+     "signals": [
+      "Effective strategies for handling disruptions and maintaining student focus",
+      "Experience in managing diverse classroom dynamics"
+     ]
+    },
+    {
+     "id": "c3",
+     "name": "Student Engagement",
+     "why": "Assesses the candidate's methods for keeping students engaged and motivated in mathematics, which is essential for a mid-level teacher to enhance learning outcomes and student retention.",
+     "weight": 0.3,
+     "minutes": 3.0,
+     "signals": [
+      "Innovative teaching techniques and strategies for interactive learning",
+      "Track record of improving student participation and interest in mathematics"
+     ]
+    }
+   ],
+   "opening": "Good morning! Today, we’ll be discussing your approach to instructional leadership and classroom management in a mathematics classroom. Let’s start with your experience in leading a mathematics class.",
+   "style_notes": "The interview will follow a warm and encouraging tone, focusing on specific examples and measurable outcomes to assess the candidate's competencies. The format will include scenario-based questions to understand their strategies and approaches.",
+   "start_difficulty": 3,
+   "emergency": false,
+   "provider": "ollama"
+  },
+  "turns": [
+   {
+    "index": 0,
+    "action": "open",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Good morning! My name is Maya. Can you tell me about a time when you successfully led a mathematics class and what strategies you used to ensure effective teaching and student engagement?",
+    "anchor_quote": "",
+    "reason": "Starting the interview with an open question on instructional leadership. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000000.0,
+    "answer": "Morning! Yeah, so, in my last class, we were learning about fractions. I, um, tried to make it fun by using lots of food—like apples and pizzas. I, like, asked students to bring some snacks and we, like, did some hands-on activities. Maybe it wasn't the best, but it seemed to work okay. Students seemed a bit more interested, though I'm not sure if it helped with, like, understanding the concepts.",
+    "answer_words": [],
+    "answer_seconds": 28.4,
+    "answered_at": 1000036.4,
+    "score": 2,
+    "assessment": {
+     "strengths": "Candidate mentioned using hands-on activities and tried to make the lesson fun.",
+     "gaps": "Answer was vague and lacked measurable impact or specific strategies.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 1,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "That sounds like a creative approach! Could you give me a specific example of a lesson where you led the class and how you ensured the students were engaged and understood the concepts?",
+    "anchor_quote": "I, um, tried to make it fun by using lots of food—like apples and pizzas. I, like, asked students to bring some snacks and we, like, did some hands-on activities.",
+    "reason": "Expanding on the vague example with more detail. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000036.4,
+    "answer": "Yeah, so, um, one time we did a lesson on geometry. I, like, used shapes and stuff, you know, cutouts and stuff. I, like, tried to make it interactive, but, you know, it was kinda hit or miss. I, um, asked questions, but, like, not really sure if they got it.",
+    "answer_words": [],
+    "answer_seconds": 20.4,
+    "answered_at": 1000064.8,
+    "score": 2,
+    "assessment": {
+     "strengths": "Candidate described a couple of creative teaching strategies, but lacked specific details and outcomes.",
+     "gaps": "No concrete examples, unclear impact on student understanding.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 2,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Could you provide more details about that geometry lesson? What specific activities did you use, and how did you verify that the students understood the concepts?",
+    "anchor_quote": "I, like, used shapes and stuff, you know, cutouts and stuff. I, like, tried to make it interactive, but, you know, it was kinda hit or miss.",
+    "reason": "Need more specific details and outcomes for instructional leadership. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000064.8,
+    "answer": "Sure! In the geometry lesson, I used shape cutouts and实物模型。我们让学生通过拼图来理解不同形状的属性，比如三角形、矩形和圆形。我还让他们自己画图，这样可以更好地理解对称性和角度概念。为了确保他们理解，我让他们解释自己的作品，并提问，看看他们是否能准确地描述每个形状的特点。总的来说，虽然过程有些随意，但我觉得互动和实际操作帮助他们更好地掌握了几何概念。",
+    "answer_words": [],
+    "answer_seconds": 4.0,
+    "answered_at": 1000076.8,
+    "score": null,
+    "assessment": null,
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 3,
+    "action": "new_topic",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "Can you share a strategy you've used to handle disruptions while keeping all students engaged in a mathematics lesson?",
+    "anchor_quote": "",
+    "reason": "focused fresh-question call (Effective strategies for handling disruptions and maintaining student focus) [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000076.8,
+    "answer": "Sure! So, in a lesson, if there's a disruption, I try to address it quickly to avoid losing the class's attention. For example, if someone starts chatting, I might pause the lesson and ask everyone to take a moment of quiet reflection or a quick group question related to the topic. This way, I can bring the class back to focus without spending too much time. I also make sure to rotate the activities so everyone stays engaged, and I use real-life examples to connect the concepts to their daily lives, which helps keep the class interested.",
+    "answer_words": [],
+    "answer_seconds": 38.8,
+    "answered_at": 1000123.6000000001,
+    "score": 2,
+    "assessment": {
+     "strengths": "尝试通过实物模型和实践活动来提高学生兴趣，但未能提供具体细节或结果验证。",
+     "gaps": "缺乏具体细节和结果验证，难以评估其教学策略的有效性。",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": [
+     "written by the focused fresh-question call after the full turn failed validation"
+    ]
+   },
+   {
+    "index": 4,
+    "action": "revisit",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Can you provide more details about how you rotate activities in your lessons and what impact this had on student engagement and learning outcomes?",
+    "anchor_quote": "I also make sure to rotate the activities",
+    "reason": "回顾候选人在管理课堂时使用的活动轮换策略，进一步探讨其具体实施和效果。 [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000123.6000000001,
+    "answer": "Sure! I rotate activities by breaking the lesson into smaller segments, each focusing on a different aspect of the topic. For example, in a geometry lesson, we might start with a short lecture on the properties of shapes, followed by a group activity where students work with cutouts to build different shapes, then a quick quiz to reinforce the concepts, and finally a hands-on project where they create a model of a real-world object using the shapes we've discussed. This approach keeps the class dynamic and prevents boredom. Students get a chance to move around and engage in different types of tasks, which helps maintain their interest and participation. For instance, in one class, after the lecture, students were a bit restless, but the cutouts activity helped refocus them. The quiz gave immediate feedback, and the project made the learning more practical and memorable. Overall, the rotation helped improve both engagement and retention of the material.",
+    "answer_words": [],
+    "answer_seconds": 62.4,
+    "answered_at": 1000194.0000000001,
+    "score": 2,
+    "assessment": {
+     "strengths": "提到了使用实物模型和互动活动来保持学生的兴趣和参与度，但缺乏具体的例子和结果数据。",
+     "gaps": "例子较为模糊，未提供具体的评价标准或结果来验证学生的理解和参与度。",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 5,
+    "action": "revisit",
+    "competency": "c3",
+    "difficulty": 3,
+    "say": "In your previous example, you mentioned that students were a bit restless. Could you provide a specific instance where rotating activities helped improve student engagement and how you measured that improvement?",
+    "anchor_quote": "students were a bit restless",
+    "reason": "需要具体化并验证学生参与度提升的具体情况。 [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000194.0000000001,
+    "answer": "Sure! One time, we were learning about trigonometric ratios, and the class was a bit restless after a long lecture. To keep them engaged, I split the lesson into four segments: a short lecture, a group discussion using real-world examples, a hands-on activity with angle measurements, and a quick quiz. Before rotating, I noticed some students were looking around or whispering. After the lecture, I immediately had them form groups and discuss how trigonometry applies to building construction, which helped them see the practical use. Then, I gave them protractors to measure angles in various objects around the classroom. The quiz at the end checked their understanding. The feedback was clear—students were more attentive during the discussion and hands-on activity, and their quiz scores improved significantly compared to previous quizzes. This rotation not only helped in managing restlessness but also in reinforcing the concepts more effectively.",
+    "answer_words": [],
+    "answer_seconds": 58.4,
+    "answered_at": 1000260.4000000001,
+    "score": 4,
+    "assessment": {
+     "strengths": "Provided a clear example with measurable outcomes and interactive activities.",
+     "gaps": "No specific quantitative data on student performance.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 6,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "That's a great example! Could you quantify the improvement in student performance, perhaps by providing the quiz scores before and after the rotation?",
+    "anchor_quote": "The feedback was clear—students were more attentive during the discussion and hands-on activity, and their quiz scores improved significantly compared to previous quizzes.",
+    "reason": "Need more quantitative data to fully assess impact. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000260.4000000001,
+    "answer": "Sure! In that particular class, before rotating the activities, the average quiz score was around 65%. After implementing the rotation with the lecture, group discussion, hands-on activity, and quiz, the average score increased to 85%. This is a significant improvement, showing that the varied approach not only engaged the students more but also helped them grasp the concepts better.",
+    "answer_words": [],
+    "answer_seconds": 23.6,
+    "answered_at": 1000292.0000000001,
+    "score": 4,
+    "assessment": {
+     "strengths": "Provided specific examples and measurable outcomes, showing a clear impact on student engagement and performance.",
+     "gaps": "Could include more diverse teaching methods and strategies for managing large class sizes.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 7,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "That's excellent to see such a clear improvement. Could you describe a time when you had to handle a larger class size and what strategies you used to maintain effective teaching and student engagement?",
+    "anchor_quote": "In that particular class, before rotating the activities, the average quiz score was around 65%. After implementing the rotation with the lecture, group discussion, hands-on activity, and quiz, the average score increased to 85%.",
+    "reason": "Need to explore more strategies and methods. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000292.0000000001,
+    "answer": "Sure! When I had a class of 35 students, I found it challenging to maintain engagement, but I implemented a few strategies. First, I divided the class into smaller groups, about 7-8 students each, to facilitate more personalized interactions. This helped in managing the larger class size while ensuring that every student had a chance to participate actively. To keep the students engaged, I used a variety of activities. For instance, in a lesson on algebra, I split the class into groups and gave each group a set of problems to solve collaboratively. This not only made the class more dynamic but also allowed me to move around the room to assist and monitor each group's progress. I also incorporated technology by using interactive whiteboard applications that allowed students to work on problems in real-time, which was engaging and made the process more interactive. Additionally, I used real-life examples and puzzles that related to the topics, which helped students see the practical applications of algebra. This made the class more relatable and interesting. To ensure that all students were following along, I implemented a \"quick check\" system where I would randomly call on students to explain their solutions or reasoning. This not only kept them on their toes but also helped in identifying any gaps in understanding early. Overall, by dividing the class, using varied activities, and incorporating technology and real-life examples, I was able to maintain effective teaching and keep the larger class size engaged. The class response was positive, and I observed a noticeable improvement in their participation and understanding of the concepts.",
+    "answer_words": [],
+    "answer_seconds": 106.0,
+    "answered_at": 1000406.0000000001,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a detailed example of handling a larger class size and effectively engaging students through group work, technology, and real-life examples.",
+     "gaps": "No clear quantifiable metrics for the improvement in student understanding.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 8,
+    "action": "wrap_up",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "That's a fantastic example! Handling a larger class size is indeed challenging, and it's great to see how you effectively managed it. Could you briefly summarize how your strategies impacted the overall classroom environment and student engagement?",
+    "anchor_quote": "I found it challenging to maintain engagement, but I implemented a few strategies.",
+    "reason": "Closing the interview with a strong example of classroom management. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000406.0000000001,
+    "answer": "Absolutely! When dealing with a larger class of 35 students, I implemented several strategies to enhance engagement and maintain an effective learning environment. By dividing the class into smaller groups, I was able to foster more personalized interactions and ensure that every student had a chance to participate actively. Using a variety of activities, such as collaborative problem-solving and interactive whiteboard applications, kept the class dynamic and engaging. Incorporating real-life examples and puzzles made the concepts more relatable and interesting, which helped students see the practical applications of the material. Additionally, the \"quick check\" system, where I would randomly call on students to explain their solutions, kept them engaged and helped identify any gaps in understanding early. These strategies not only improved the overall classroom environment but also significantly increased student engagement and participation, leading to better retention and understanding of the concepts. The quick improvement in quiz scores and the positive feedback from the students clearly indicate the effectiveness of these approaches.",
+    "answer_words": [],
+    "answer_seconds": 65.2,
+    "answered_at": 1000479.2000000001,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided a detailed example of handling a larger class size and effectively managing engagement through various strategies.",
+     "gaps": "Candidate could have provided more quantitative data to support the effectiveness of the strategies.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 9,
+    "action": "close",
+    "competency": "c3",
+    "difficulty": 3,
+    "say": "Thank you for sharing those insights. It was great to hear about your strategies for engaging students and managing a larger class size. You've demonstrated a clear understanding of the importance of interactive and practical learning. Goodbye!",
+    "anchor_quote": "Could you provide a specific instance where rotating activities helped improve student engagement and how you measured that improvement?",
+    "reason": "Final question to wrap up the interview on student engagement.",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000479.2000000001,
+    "answer": null,
+    "answer_words": [],
+    "answer_seconds": 0.0,
+    "answered_at": null,
+    "score": null,
+    "assessment": null,
+    "evaluation": null,
+    "corrections": []
+   }
+  ],
+  "difficulty": 3,
+  "started_at": 1000000.0,
+  "finished": true,
+  "events": [
+   {
+    "t": 1791319821.583,
+    "kind": "turn",
+    "turn": 0,
+    "provider": "ollama",
+    "ms": 145389.5,
+    "action": "open"
+   },
+   {
+    "t": 1791319913.219,
+    "kind": "turn",
+    "turn": 1,
+    "provider": "ollama",
+    "ms": 63889.4,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320002.221,
+    "kind": "turn",
+    "turn": 2,
+    "provider": "ollama",
+    "ms": 64248.2,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320234.684,
+    "kind": "fresh_question",
+    "turn": 3,
+    "provider": "ollama",
+    "reason": "focused fresh-question call (Effective strategies for handling disruptions and maintaining student focus)"
+   },
+   {
+    "t": 1791320385.822,
+    "kind": "turn",
+    "turn": 4,
+    "provider": "ollama",
+    "ms": 120104.3,
+    "action": "revisit"
+   },
+   {
+    "t": 1791320609.173,
+    "kind": "turn",
+    "turn": 5,
+    "provider": "ollama",
+    "ms": 141370.7,
+    "action": "revisit"
+   },
+   {
+    "t": 1791320745.784,
+    "kind": "turn",
+    "turn": 6,
+    "provider": "ollama",
+    "ms": 84718.4,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320869.127,
+    "kind": "turn",
+    "turn": 7,
+    "provider": "ollama",
+    "ms": 89318.4,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321052.869,
+    "kind": "turn",
+    "turn": 8,
+    "provider": "ollama",
+    "ms": 112422.4,
+    "action": "wrap_up"
+   },
+   {
+    "t": 1791321288.645,
+    "kind": "turn",
+    "turn": 9,
+    "provider": "ollama",
+    "ms": 165829.5,
+    "action": "close"
+   }
+  ]
+ },
+ "attempts": [
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 125679.0,
+   "error": "",
+   "input_tokens": 605,
+   "output_tokens": 444
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 124569.5,
+   "error": "say must ask the candidate a question",
+   "input_tokens": 1516,
+   "output_tokens": 69
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 20819.9,
+   "error": "",
+   "input_tokens": 1554,
+   "output_tokens": 82
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 63889.3,
+   "error": "",
+   "input_tokens": 1673,
+   "output_tokens": 174
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 64248.2,
+   "error": "",
+   "input_tokens": 1846,
+   "output_tokens": 167
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 72848.7,
+   "error": "follow_up must ask about what the candidate just said (the anchor_quote); to return to an earlier answer use action revisit; say must ask the candidate a question",
+   "input_tokens": 2033,
+   "output_tokens": 183
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 62690.0,
+   "error": "say must ask the candidate a question",
+   "input_tokens": 2131,
+   "output_tokens": 252
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 38870.0,
+   "error": "follow_up must ask about what the candidate just said (the anchor_quote); to return to an earlier answer use action revisit",
+   "input_tokens": 2071,
+   "output_tokens": 166
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 20780.2,
+   "error": "",
+   "input_tokens": 252,
+   "output_tokens": 22
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 75752.5,
+   "error": "follow_up must ask about what the candidate just said (the anchor_quote); to return to an earlier answer use action revisit; say must ask the candidate a question",
+   "input_tokens": 2216,
+   "output_tokens": 172
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 44351.6,
+   "error": "",
+   "input_tokens": 2314,
+   "output_tokens": 155
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 95830.8,
+   "error": "follow_up must ask about what the candidate just said (the anchor_quote); to return to an earlier answer use action revisit; say must ask the candidate a question",
+   "input_tokens": 2479,
+   "output_tokens": 213
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 45539.7,
+   "error": "",
+   "input_tokens": 2577,
+   "output_tokens": 160
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 84718.4,
+   "error": "",
+   "input_tokens": 2757,
+   "output_tokens": 147
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 89318.4,
+   "error": "",
+   "input_tokens": 2916,
+   "output_tokens": 188
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 112422.4,
+   "error": "",
+   "input_tokens": 3331,
+   "output_tokens": 172
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 115658.3,
+   "error": "Maya is your own name: do not call the candidate Maya (you do not know their name)",
+   "input_tokens": 3668,
+   "output_tokens": 186
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 50171.1,
+   "error": "",
+   "input_tokens": 3701,
+   "output_tokens": 170
+  }
+ ],
+ "qualities": [
+  "weak",
+  "weak",
+  "average",
+  "average",
+  "strong",
+  "strong",
+  "strong",
+  "strong",
+  "strong"
+ ]
+}

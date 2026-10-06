@@ -1,0 +1,996 @@
+{
+ "checks": {
+  "questions": 15,
+  "bank_overlap": 0,
+  "follow_ups": 3,
+  "follow_ups_referencing_answer": 3,
+  "difficulty_tracks_performance": true,
+  "difficulty_transitions": [
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 4
+   },
+   {
+    "score": 3,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 3,
+    "from": 4,
+    "to": 4
+   }
+  ],
+  "difficulty_corrections_by_code": 6,
+  "emergency_questions": 0,
+  "fresh_questions": 3,
+  "rejected_attempts": {
+   "Maya is your own name": 1,
+   "say must ask the candidate a question": 1,
+   "repeats an earlier question": 17,
+   "ollama": 2,
+   "close ends the interview, so it must not ask anything": 2
+  },
+  "emergency_blueprint": false,
+  "repeats": 0,
+  "closed_on_time": true,
+  "passed": true
+ },
+ "state": {
+  "session_id": "mock-14",
+  "params": {
+   "role": "Backend Engineer",
+   "seniority": "mid",
+   "company": "Startup (seed stage)",
+   "company_style": "Scrappy, ownership, broad skills",
+   "job_description": "Build and operate high-throughput REST and gRPC services in Go and Python on Kubernetes; own on-call; Postgres and Kafka.",
+   "resume_context": "",
+   "skills": [],
+   "interview_type": "mixed",
+   "round": "technical",
+   "difficulty": "auto",
+   "language": "hi",
+   "duration_minutes": 12,
+   "persona": "maya"
+  },
+  "blueprint": {
+   "summary": "This interview assesses the candidate's technical expertise in backend development and their ability to take ownership in a startup environment, focusing on REST and gRPC services, Kubernetes, and on-call responsibilities.",
+   "competencies": [
+    {
+     "id": "c1",
+     "name": "Technical Proficiency",
+     "why": "Candidates must demonstrate strong technical skills in backend development, particularly in Go and Python for REST and gRPC services.",
+     "weight": 0.4,
+     "minutes": 6.0,
+     "signals": [
+      "Candidate should provide examples of complex projects they have worked on and the technologies they used."
+     ]
+    },
+    {
+     "id": "c2",
+     "name": "System Ownership",
+     "why": "Mid-level backend engineers need to take ownership of systems, including on-call responsibilities and ensuring smooth operations.",
+     "weight": 0.3,
+     "minutes": 4.0,
+     "signals": [
+      "Candidate should discuss a specific instance where they took full ownership of a system and the measurable outcomes."
+     ]
+    },
+    {
+     "id": "c3",
+     "name": "Kubernetes Experience",
+     "why": "Experience with Kubernetes is crucial for deploying and managing containerized applications in a production environment.",
+     "weight": 0.2,
+     "minutes": 3.0,
+     "signals": [
+      "Candidate should explain their experience with Kubernetes, including any challenges they overcame and the benefits achieved."
+     ]
+    }
+   ],
+   "opening": "Namaste! Let's start by discussing your experience in building high-throughput REST and gRPC services using Go and Python.",
+   "style_notes": "The interview will be warm and encouraging, with a focus on probing the candidate's technical depth and their ability to take ownership in a startup environment. The tone will be precise, and the format will be a mix of technical questions and open-ended discussions.",
+   "start_difficulty": 3,
+   "emergency": false,
+   "provider": "ollama"
+  },
+  "turns": [
+   {
+    "index": 0,
+    "action": "open",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Namaste! I'm Maya. Let's start by discussing your experience in building high-throughput REST and gRPC services using Go and Python. Can you give an example of a project where you implemented such services, and what were the key challenges you faced and how you overcame them?",
+    "anchor_quote": "",
+    "reason": "Opening the discussion on technical proficiency. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000000.0,
+    "answer": "Namaste Maya! Mujhe ek baat karna hai, main backend engineer ke liye yeh role pasand karta hoon. Har baar main Go aur Python ke through services banane ke liye kaam karwaata hoon. Ek baar, main ek project mein kaam kiya tha jisme hum ek e-commerce platform ke backend services banane ka kaam karte hain. Key challenges mein se ek thi humare system ko aadharit load handle karna. Isse humne load balancer aur caching strategies ki madad se samjhauta kiya. Aur doosra challenge thi humara system fast response time ke saath high throughput ke liye optimize karna. Isse humne scalability aur performance tuning ke through se solve kiya.",
+    "answer_words": [],
+    "answer_seconds": 42.8,
+    "answered_at": 1000050.8,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided specific examples of challenges and solutions, showing some technical depth.",
+     "gaps": "Candidate did not quantify the impact of their solutions or provide concrete metrics.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 1,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Mujhe bahut achhe se samajh aaya ki aap Go aur Python ke through services banane mein kaam karte hain. Par yeh batao ki aapne kaise samjhauta kiya hain, aur kya jemarks aapne usse dikhaye hain? Ki aapne kya metrics use kiye hain ya kisi bhi kuchh kafi toh samay mein kaam karti hain?",
+    "anchor_quote": "main backend engineer ke liye yeh role pasand karta hoon. Har baar main Go aur Python ke through services banane ke liye kaam karwaata hoon. Ek baar, main ek project mein kaam",
+    "reason": "Candidate's response was specific but lacked quantification. Further probing is needed. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000050.8,
+    "answer": "Namaste Maya! Samjhauta kiya hain ki humne services ke design mein clean architecture aur SOLID principles ka istemal kiya. Agar kisi service ko update karna tha, hum usmein first modular aur component-wise approach lagaate hain, jisse sechane ke liye koi problem nahi hota. Metrics ke liye, hum prometheus aur Grafana ka use karte hain. Isse hum aadharit system performance ko observe kar sakte hain aur koi bottleneck identify kar sakte hain. Kafi toh samay mein, hum metrics ke madad se system ko optimize kar sakte hain aur its performance enhance kar sakte hain.",
+    "answer_words": [],
+    "answer_seconds": 37.2,
+    "answered_at": 1000096.0,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a good explanation of the architecture and metrics used, but could have given more specific examples and metrics.",
+     "gaps": "No specific metrics or exact numbers were provided to quantify the results.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote 'Har baar main main backend engineer ke liye yeh role pasand karta hoon. Har baar')"
+    ]
+   },
+   {
+    "index": 2,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Mujhe bahut achhe se samajh aaya ki aap clean architecture aur SOLID principles ka istemal kiye hain. Par yeh batao ki aapne kisa metrics ka use kiya hain jo aapki architecture se connect karta hai aur kya results aaye hain? Kahiya, prometheus aur Grafana ka use kaise kiya hain aur kya aapko koi specific numbers dekhne mile hain jo aapka project ka performance improve kiya hai?",
+    "anchor_quote": "Samjhauta kiya hain ki humne services ke design mein clean architecture aur SOLID principles ka istemal kiya",
+    "reason": "Candidate provided a good explanation, but could provide more specific examples and metrics. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000096.0,
+    "answer": "Namaste Maya! Hum metrics ke liye prometheus ka use kiya hain, jisse hum backend services ke status ko monitor kar sakte hain aur kisi bhi service ko troubleshoot kar sakte hain. Grafana ka use karte hain, jisse humse hum metrics ko visualize kar sakte hain aur isse dashboard par show kar sakte hain. Abhi tak humne dekha hain ki humare system ka response time 50-60% optimize ho chuka hai aur throughput bhi 40-50% zyada ho chuka hai. Isse hum pata chalate hain ki humara architecture ka optimisation ki madad se humare services ka performance improve ho raha hai.",
+    "answer_words": [],
+    "answer_seconds": 39.2,
+    "answered_at": 1000143.2,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided specific metrics and tools used for monitoring and optimization.",
+     "gaps": "Candidate could provide more concrete numbers or case studies for further validation.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote 'par yeh batao ki aapne kaise samjhauta kiya hain, aur kya jemarks aapne usse dik')"
+    ]
+   },
+   {
+    "index": 3,
+    "action": "new_topic",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "Aapne clean architecture aur SOLID principles ka istemal kiya hain, mujhe yeh bahut achhe se samajh aaya. Par yeh batao ki aapne kisi bhi system mein kaun kaun se responsibilities take kare hain aur kya outcomes aaye hain? Ki aapne kisi specific instance mein aadharit full ownership of a system ke liye kaam kiya hain, aur kya aapko koi measurable outcomes mile hain?",
+    "anchor_quote": "",
+    "reason": "Moving to discuss system ownership in a startup context. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000143.2,
+    "answer": "Namaste Maya! Samay mein, main backend services ke development ke liye full ownership take karta hoon. Ek baar, main ek e-commerce platform ke backend services ke liye kaam kiya tha. Mujhe responsibilities include codebase ka maintain, performance tuning, aur system se related troubleshooting. Humne system ka architecture optimize kiya aur scaling issues resolve kiye. Abhi tak, humne response time ko 50-60% optimize kiya aur throughput bhi 40-50% zyada kiya. Isse, humare services ka performance improve ho raha hai aur hume pata chal raha hai ki humara kaam positive outcomes deta hai.",
+    "answer_words": [],
+    "answer_seconds": 36.4,
+    "answered_at": 1000187.6,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a detailed explanation of the metrics used and the improvements made, but could provide more specific numbers or examples.",
+     "gaps": "Candidate could elaborate on the specific metrics used and the measurable outcomes.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 4,
+    "action": "new_topic",
+    "competency": "c3",
+    "difficulty": 3,
+    "say": "Ek baar, main aapke liye yeh batao ki aapne Kubernetes ke through kisi project mein kaam kiya hain, aur kya challenges aaye hain jisme aapko samjhauta kiya hain aur kya benefits aaye hain? Ki aapne kisi specific instance mein aadharit full ownership of a system ke liye kaam kiya hain, aur kya aapko koi measurable outcomes mile hain?",
+    "anchor_quote": "",
+    "reason": "Exploring the candidate's experience with Kubernetes in a depth relevant to the role and company's style of work, with a focus on ownership and measurable outcomes in a startup environment. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000187.6,
+    "answer": "Namaste Maya! Ek baar, mujhe ek project tha jisme hum Kubernetes ke through kisi e-commerce platform ke backend services ko deploy kiya tha. Challenges mein se ek thi, humare system ko aadharit load handle karna aur scalability ke liye optimize karna. Isse humne load balancer aur autoscaling policies ki madad se samjhauta kiya. Aur doosra challenge thi, humare services ke performance aur availability ko maintain karna. Isse humne monitoring tools ke madad se samjhauta kiya. Baat outcomes se karte hain, humne Kubernetes ka use karte hue response time ko 40-50% optimize kiya aur system ka availability 99.9% ke saath maintain kiya. Humne full ownership take karte hue ek cluster ke liye kaam kiya tha, aur humare efforts se, hume pata chalaya hua hai ki humare services ka performance mehnat se improve ho raha hai.",
+    "answer_words": [],
+    "answer_seconds": 53.6,
+    "answered_at": 1000249.2,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided specific examples of metrics and performance improvements.",
+     "gaps": "Candidate could provide more specific numbers and details.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 5,
+    "action": "revisit",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "Ek baar, aapne kisi specific instance mein aadharit full ownership of a system ke liye kaam kiya hain, aur kya aapko koi measurable outcomes mile hain? Ki aapne kisi specific metrics ke madad se system ka response time aur throughput optimize kiya hain aur kya aapko koi specific numbers dekhne mile hain jo aapka project ka performance improve kiya hai?",
+    "anchor_quote": "Humne response time ko 50-60% optimize kiya aur throughput bhi 40-50% zyada kiya.",
+    "reason": "Candidate provided a good example but could share more specific metrics and results to strengthen the answer further in System Ownership competency c2. Revisiting this will help get more details and validate the impact of their work on system performance and availability under the given constraints  [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000249.2,
+    "answer": "Namaste Maya! Ek baar, main ek e-commerce platform ke backend services ke liye full ownership take kiya tha. Mujhe responsibilities include codebase ka maintain, performance tuning, aur system se related troubleshooting. Humne system ka architecture optimize kiya aur scaling issues resolve kiye. Abhi tak, humne response time ko 40-50% optimize kiya aur throughput bhi 40-50% zyada kiya. Isse, humare services ka performance improve ho raha hai aur hume pata chal raha hai ki humara kaam positive outcomes deta hai. Hum prometheus aur Grafana ka use karte hue metrics ke madad se system ka performance improve kar sakte hain, aur specific numbers dekhne mile hain jo humara project ka performance improve kiya hai.",
+    "answer_words": [],
+    "answer_seconds": 44.8,
+    "answered_at": 1000302.0,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided specific examples of metrics usage and performance improvements.",
+     "gaps": "Candidate could provide more specific numbers and metrics to back up their claims.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 6,
+    "action": "revisit",
+    "competency": "c3",
+    "difficulty": 3,
+    "say": "Abhi tak, humne response time ko 40-50% optimize kiya aur throughput bhi 40-50% zyada kiya. Isse, humare services ka performance improve ho raha hai. Par yeh batao ki aapne kya specific metrics use kiya hain jo response time aur throughput ke madad se improve kiya hai? Kya aapko kisi specific numbers dekhne mile hain jo aapka project ka performance improve kiya hai?",
+    "anchor_quote": "Abhi tak, humne response time ko 40-50% optimize kiya aur throughput bhi 40-50% zyada kiya. Isse, humare services ka performance improve ho raha hai",
+    "reason": "Candidate mentioned performance improvements but could provide more details. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000302.0,
+    "answer": "Namaste Maya! Hum prometheus ka use kiye hain, jisse hum response time aur throughput ke liye specific metrics collect kar sakte hain. Isse hum aadharit system performance ko monitor kar sakte hain aur koi bottleneck identify kar sakte hain. Abhi tak, humne dekha hain ki humare services ka response time 45% optimize ho chuka hai aur throughput 42% zyada ho chuka hai. Isse hum pata chalate hain ki humara architecture ka optimisation ki madad se humare services ka performance improve ho raha hai.",
+    "answer_words": [],
+    "answer_seconds": 33.2,
+    "answered_at": 1000343.2,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided specific metrics and their results, showing measurable impact.",
+     "gaps": "Could provide more details on the challenges faced and how they were overcome.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 7,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Abhi tak, humne response time ko 45% optimize ho chuka hai aur throughput 42% zyada ho chuka hai. Par yeh batao ki aapne kya specific challenges aaye hain jiske solution humne dekha, aur kaise aap samjhauta kiya hain?",
+    "anchor_quote": "aur koi bottleneck identify kar sakte hain. Abhi tak, humne dekha hain ki humare services ka response time 45% optimize ho chuka hai aur throughput 42% zyada",
+    "reason": "Clarify the specific challenges and solutions for further depth on technical proficiency and ownership in a startup environment. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000343.2,
+    "answer": "Namaste Maya! Abhi tak, humne kisi bhi service ko update karte hue response time ki optimization mein challenge tha. Isse humne load balancing aur caching strategies ki madad se samjhauta kiya. Aur doosra challenge thi, humare services ke performance tuning ke liye resource allocation optimize karna. Isse humne Kubernetes ke through autoscaling policies aur pod management ki madad se samjhauta kiya. Abhi tak, humne dekha hain ki humare efforts se response time 45% optimize ho chuka hai aur throughput 42% zyada ho chuka hai.",
+    "answer_words": [],
+    "answer_seconds": 33.6,
+    "answered_at": 1000384.7999999999,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided specific examples of performance improvements and used metrics to track progress.",
+     "gaps": "Candidate could provide more specific details about the challenges faced and solutions implemented.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote 'Abhi tak, humne response time ko 45% optimize ho chuka hai aur throughput 42% zy')"
+    ]
+   },
+   {
+    "index": 8,
+    "action": "revisit",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "Ek baar, aapne kya specific challenges aaye hain jiske solution humne dekha, aur kaise aap samjhauta kiya hain? Ki aapne kisi specific metrics ke madad se system ka response time aur throughput optimize kiya hain aur kya aapko koi specific numbers dekhne mile hain jo aapka project ka performance improve kiya hai?",
+    "anchor_quote": "response time ko 45% optimize ho chuka hai aur throughput 42% zyada ho chuka hai",
+    "reason": "Candidate mentioned measurable outcomes, but could provide more context on the challenges faced and solutions implemented. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000384.7999999999,
+    "answer": "Namaste Maya! Ek baar, humne kisi e-commerce platform ke backend services mein challenge tha jisme service level agreement (SLA) ke saath humare system ko high availability aur fast response time provide karna tha. Isse humne load balancing, caching strategies, aur autoscaling policies ki madad se samjhauta kiya. Metrics ke liye, hum prometheus aur Grafana ka use kiya hain. Isse hum response time ko 45% optimize kiya aur throughput 42% zyada kiya. Humne dekha hain ki humara system 99.9% availability ke saath work kar raha hai.",
+    "answer_words": [],
+    "answer_seconds": 34.0,
+    "answered_at": 1000426.7999999999,
+    "score": null,
+    "assessment": null,
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 9,
+    "action": "new_topic",
+    "competency": "c3",
+    "difficulty": 3,
+    "say": "Can you walk me through how you've managed to scale your applications using Kubernetes and any challenges you faced during that process?",
+    "anchor_quote": "",
+    "reason": "focused fresh-question call (Candidate should explain their experience with Kubernetes, including any challenges they overcame and the benefits achieved.) [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000426.7999999999,
+    "answer": "Namaste Maya! Humne kisi ek e-commerce platform ke backend services ko scale karne ke liye Kubernetes ka use kiya tha. Challenges mein se ek thi, humare services ko aadharit load handle karna aur scalability ke liye optimize karna. Isse humne load balancer aur autoscaling policies ki madad se samjhauta kiya. Aur doosra challenge thi, humare services ke performance aur availability ko maintain karna. Isse humne monitoring tools ke madad se samjhauta kiya. Hum prometheus aur Grafana ka use kiya hain, jisse hum system ka performance monitor kar sakte hain aur koi bottleneck identify kar sakte hain. Abhi tak, humne dekha hain ki humare services ka response time 45% optimize ho chuka hai aur throughput 42% zyada ho chuka hai.",
+    "answer_words": [],
+    "answer_seconds": 47.6,
+    "answered_at": 1000482.3999999999,
+    "score": null,
+    "assessment": null,
+    "evaluation": null,
+    "corrections": [
+     "written by the focused fresh-question call after the full turn failed validation"
+    ]
+   },
+   {
+    "index": 10,
+    "action": "new_topic",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "Can you share a story about a mistake you made in a system you owned and the lessons learned from it?",
+    "anchor_quote": "",
+    "reason": "focused fresh-question call (a mistake or failure and what was learned from it) [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000482.3999999999,
+    "answer": "Namaste Maya! Ek baar, mujhe ek e-commerce platform ke backend services ke liye full ownership lene ka kaam kiya tha. Ek baar, humne ek new feature ka release kiya tha, lekin uske baad humne observe kiya tha ki system mein some unexpected behaviour thi. Agar kisi bhi problem solve karne ke liye humne debugging kiya tha, lekin humein kuchh aadharit issues dekhne mile hain. Isse humne root cause identify kiya tha aur dekha tha ki humne kuchh code ko improper way mein commit kiya tha, jo system ke functionality mein issue create kara tha. Isse humne learn kiya tha ki kisi bhi code commit pehle test karke submit karna zaruri hai. Aur hume bhi pata chal raha tha ki humein regular code review mein participate karna zaruri hai jisse system mein kuchh unexpected issues ko early detect kar sakte hain. Isse hum pata chal gaye ki aadharit testing aur code review ke through humare system ka quality increase ho sakti hai.",
+    "answer_words": [],
+    "answer_seconds": 64.4,
+    "answered_at": 1000554.7999999999,
+    "score": null,
+    "assessment": null,
+    "evaluation": null,
+    "corrections": [
+     "written by the focused fresh-question call after the full turn failed validation"
+    ]
+   },
+   {
+    "index": 11,
+    "action": "new_topic",
+    "competency": "c3",
+    "difficulty": 3,
+    "say": "Can you share an example of how you've used Kubernetes to handle failures in your applications and the benefits you achieved in doing so?",
+    "anchor_quote": "",
+    "reason": "focused fresh-question call (Candidate should explain their experience with Kubernetes, including any challenges they overcame and the benefits achieved.) [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000554.7999999999,
+    "answer": "Namaste Maya! Ek baar, humne ek e-commerce platform ke backend services ko Kubernetes ke through scale karne ke liye kaam kiya tha. Humne autoscaling policies ka use kiya tha, jo humare services ko aadharit load handle karne mein madad kar sakti thi. Aur doosra benefit thi, humne Kubernetes' built-in disaster recovery features ka use kiya tha, jo humare services ko failure se protect kar sakta hai. Isse hum pata chal gaye ki kisi bhi service ko kisi bhi condition mein fail karne ke baad, hum apne cluster ke through kuchh aur instances start kar sakte hain jisse kisi bhi service ka availability maintain kar sakte hain. Humne dekha hain ki humare services ka availability 99.9% ke saath work kar raha hai aur kisi bhi failure se pahunchne mein samay kam rahe.",
+    "answer_words": [],
+    "answer_seconds": 52.4,
+    "answered_at": 1000615.2,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided specific metrics and the impact on performance.",
+     "gaps": "Candidate could provide more specific details on the challenges faced and the root cause analysis.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "written by the focused fresh-question call after the full turn failed validation"
+    ]
+   },
+   {
+    "index": 12,
+    "action": "revisit",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "Can you give an example of a more complex project you have worked on, and the technologies you used beyond Go and Python for REST and gRPC services?",
+    "anchor_quote": "Abhi tak, humne response time ko 45% optimize ho chuka hai aur throughput 42% zyada kiya.",
+    "reason": "Candidate mentioned specific metrics, revisit to explore more complex projects and technologies used. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000615.2,
+    "answer": "Namaste Maya! Ek baar, mujhe ek finance company ka project tha jisme hum humare services ko Python aur Go ke through build karne ka kaam kiya tha. Ye project ek real-time trading platform ke backend services ke liye tha. Mujhe responsibilities include codebase ka maintain, performance tuning, aur system se related troubleshooting. Humne kuchh complex algorithms aur machine learning models ka use kiye hain jisse hum trading signals process kar sakte hain. Humne Apache Kafka ka use kiya hain, jisse hum real-time data processing ke liye madad milli thi. Aur doosre technologies mein, hum Apache Cassandra ka use kiya hain, jisse hum hume high availability aur distributed database ke benefit deta hai. Abhi tak, humne dekha hain ki humare services ka response time 40-45% optimize ho chuka hai aur throughput 40-42% zyada ho chuka hai.",
+    "answer_words": [],
+    "answer_seconds": 54.0,
+    "answered_at": 1000677.2,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a detailed example of a complex project involving Python and Go, along with the use of Apache Kafka and Apache Cassandra. He mentioned specific metrics and performance improvements.",
+     "gaps": "Candidate could benefit from providing more quantitative data and specific examples of challenges and their solutions.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 13,
+    "action": "wrap_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "Aapne ek baar ek complex project ke baare mein bahut achhe se samajh aaya ki aap Go, Python, Apache Kafka aur Apache Cassandra ka use kiye hain. Par, kya aapko koi specific numbers dekhne mile hain jo aapka project ka performance improve kiya hai? Aur kaise aap samjhauta kiya hain jisme aapko kisi bhi challenge solve karne ke liye kaam kiya? Abhi tak hum time ho raha hai, kya aap kisi bhi question ke baare mein aur baatein karte hain? Koi bhi seb kuchh pata chal raha hai? Ya kisi bhi feedback de sakte hain?",
+    "anchor_quote": "Humne dekha hain ki humare services ka response time 40-45% optimize ho chuka hai aur throughput 40-42% zyada ho chuka hai.",
+    "reason": "Candidate has provided substantial technical details and could benefit from wrapping up the discussion. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000677.2,
+    "answer": "Namaste Maya! Abhi tak, humne dekha hain ki humare services ka response time 40-45% optimize ho chuka hai aur throughput 40-42% zyada ho chuka hai. Hum Apache Kafka aur Apache Cassandra ke through real-time data processing aur high availability ke liye madad milli hain. Isse hum pata chalate hain ki humare systems ka performance improve ho raha hai. Kisi bhi challenge solve karne ke liye, hum clean architecture aur SOLID principles ki madad se samjhauta kiya hain. Humne kuchh complex algorithms aur machine learning models ka use kiya hain, jisse hum trading signals process kar sakte hain. Abhi tak, humne dekha hain ki hum hume pata chal raha hai ki humara kaam positive outcomes deta hai. Koi bhi feedback dekhne ka time ho raha hai?",
+    "answer_words": [],
+    "answer_seconds": 50.0,
+    "answered_at": 1000735.2,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a detailed example of a complex project, the technologies used, and the specific metrics and results. The example was relevant and demonstrated technical proficiency.",
+     "gaps": "Candidate could have given more specific numbers and metrics to demonstrate the improvements in performance.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 14,
+    "action": "close",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "Aapka bahut shukriya, aapka interview khshamta hai. Aapne bahut achhe se samajhaya ki aap technical proficiency mein hain aur aapka feedback samajhkar hum aapke liye khshamta hain. Aapne bahut achhe se baat ki, aapki baat sabhi baare mein aacha laga. Aapko kuchh seb kuchh pata chalne ka khshamta hai. Aapko kuchh aasaan seb kuchh dekhne ka shubhkamnayein aur khshamta hain. Aapko kripaya chalo chalao.",
+    "anchor_quote": "Hum Apache Kafka aur Apache Cassandra ke through real-time data processing aur high availability ke liye madad milli hain. Isse hum pata chalate hain ki humare systems ka performance improve ho raha hai.",
+    "reason": "Candidate has provided a comprehensive example of a complex project and demonstrated strong technical proficiency.",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000735.2,
+    "answer": null,
+    "answer_words": [],
+    "answer_seconds": 0.0,
+    "answered_at": null,
+    "score": null,
+    "assessment": null,
+    "evaluation": null,
+    "corrections": []
+   }
+  ],
+  "difficulty": 4,
+  "started_at": 1000000.0,
+  "finished": true,
+  "events": [
+   {
+    "t": 1791319944.551,
+    "kind": "turn",
+    "turn": 0,
+    "provider": "ollama",
+    "ms": 213703.3,
+    "action": "open"
+   },
+   {
+    "t": 1791320078.653,
+    "kind": "correction",
+    "turn": 1,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote 'Har baar main main backend engineer ke liye yeh role pasand karta hoon. Har baar')"
+   },
+   {
+    "t": 1791320078.653,
+    "kind": "turn",
+    "turn": 1,
+    "provider": "ollama",
+    "ms": 92946.7,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320253.229,
+    "kind": "correction",
+    "turn": 2,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote 'par yeh batao ki aapne kaise samjhauta kiya hain, aur kya jemarks aapne usse dik')"
+   },
+   {
+    "t": 1791320253.229,
+    "kind": "turn",
+    "turn": 2,
+    "provider": "ollama",
+    "ms": 121555.1,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320505.92,
+    "kind": "turn",
+    "turn": 3,
+    "provider": "ollama",
+    "ms": 196089.6,
+    "action": "new_topic"
+   },
+   {
+    "t": 1791320775.782,
+    "kind": "turn",
+    "turn": 4,
+    "provider": "ollama",
+    "ms": 212826.5,
+    "action": "new_topic"
+   },
+   {
+    "t": 1791321289.732,
+    "kind": "turn",
+    "turn": 5,
+    "provider": "ollama",
+    "ms": 444410.4,
+    "action": "revisit"
+   },
+   {
+    "t": 1791321646.536,
+    "kind": "turn",
+    "turn": 6,
+    "provider": "ollama",
+    "ms": 288614.6,
+    "action": "revisit"
+   },
+   {
+    "t": 1791321867.744,
+    "kind": "correction",
+    "turn": 7,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote 'Abhi tak, humne response time ko 45% optimize ho chuka hai aur throughput 42% zy')"
+   },
+   {
+    "t": 1791321867.744,
+    "kind": "turn",
+    "turn": 7,
+    "provider": "ollama",
+    "ms": 162953.4,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791322223.232,
+    "kind": "turn",
+    "turn": 8,
+    "provider": "ollama",
+    "ms": 300473.0,
+    "action": "revisit"
+   },
+   {
+    "t": 1791322739.637,
+    "kind": "fresh_question",
+    "turn": 9,
+    "provider": "ollama",
+    "reason": "focused fresh-question call (Candidate should explain their experience with Kubernetes, including any challenges they overcame and the benefits achieved.)"
+   },
+   {
+    "t": 1791323508.34,
+    "kind": "fresh_question",
+    "turn": 10,
+    "provider": "ollama",
+    "reason": "focused fresh-question call (a mistake or failure and what was learned from it)"
+   },
+   {
+    "t": 1791324219.209,
+    "kind": "fresh_question",
+    "turn": 11,
+    "provider": "ollama",
+    "reason": "focused fresh-question call (Candidate should explain their experience with Kubernetes, including any challenges they overcame and the benefits achieved.)"
+   },
+   {
+    "t": 1791324804.77,
+    "kind": "turn",
+    "turn": 12,
+    "provider": "ollama",
+    "ms": 510902.5,
+    "action": "revisit"
+   },
+   {
+    "t": 1791325124.822,
+    "kind": "turn",
+    "turn": 13,
+    "provider": "ollama",
+    "ms": 246581.9,
+    "action": "wrap_up"
+   },
+   {
+    "t": 1791325662.12,
+    "kind": "turn",
+    "turn": 14,
+    "provider": "ollama",
+    "ms": 449454.7,
+    "action": "close"
+   }
+  ]
+ },
+ "attempts": [
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 119932.7,
+   "error": "",
+   "input_tokens": 629,
+   "output_tokens": 403
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 168693.5,
+   "error": "Maya is your own name: do not call the candidate Maya (you do not know their name)",
+   "input_tokens": 1500,
+   "output_tokens": 290
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 20731.5,
+   "error": "say must ask the candidate a question",
+   "input_tokens": 1533,
+   "output_tokens": 83
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 24278.1,
+   "error": "",
+   "input_tokens": 1538,
+   "output_tokens": 101
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 92946.6,
+   "error": "",
+   "input_tokens": 1773,
+   "output_tokens": 253
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 121555.1,
+   "error": "",
+   "input_tokens": 2160,
+   "output_tokens": 298
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 123321.8,
+   "error": "repeats an earlier question: 'Mujhe bahut achhe se samajh aaya ki aap clean architecture aur SOLID principles '",
+   "input_tokens": 2578,
+   "output_tokens": 268
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 72767.7,
+   "error": "",
+   "input_tokens": 2831,
+   "output_tokens": 210
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 124118.0,
+   "error": "repeats an earlier question: 'Aapne clean architecture aur SOLID principles ka istemal kiya hain, mujhe yeh ba'",
+   "input_tokens": 2978,
+   "output_tokens": 221
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 88708.3,
+   "error": "",
+   "input_tokens": 3279,
+   "output_tokens": 246
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 198411.9,
+   "error": "repeats an earlier question: 'Ek baar, main aapke liye yeh batao ki aapne Kubernetes ke through kisi project m'",
+   "input_tokens": 3434,
+   "output_tokens": 438
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 106465.9,
+   "error": "repeats an earlier question: 'Aapne clean architecture aur SOLID principles ka istemal kiya hain, mujhe yeh ba'",
+   "input_tokens": 3787,
+   "output_tokens": 280
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 139532.2,
+   "error": "",
+   "input_tokens": 3784,
+   "output_tokens": 410
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 181895.5,
+   "error": "repeats an earlier question: 'Aapne clean architecture aur SOLID principles ka istemal kiya hain, mujhe yeh ba'",
+   "input_tokens": 3831,
+   "output_tokens": 335
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 106719.0,
+   "error": "",
+   "input_tokens": 4221,
+   "output_tokens": 258
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 162953.4,
+   "error": "",
+   "input_tokens": 4215,
+   "output_tokens": 222
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 188198.0,
+   "error": "repeats an earlier question: 'Abhi tak, humne response time ko 45% optimize ho chuka hai aur throughput 42% zy'",
+   "input_tokens": 4527,
+   "output_tokens": 290
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 112274.9,
+   "error": "",
+   "input_tokens": 5018,
+   "output_tokens": 224
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 180588.5,
+   "error": "repeats an earlier question: 'Ek baar, aapne kya specific challenges aaye hain jiske solution humne dekha, aur'",
+   "input_tokens": 4879,
+   "output_tokens": 217
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 119183.8,
+   "error": "repeats an earlier question: 'Ek baar, main aapke liye yeh batao ki aapne Kubernetes ke through kisi project m'",
+   "input_tokens": 5383,
+   "output_tokens": 236
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 116043.1,
+   "error": "repeats an earlier question: 'Ek baar, main aapke liye yeh batao ki aapne Kubernetes ke through kisi project m'",
+   "input_tokens": 5384,
+   "output_tokens": 229
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 43758.2,
+   "error": "",
+   "input_tokens": 568,
+   "output_tokens": 25
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240105.1,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 155791.4,
+   "error": "repeats an earlier question: 'Abhi tak, humne response time ko 40-50% optimize kiya aur throughput bhi 40-50% '",
+   "input_tokens": 5146,
+   "output_tokens": 245
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 120338.7,
+   "error": "repeats an earlier question: 'Ek baar, aapne kya specific challenges aaye hain jiske solution humne dekha, aur'",
+   "input_tokens": 5634,
+   "output_tokens": 231
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 125991.4,
+   "error": "repeats an earlier question: 'Ek baar, aapne kisi specific instance mein aadharit full ownership of a system k'",
+   "input_tokens": 5629,
+   "output_tokens": 252
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 45496.2,
+   "error": "",
+   "input_tokens": 588,
+   "output_tokens": 23
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240108.7,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 188793.0,
+   "error": "repeats an earlier question: 'Ek baar, aapne kisi specific instance mein aadharit full ownership of a system k'",
+   "input_tokens": 5468,
+   "output_tokens": 317
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 119583.3,
+   "error": "repeats an earlier question: 'Ek baar, aapne kisi specific instance mein aadharit full ownership of a system k'",
+   "input_tokens": 5924,
+   "output_tokens": 237
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 72630.2,
+   "error": "repeats an earlier question: 'Ek baar, main aapke liye yeh batao ki aapne Kubernetes ke through kisi project m'",
+   "input_tokens": 5924,
+   "output_tokens": 229
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 9602.0,
+   "error": "",
+   "input_tokens": 616,
+   "output_tokens": 27
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 286070.8,
+   "error": "close ends the interview, so it must not ask anything: thank the candidate and say goodbye; repeats an earlier question: \"Can you share an example of how you've used Kubernetes to handle failures in you\"",
+   "input_tokens": 5757,
+   "output_tokens": 212
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 128125.1,
+   "error": "repeats an earlier question: 'Abhi tak, humne response time ko 40-50% optimize kiya aur throughput bhi 40-50% '",
+   "input_tokens": 6207,
+   "output_tokens": 251
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 96706.4,
+   "error": "",
+   "input_tokens": 6202,
+   "output_tokens": 165
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 246581.9,
+   "error": "",
+   "input_tokens": 6072,
+   "output_tokens": 337
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 328419.6,
+   "error": "close ends the interview, so it must not ask anything: thank the candidate and say goodbye",
+   "input_tokens": 6658,
+   "output_tokens": 462
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 121035.0,
+   "error": "",
+   "input_tokens": 6690,
+   "output_tokens": 328
+  }
+ ],
+ "qualities": [
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average"
+ ]
+}

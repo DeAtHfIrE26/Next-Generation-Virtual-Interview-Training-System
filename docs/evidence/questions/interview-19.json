@@ -1,0 +1,712 @@
+{
+ "checks": {
+  "questions": 13,
+  "bank_overlap": 0,
+  "follow_ups": 9,
+  "follow_ups_referencing_answer": 9,
+  "difficulty_tracks_performance": true,
+  "difficulty_transitions": [
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 4
+   }
+  ],
+  "difficulty_corrections_by_code": 1,
+  "emergency_questions": 0,
+  "fresh_questions": 0,
+  "rejected_attempts": {},
+  "emergency_blueprint": false,
+  "repeats": 0,
+  "closed_on_time": true,
+  "passed": true
+ },
+ "state": {
+  "session_id": "mock-19",
+  "params": {
+   "role": "DevOps Engineer",
+   "seniority": "junior",
+   "company": "TCS",
+   "company_style": "Linux, CI/CD basics and a project discussion",
+   "job_description": "",
+   "resume_context": "",
+   "skills": [
+    "Linux",
+    "CI/CD"
+   ],
+   "interview_type": "technical",
+   "round": "screening",
+   "difficulty": "auto",
+   "language": "en",
+   "duration_minutes": 10,
+   "persona": "maya"
+  },
+  "blueprint": {
+   "summary": "This interview will assess the candidate's foundational knowledge in Linux and CI/CD, as well as their ability to discuss and apply these concepts in practical scenarios, which are essential for the DevOps Engineer role at TCS.",
+   "competencies": [
+    {
+     "id": "c1",
+     "name": "Linux Knowledge",
+     "why": "Demonstrates the candidate's foundational skills in an essential tool for DevOps Engineers, necessary for day-to-day operations and system management.",
+     "weight": 0.4,
+     "minutes": 4.0,
+     "signals": [
+      "Strong understanding of Linux commands and file systems",
+      "Experience with managing and configuring Linux servers"
+     ]
+    },
+    {
+     "id": "c2",
+     "name": "CI/CD Basics",
+     "why": "Evaluates the candidate's understanding of Continuous Integration and Continuous Deployment principles, critical for automating software delivery processes.",
+     "weight": 0.35,
+     "minutes": 3.5,
+     "signals": [
+      "Familiarity with CI/CD tooling and pipelines",
+      "Experience in implementing CI/CD practices"
+     ]
+    },
+    {
+     "id": "c3",
+     "name": "Practical Application",
+     "why": "Assesses the candidate's ability to apply theoretical knowledge in real-world scenarios, a key skill for a junior DevOps Engineer.",
+     "weight": 0.25,
+     "minutes": 2.5,
+     "signals": [
+      "Example projects or initiatives where they applied CI/CD",
+      "Handling and resolving issues in Linux environments"
+     ]
+    }
+   ],
+   "opening": "Hello, thank you for joining us today. Let's start by discussing your experience with Linux.",
+   "style_notes": "TCS's interview style is warm and encouraging, with a focus on technical depth. We will probe for both theoretical knowledge and practical experience.",
+   "start_difficulty": 3,
+   "emergency": false,
+   "provider": "ollama"
+  },
+  "turns": [
+   {
+    "index": 0,
+    "action": "open",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Hello, thank you for joining us today. Let's start by discussing your experience with Linux. Could you tell me about a specific project or task where you used Linux commands and file systems?",
+    "anchor_quote": "",
+    "reason": "Starting the interview with the candidate's foundational knowledge in Linux. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000000.0,
+    "answer": "Sure, I have a lot of experience working with Linux, particularly in the areas of file systems and commands. In one of my previous projects, I was responsible for setting up a development environment for a new application. I used a variety of Linux commands to manage file permissions and directories, ensuring that the environment was secure and efficient. I also worked with different file systems to optimize the storage and performance of the application.",
+    "answer_words": [],
+    "answer_seconds": 30.0,
+    "answered_at": 1000038.0,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate described using Linux commands and file systems in a project, indicating experience with basic Linux operations.",
+     "gaps": "Lacks specific examples and details about the commands or file systems used.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 1,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "That's great to hear. Could you walk me through a specific command or two that you used in that project? What was the goal, and what did you accomplish?",
+    "anchor_quote": "Sure, I have a lot of experience working with Linux, particularly in the areas of file systems and commands.",
+    "reason": "Need more specific details. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000038.0,
+    "answer": "Certainly, I often use commands like `chmod` and `chown` to manage file permissions and ownership within the development environment. For instance, with `chmod`, I can adjust the access permissions to ensure only necessary users have read, write, or execute access. And `chown` helps in setting the correct ownership, making sure the right users or groups have the necessary permissions. These commands are crucial for maintaining the security and functionality of the setup.",
+    "answer_words": [],
+    "answer_seconds": 28.8,
+    "answered_at": 1000074.8,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided specific commands and explained their purpose and importance.",
+     "gaps": "Lacks detailed examples or concrete outcomes of using these commands.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 2,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "That's helpful. Could you give an example of a situation where you used these commands to solve a specific problem or achieve a particular outcome?",
+    "anchor_quote": "Certainly, I often use commands like `chmod` and `chown` to manage file permissions and ownership within the development environment.",
+    "reason": "Need more concrete examples and outcomes. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000074.8,
+    "answer": "Certainly, in a previous project, I had to adjust file permissions and ownership for a set of configuration files to ensure they were accessible only to the application process. I used `chmod` to set the appropriate read and execute permissions and `chown` to change the ownership to the correct user. This helped in maintaining the integrity of the configuration files and prevented unauthorized access, which was crucial for the application's stability and security.",
+    "answer_words": [],
+    "answer_seconds": 29.2,
+    "answered_at": 1000112.0,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided specific examples and explained the use of Linux commands like `chmod` and `chown`.",
+     "gaps": "Candidate could provide more specific numbers or outcomes to quantify the impact.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 3,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "That's a clear example. Could you quantify the impact of these actions? For instance, did it improve performance, security, or user experience in any measurable way?",
+    "anchor_quote": "Certainly, in a previous project, I had to adjust file permissions and ownership for a set of configuration files to ensure they were accessible only to the application process.",
+    "reason": "Need more detail on the specific problem and its resolution. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000112.0,
+    "answer": "Absolutely, the actions I took with `chmod` and `chown` significantly enhanced the security and stability of the environment. By ensuring that only the necessary users had access to critical files, we reduced the risk of unauthorized changes, which in turn improved the overall security posture. Additionally, optimizing file permissions and ownership helped in streamlining the application's performance, as the application could access and modify files more efficiently. While I didn't have specific metrics on hand for this project, the positive feedback from the development team and the smooth operation of the application in subsequent phases indicated a clear improvement in both security and performance.",
+    "answer_words": [],
+    "answer_seconds": 41.6,
+    "answered_at": 1000161.6,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a detailed example of using Linux commands to manage file permissions and ownership, which is relevant to the role. Mentioned security and performance improvements.",
+     "gaps": "No specific metrics or quantitative impact mentioned, which could provide more concrete evidence of the impact.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 4,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "You mentioned that optimizing file permissions and ownership helped in streamlining the application's performance. Could you provide some specific metrics or data points to quantify this improvement? For example, did this optimization reduce the application's loading time, or make it run faster in any measurable way?",
+    "anchor_quote": "Additionally, optimizing file permissions and ownership helped in streamlining the application's performance, as the application could access and modify files more efficiently.",
+    "reason": "Candidate mentioned performance improvement but did not provide specific metrics or details. Let's probe further to get more concrete information on the impact of their actions. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000161.6,
+    "answer": "Certainly, optimizing file permissions and ownership did have a measurable impact on the application's performance. For example, we saw a noticeable decrease in the application's boot-up time, which improved from around 90 seconds to about 60 seconds. This reduction in boot-up time was significant, as it allowed for faster deployment cycles and more efficient use of resources. Additionally, the application's response time improved by approximately 20%, as we were able to reduce the number of permission checks required during runtime. These improvements were noted through logging and performance monitoring tools, which provided concrete data on the application's performance before and after the optimization.",
+    "answer_words": [],
+    "answer_seconds": 41.2,
+    "answered_at": 1000210.7999999999,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided specific examples and measured outcomes, demonstrating practical application of Linux commands.",
+     "gaps": "Could benefit from more detailed metrics or specific commands used.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 5,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Thank you for those detailed metrics. Could you walk me through the specific commands you used for the permission and ownership adjustments? For instance, what exact `chmod` and `chown` commands did you run, and how did you determine the correct permissions and ownership?",
+    "anchor_quote": "Certainly, optimizing file permissions and ownership did have a measurable impact on the application's performance.",
+    "reason": "To further explore the candidate's expertise in Linux commands and their impact. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000210.7999999999,
+    "answer": "Certainly, when I needed to adjust file permissions and ownership, I used a combination of `chmod` and `chown` commands based on the specific requirements of the project. For instance, I would use `chmod 755` to set the file permissions, which allows the owner full access, and read and execute permissions for group members and others, ensuring a balance between security and usability. The `chown` command, like `chown user:group`, was used to change the ownership to the appropriate user and group, making sure that the application process had the necessary access without compromising security. The exact commands would vary depending on the context, but the key was to ensure that the permissions and ownership were set to the minimum required level to maintain security and functionality.",
+    "answer_words": [],
+    "answer_seconds": 50.0,
+    "answered_at": 1000268.7999999999,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided detailed commands and explained the reasoning behind the permissions and ownership adjustments.",
+     "gaps": "Candidate could provide more specific metrics or data points, which could have further quantified the impact.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 6,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Could you now give an example of how you have applied CI/CD principles in your work, particularly in the context of TCS?",
+    "anchor_quote": "Certainly, when I needed to adjust file permissions and ownership, I used a combination of `chmod` and `chown` commands based on the specific requirements of the project.",
+    "reason": "Candidate has shown good knowledge but can provide more concrete examples and metrics to strengthen the answer further. Moving to CI/CD basics to diversify the discussion content and test another competency area in the remaining time. A revisit to Linux knowledge could be done later if needed based  [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000268.7999999999,
+    "answer": "Certainly, I have experience with CI/CD principles, and in my previous role, I worked on integrating these practices into our development lifecycle. For instance, I helped set up a Jenkins pipeline to automate the continuous integration and deployment process for a project. This pipeline included steps for code validation, building the application, running unit tests, and finally deploying the application to a staging environment. By automating these tasks, we were able to reduce manual errors and speed up the development process. I also configured webhooks to trigger builds on code push, ensuring that every change was automatically tested and deployed, which was crucial for the team's productivity and the application's quality.",
+    "answer_words": [],
+    "answer_seconds": 44.4,
+    "answered_at": 1000321.2,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a clear example of applying CI/CD principles and discussed the benefits, though the metrics were not as detailed.",
+     "gaps": "No specific metrics or data points were provided to quantify the impact of CI/CD practices.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 7,
+    "action": "follow_up",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "Could you provide some specific metrics or data points to quantify the impact of implementing this CI/CD pipeline? For example, did it reduce the time it took to deploy changes, or improve the overall quality of the application?",
+    "anchor_quote": "I helped set up a Jenkins pipeline to automate the continuous integration and deployment process for a project.",
+    "reason": "Candidate needs to provide more specific metrics and details on the impact of CI/CD. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000321.2,
+    "answer": "Certainly, implementing the CI/CD pipeline had a significant impact on both the deployment process and the overall quality of the application. We saw a notable reduction in deployment time, from an average of 30 minutes per deployment to just under 10 minutes. This improvement in deployment time allowed our team to respond more quickly to changes and customer requests. Additionally, the automation of tests and builds helped in catching bugs and issues early, which improved the quality of the application. Our defect rate in production decreased by about 30%, and we saw a 25% increase in the number of successful deployments. These metrics were tracked using our internal dashboards and logs, providing clear evidence of the pipeline's effectiveness in enhancing both deployment efficiency and application quality.",
+    "answer_words": [],
+    "answer_seconds": 50.4,
+    "answered_at": 1000379.6,
+    "score": 4,
+    "assessment": {
+     "strengths": "Provided specific metrics on the impact of CI/CD implementation, demonstrating tangible benefits.",
+     "gaps": "No specific technical details on the CI/CD tools used or the pipeline setup.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 8,
+    "action": "follow_up",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "Could you provide more technical details on the CI/CD tools and pipeline setup you used for this project? What specific tools did you integrate, and how did you configure them?",
+    "anchor_quote": "implementing the CI/CD pipeline had a significant impact on both the deployment process",
+    "reason": "Need more technical details on the CI/CD implementation to fully assess this competency. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000379.6,
+    "answer": "Certainly, in the CI/CD setup I worked on, we primarily used Jenkins as the orchestration tool. We integrated Jenkins with Git for version control, and GitHub for code hosting. For continuous integration, Jenkins was configured to automatically trigger builds on code commits to the main branch. We set up various stages in the pipeline, including static code analysis with tools like SonarQube, unit testing with JUnit, and deployment to a staging environment using Docker and Kubernetes. Each stage was monitored with detailed logging and notifications to alert the team of any issues. Additionally, we used Jenkins plugins like the Git plugin for Git integration and the Docker plugin for containerized deployment. This setup ensured that every change was thoroughly tested and deployed with minimal human intervention, streamlining our development process.",
+    "answer_words": [],
+    "answer_seconds": 52.0,
+    "answered_at": 1000439.6,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided detailed metrics and technical details, demonstrating a good understanding of CI/CD principles and their application.",
+     "gaps": "Could have provided more specific examples of how he/she resolved issues in Linux environments.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote 'Could you provide some specific metrics or data points to quantify the impact of')"
+    ]
+   },
+   {
+    "index": 9,
+    "action": "revisit",
+    "competency": "c3",
+    "difficulty": 3,
+    "say": "Could you now give an example of a situation where you had to troubleshoot and resolve an issue in a Linux environment, and how you approached and fixed it?",
+    "anchor_quote": "Could you provide more technical details on the CI/CD tools and pipeline setup you used for this project? What specific tools did you integrate, and how did you configure them?",
+    "reason": "Candidate provided good technical details but lacks specific examples of issue resolution in Linux environments. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000439.6,
+    "answer": "Certainly, I once encountered an issue where the application was experiencing frequent crashes during the boot-up process. I started by gathering logs from the system and the application to identify any error messages or patterns. I then used `dmesg` to check for kernel messages and `journalctl` to review system logs, which helped me pinpoint the problem to a misconfiguration in the `/etc/fstab` file. By adjusting the mount options and ensuring that the file system was mounted correctly, I was able to resolve the issue. Additionally, I used `strace` to trace system calls and signals, which provided insights into the application's behavior during startup. This allowed me to debug the application's interactions with the file system and further refine the configuration. Overall, the approach was methodical, using a combination of logging, system monitoring tools, and debugging techniques to identify and fix the root cause of the issue.",
+    "answer_words": [],
+    "answer_seconds": 58.4,
+    "answered_at": 1000506.0,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a detailed example of troubleshooting and resolving an issue in a Linux environment, using tools like `dmesg`, `journalctl`, and `strace`. The approach was systematic and well-documented.",
+     "gaps": "The response could benefit from more specific metrics or data points to quantify the resolution's impact.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 10,
+    "action": "follow_up",
+    "competency": "c3",
+    "difficulty": 3,
+    "say": "Could you elaborate on the impact of resolving this issue? Did it have any measurable effects on the system's performance or stability?",
+    "anchor_quote": "I then used `dmesg` to check for kernel messages and `journalctl` to review system logs, which helped me pinpoint the problem to a misconfiguration in the `/etc/fstab` file.",
+    "reason": "Exploring the depth of the Linux knowledge and practical application further. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000506.0,
+    "answer": "Resolving the issue had a significant impact on the system's stability and performance. By ensuring that the file system was correctly configured and mounted, we eliminated the application crashes during boot-up, which improved the overall stability of the system. This, in turn, led to a smoother user experience and fewer disruptions for the development team. The application became more reliable, as it could start up without errors, and the team was able to focus on other tasks without the constant threat of unexpected crashes. Additionally, the reduction in crashes and reboots helped in reducing the load on the system and its resources, which contributed to overall system efficiency. These improvements were reflected in the logs and performance metrics, showing a clear enhancement in the system's reliability and performance.",
+    "answer_words": [],
+    "answer_seconds": 51.2,
+    "answered_at": 1000565.2,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided a detailed example of troubleshooting a Linux issue, including the impact and specific tools used.",
+     "gaps": "Candidate could benefit from providing more specific metrics or technical details.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 11,
+    "action": "wrap_up",
+    "competency": "c3",
+    "difficulty": 3,
+    "say": "Could you now tell me a bit about your experience or any challenges you faced in your current or previous roles, and how you overcame them in the context of DevOps?",
+    "anchor_quote": "Could you elaborate on the impact of resolving this issue? Did it have any measurable effects on the system's performance or stability?",
+    "reason": "Closing the interview with a final question to ensure all competencies are covered. [candidate quality: vague]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000565.2,
+    "answer": "Certainly, in my current role, I faced a challenge related to integrating a legacy application into our modern CI/CD pipeline. The application had a complex setup with many hardcoded paths and dependencies, which made it difficult to automate. To address this, I led a team in creating a detailed inventory of all the application's dependencies and paths. We then worked on refactoring the code to make it more modular and easier to manage. By leveraging tools like Ansible for configuration management and Docker for containerization, we were able to create a consistent and repeatable deployment process. This approach not only streamlined the deployment but also improved the maintainability of the application. The key was to approach the challenge methodically, breaking down the problem into smaller, manageable tasks and leveraging the right DevOps tools to achieve the desired outcome.",
+    "answer_words": [],
+    "answer_seconds": 55.2,
+    "answered_at": 1000628.3999999999,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a detailed example of integrating a legacy application into a CI/CD pipeline, showcasing problem-solving skills and the use of DevOps tools.",
+     "gaps": "",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 12,
+    "action": "close",
+    "competency": "c3",
+    "difficulty": 4,
+    "say": "Thank you for your detailed responses. It was great to learn about your experience with Linux and CI/CD. We appreciate your time today.",
+    "anchor_quote": "Certainly, in my current role, I faced a challenge related to integrating a legacy application into our modern CI/CD pipeline.",
+    "reason": "Time is up and all competencies are covered.",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000628.3999999999,
+    "answer": null,
+    "answer_words": [],
+    "answer_seconds": 0.0,
+    "answered_at": null,
+    "score": null,
+    "assessment": null,
+    "evaluation": null,
+    "corrections": []
+   }
+  ],
+  "difficulty": 4,
+  "started_at": 1000000.0,
+  "finished": true,
+  "events": [
+   {
+    "t": 1791320062.735,
+    "kind": "turn",
+    "turn": 0,
+    "provider": "ollama",
+    "ms": 129833.7,
+    "action": "open"
+   },
+   {
+    "t": 1791320147.486,
+    "kind": "turn",
+    "turn": 1,
+    "provider": "ollama",
+    "ms": 58505.1,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320236.704,
+    "kind": "turn",
+    "turn": 2,
+    "provider": "ollama",
+    "ms": 61518.2,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320332.44,
+    "kind": "turn",
+    "turn": 3,
+    "provider": "ollama",
+    "ms": 68981.1,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320450.78,
+    "kind": "turn",
+    "turn": 4,
+    "provider": "ollama",
+    "ms": 85909.8,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320575.897,
+    "kind": "turn",
+    "turn": 5,
+    "provider": "ollama",
+    "ms": 86295.1,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320741.062,
+    "kind": "turn",
+    "turn": 6,
+    "provider": "ollama",
+    "ms": 118885.2,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320884.724,
+    "kind": "turn",
+    "turn": 7,
+    "provider": "ollama",
+    "ms": 100897.8,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321042.798,
+    "kind": "correction",
+    "turn": 8,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote 'Could you provide some specific metrics or data points to quantify the impact of')"
+   },
+   {
+    "t": 1791321042.798,
+    "kind": "turn",
+    "turn": 8,
+    "provider": "ollama",
+    "ms": 111441.7,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321208.19,
+    "kind": "turn",
+    "turn": 9,
+    "provider": "ollama",
+    "ms": 115581.3,
+    "action": "revisit"
+   },
+   {
+    "t": 1791321391.737,
+    "kind": "turn",
+    "turn": 10,
+    "provider": "ollama",
+    "ms": 128884.9,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321574.309,
+    "kind": "turn",
+    "turn": 11,
+    "provider": "ollama",
+    "ms": 130548.6,
+    "action": "wrap_up"
+   },
+   {
+    "t": 1791321768.969,
+    "kind": "turn",
+    "turn": 12,
+    "provider": "ollama",
+    "ms": 142377.4,
+    "action": "close"
+   }
+  ]
+ },
+ "attempts": [
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 118356.5,
+   "error": "",
+   "input_tokens": 609,
+   "output_tokens": 408
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 129833.7,
+   "error": "",
+   "input_tokens": 1479,
+   "output_tokens": 86
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 58505.1,
+   "error": "",
+   "input_tokens": 1629,
+   "output_tokens": 157
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 61518.2,
+   "error": "",
+   "input_tokens": 1818,
+   "output_tokens": 147
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 68981.1,
+   "error": "",
+   "input_tokens": 1990,
+   "output_tokens": 173
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 85909.8,
+   "error": "",
+   "input_tokens": 2209,
+   "output_tokens": 221
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 86295.1,
+   "error": "",
+   "input_tokens": 2474,
+   "output_tokens": 174
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 118885.0,
+   "error": "",
+   "input_tokens": 2767,
+   "output_tokens": 283
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 100897.8,
+   "error": "",
+   "input_tokens": 2984,
+   "output_tokens": 186
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 111441.7,
+   "error": "",
+   "input_tokens": 3254,
+   "output_tokens": 191
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 115581.3,
+   "error": "",
+   "input_tokens": 3509,
+   "output_tokens": 183
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 128884.8,
+   "error": "",
+   "input_tokens": 3785,
+   "output_tokens": 204
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 130548.6,
+   "error": "",
+   "input_tokens": 4029,
+   "output_tokens": 169
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 142377.4,
+   "error": "",
+   "input_tokens": 4309,
+   "output_tokens": 155
+  }
+ ],
+ "qualities": [
+  "vague",
+  "vague",
+  "vague",
+  "vague",
+  "vague",
+  "vague",
+  "vague",
+  "vague",
+  "vague",
+  "vague",
+  "vague",
+  "vague"
+ ]
+}
