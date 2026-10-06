@@ -11,13 +11,10 @@ E8 coding challenge -> E9 report.
 
 from __future__ import annotations
 
-from concurrent.futures import ThreadPoolExecutor
-from datetime import UTC, datetime
 from typing import Literal
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from interview_core.adapters import factory
-from interview_core.agent.json_provider import ChatJSONProvider
 from interview_core.agent.personas import PERSONAS
 from interview_core.agent.state import (
     INTERVIEW_TYPES,
@@ -29,12 +26,9 @@ from interview_core.agent.state import (
 )
 from interview_core.codeexec import grade_submission, load_challenges, pick_challenge
 from interview_core.face import FaceVerifier
-from interview_core.nlp.evaluator import evaluate
 from interview_core.nlp.resume import parse_resume_pdf
 from interview_core.nlp.roles import is_technical, role_family
-from interview_core.nlp.structured import StructuredLLM
 from interview_core.realtime import stt
-from interview_core.report import build_report
 from interview_core.security import EventType
 from interview_core.speech.asr import Word
 from pydantic import BaseModel, Field
@@ -389,30 +383,4 @@ def finish(session_id: str, user: User = Depends(current_user), db: Session = De
     s = _own(db, user, session_id)
     if s.report is not None:
         return s.report
-    st = AgentState.from_dict(dict(s.state))
-    pending = [t for t in st.turns if t.answer is not None and t.evaluation is None]
-    chain = list(runtime.llm_chain()) if not metering.over_cap(db, user, s) else []
-    llm = StructuredLLM(ChatJSONProvider(chain[0]) if chain else None)
-
-    def run(t):
-        q = {"question": t.say, "category": t.action, "difficulty": t.difficulty}
-        return t, evaluate(llm, q, t.answer or "", role=st.params.role, seniority=st.params.seniority)
-
-    with ThreadPoolExecutor(max_workers=4) as pool:
-        for t, ev in pool.map(run, pending):
-            t.evaluation = ev.to_dict()
-    metering.record_llm_calls(db, user, s.id, llm.log)
-    s.state = st.to_dict()
-    report = build_report(
-        s.state,
-        per_answer=list(s.signals),
-        integrity=s.integrity.get("episodes", {}),
-        mode=s.mode,
-        code_results=[c for c in s.code_results if c.get("final")],
-    )
-    s.report = report
-    if s.status == "active":
-        s.status = "finished"
-    s.finished_at = datetime.now(UTC)
-    db.commit()
-    return report
+    return interview.finish(db, user, s)

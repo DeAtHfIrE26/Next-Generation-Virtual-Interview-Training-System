@@ -98,6 +98,11 @@ test("spoken interview: speech in, live captions, LLM follow-ups, spoken questio
   await page.getByRole("button", { name: "End and see report" }).click();
   await page.waitForURL(new RegExp(`/reports/${id}`), { timeout: 180_000 });
   await expect(page.getByText("Interview report", { exact: true })).toBeVisible({ timeout: 120_000 });
+  if (REQUIRE_LLM) {
+    // Every answer must end up scored by the LLM rubric (a slow model finishes in the background).
+    await expect(page.getByTestId("scoring-pending")).toHaveCount(0, { timeout: LLM_TIMEOUT });
+    await expect(page.getByText("offline scoring", { exact: true })).toHaveCount(0);
+  }
   await expect(page.getByRole("heading", { level: 1, name: "Backend Engineer · Acme Payments" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Answer by answer" })).toBeVisible();
   await page.screenshot({ path: info.outputPath("05-report.png"), fullPage: true });

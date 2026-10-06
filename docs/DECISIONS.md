@@ -313,3 +313,18 @@ Tests:
 **Chosen.** `assets.fetch` checks the remaining `Content-Length` after copying and treats any shortfall as an interruption. It then resumes with an HTTP `Range` request, up to 6 attempts with exponential backoff. If the server ignores the range, it restarts the download from the beginning. The SHA-256 check still runs on the finished file. URLs that are not HTTP(S) are refused.
 
 Test: `test_fetch_resumes_after_dropped_connections` uses a local server that cuts the first two responses short.
+
+## D21. Answers are scored by the LLM even when it is slow: within a budget, then in the background (2026-10-06)
+
+**Measured.** In the real-LLM E2E on 7af8800 (Qwen2.5-7B on a CI CPU), the questions were written by the LLM, but both answers in the report carried the "offline scoring" badge. The rubric evaluator's LLM client had a fixed 20-second timeout, while the interviewer already used `llm_timeout_s` (240 s for a local model). On that CPU, every evaluation timed out and fell back to the offline scorer, which is labelled but is not the transformer-based evaluation that element E6 describes.
+
+Raising the timeout alone was not enough. `finish` scored every answer inside one request, so on a slow model the request would outlast the web proxy's upstream timeout (about 5 minutes) for any real interview.
+
+**Chosen.**
+- **Matching timeout.** The evaluator now uses the interviewer's timeout for the provider chain, and scores one answer at a time on a local model.
+- **Budget.** `finish` waits up to `FINISH_EVAL_BUDGET_S` (default 20 s) for LLM scoring. A hosted model finishes inside it, and the report is complete at once, as before.
+- **Background.** Answers not scored by then get the fast offline score for now, still labelled "offline scoring", and the report says `scoring: "pending"`. A background job keeps scoring with the LLM and rebuilds the report when done. If the process restarts mid-way, `GET /reports/{id}` restarts the job.
+- **Report page.** It shows "Still scoring your answers in detail" and refreshes every 5 s until scoring is complete.
+- **E2E.** With `E2E_REQUIRE_LLM=1`, the test now also fails if any answer in the final report still shows "offline scoring".
+
+Test: `test_slow_llm_scoring_finishes_in_the_background`. The existing `test_full_session_with_signals_and_report` still gets LLM scores straight from `finish`.

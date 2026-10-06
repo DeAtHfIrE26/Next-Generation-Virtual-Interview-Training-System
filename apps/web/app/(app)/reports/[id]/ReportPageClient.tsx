@@ -34,6 +34,16 @@ export function ReportPageClient({ id, initial }: { id: string; initial: Report 
     return () => { alive = false; };
   }, [id, initial]);
 
+  // Scoring still running on the server (slow model): refresh until it is done.
+  const pending = r?.scoring === "pending";
+  useEffect(() => {
+    if (!pending) return;
+    const timer = setInterval(() => {
+      api<Report>(`/reports/${id}`).then(setR).catch(() => undefined);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [id, pending]);
+
   async function createShare() {
     setShare(await api(`/reports/${id}/share`, { method: "POST", json: { days: 14 } }));
   }
@@ -75,6 +85,13 @@ export function ReportPageClient({ id, initial }: { id: string; initial: Report 
               <code className="truncate rounded-[8px] bg-surface-2 px-2 py-1 font-mono text-[12px]" data-testid="share-url">{share.url}</code>
               <Button size="sm" variant="secondary" onClick={() => { void navigator.clipboard?.writeText(share.url); setCopied(true); }}><Copy className="size-3.5" /> {copied ? "Copied" : "Copy"}</Button>
             </Card>
+          )}
+          {pending && (
+            <div data-testid="scoring-pending">
+              <Alert tone="accent" title="Still scoring your answers in detail">
+                Answers marked &ldquo;offline scoring&rdquo; are being rescored by the AI evaluator. This page updates by itself.
+              </Alert>
+            </div>
           )}
           <ReportView r={r} />
         </>

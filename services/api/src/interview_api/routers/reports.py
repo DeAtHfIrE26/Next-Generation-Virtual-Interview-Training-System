@@ -9,6 +9,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
+from interview_api import interview
 from interview_api.db import get_db
 from interview_api.models import InterviewSession, User
 from interview_api.ratelimit import limiter
@@ -25,6 +26,7 @@ def get_report(session_id: str, user: User = Depends(current_user), db: Session 
     s = _own(db, user, session_id)
     if s.report is None:
         raise HTTPException(404, "report not ready; finish the session first")
+    interview.resume_scoring(db, s)
     return s.report
 
 

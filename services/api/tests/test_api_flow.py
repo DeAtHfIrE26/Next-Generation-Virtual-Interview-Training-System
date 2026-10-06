@@ -346,3 +346,29 @@ def test_plan_is_prepared_while_the_candidate_checks_devices(client, user, llm):
     first = _answer(client, sid)["turn"]
     assert first["action"] == "open" and not first["emergency"]
     assert llm.calls == calls + 1
+
+
+def test_slow_llm_scoring_finishes_in_the_background(client, user, llm, monkeypatch):
+    """Real-LLM E2E on a CPU model: the rubric scoring timed out after 20 s and every answer fell back
+    to offline scoring. finish now returns within its budget, marks the report pending, and the
+    background job replaces the offline scores with the LLM's."""
+    import time
+
+    from interview_api import interview
+
+    real = interview._score
+    monkeypatch.setattr(interview, "FINISH_EVAL_BUDGET_S", 0.05)
+    monkeypatch.setattr(interview, "_score", lambda *a: (time.sleep(0.5), real(*a))[1])
+    sid = _create(client)["id"]
+    _answer(client, sid)
+    _answer(client, sid, text=ANSWER)
+    report = client.post(f"/sessions/{sid}/finish").json()
+    assert report["scoring"] == "pending"
+    assert [a["method"] for a in report["answers"]] == ["heuristic"]  # shown as "offline scoring"
+    for _ in range(100):
+        report = client.get(f"/reports/{sid}").json()
+        if report["scoring"] == "complete":
+            break
+        time.sleep(0.05)
+    assert report["scoring"] == "complete"
+    assert [a["method"] for a in report["answers"]] == ["llm"]

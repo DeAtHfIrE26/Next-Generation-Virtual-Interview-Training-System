@@ -19,6 +19,7 @@ export interface ReportAnswer {
 export interface Report {
   version: number; generated_at: string; session_id: string; role: string; seniority?: string; company: string | null;
   interview_type?: string; round?: string; mode?: string;
+  scoring?: "pending" | "complete"; // "pending": LLM scoring of some answers is still running (D21)
   summary: {
     answers: number; overall: number | null; label: string; dimensions: Scores; difficulty_trajectory: number[]; final_difficulty?: number;
     words_per_minute: number | null; filler_per_100_words: number | null; off_screen_fraction: number | null; emergency_questions: number; duration_minutes?: number;
