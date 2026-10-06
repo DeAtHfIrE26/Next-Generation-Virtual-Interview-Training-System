@@ -25,6 +25,9 @@ def biometric(client, monkeypatch):
 
     monkeypatch.setattr(runtime, "face_embedder", lambda: ColourEmbedder())
     monkeypatch.setattr(runtime, "speaker_embedder", lambda: PitchEmbedder())
+    monkeypatch.setattr(
+        runtime, "stt_provider", lambda: None
+    )  # tones are not speech: use client-reported text
     monkeypatch.setenv("FACE_MATCH_THRESHOLD", "0.99")
     monkeypatch.setenv("VOICE_MATCH_THRESHOLD", "0.8")
     return signup(client, consents=("data_processing", "biometric_face", "biometric_voice"))
@@ -128,14 +131,13 @@ def test_voice_enrolment_with_phrases_then_matching(client, biometric):
     assert all(c["checked_by"] == "client_reported" for c in r.json()["phrases"])
     assert client.post("/enrollment/voice", json={"recordings": recs}).status_code == 422  # nonces used
     sid = client.post("/sessions", data={"role": "Engineer"}).json()["id"]
-    client.post(f"/sessions/{sid}/next")
+    client.post(f"/sessions/{sid}/turn", json={})
     same = client.post(
-        f"/sessions/{sid}/answer", json={"transcript": "hello", "audio_wav": wav_b64(tone(220, seed=7))}
+        f"/sessions/{sid}/turn", json={"text": "hello", "audio_wav": wav_b64(tone(220, seed=7))}
     ).json()
     assert same["signals"]["voice"]["status"] == "match"
-    client.post(f"/sessions/{sid}/next")
     diff = client.post(
-        f"/sessions/{sid}/answer", json={"transcript": "hello", "audio_wav": wav_b64(tone(500, seed=7))}
+        f"/sessions/{sid}/turn", json={"text": "hello", "audio_wav": wav_b64(tone(500, seed=7))}
     ).json()
     assert (
         diff["signals"]["voice"]["status"] == "mismatch" and diff["notices"][0]["event"] == "voice_mismatch"

@@ -5,6 +5,7 @@ import pytest
 
 os.environ.setdefault("TEMPLATE_KEK_BASE64", base64.b64encode(b"k" * 32).decode())
 os.environ["DATABASE_URL"] = "sqlite:///:memory:"
+os.environ["SPEECH_WARMUP"] = "0"  # models load on first use (only the realtime tests need them)
 for var in (
     "LLM_PROVIDER",
     "ASR_PROVIDER",

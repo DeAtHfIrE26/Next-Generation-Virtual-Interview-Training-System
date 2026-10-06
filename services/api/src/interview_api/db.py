@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterator
+from contextlib import contextmanager
 from pathlib import Path
 
 from sqlalchemy import create_engine, event
@@ -50,6 +51,15 @@ def reset_engine() -> None:
 
 
 def get_db() -> Iterator[Session]:
+    engine()
+    assert _factory is not None
+    with _factory() as s:
+        yield s
+
+
+@contextmanager
+def session_scope() -> Iterator[Session]:
+    """A short-lived session for background threads and WebSocket handlers."""
     engine()
     assert _factory is not None
     with _factory() as s:

@@ -32,10 +32,10 @@ def test_metrics_and_request_id(client):
     r = client.get("/auth/me", headers={"x-request-id": "req-123"})
     assert r.headers["x-request-id"] == "req-123"
     sid = client.post("/sessions", data={"role": "Engineer"}).json()["id"]
-    client.post(f"/sessions/{sid}/next")
+    client.post(f"/sessions/{sid}/turn", json={})
     m = client.get("/metrics").text
     assert 'http_requests_total{method="GET",route="/auth/me",status="200"}' in m
-    assert 'model_calls_total{outcome="fallback",provider="none",task="question"}' in m
+    assert 'model_calls_total{outcome="fallback",provider="emergency",task="interviewer"}' in m
     assert "priya" not in m
 
 

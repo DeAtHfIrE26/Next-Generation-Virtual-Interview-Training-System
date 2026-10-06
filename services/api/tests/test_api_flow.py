@@ -3,8 +3,8 @@ from pathlib import Path
 
 import pytest
 from conftest import signup
+from fake_llm import FakeInterviewerLLM
 from helpers import speech_and_mouth, wav_b64
-from interview_core.nlp.providers.base import LLMResponse
 
 REPO = Path(__file__).resolve().parents[3]
 ANSWER = (
@@ -13,17 +13,13 @@ ANSWER = (
 )
 
 
-class ScriptedProvider:
-    name, model = "scripted", "scripted-1"
+@pytest.fixture
+def llm(monkeypatch):
+    from interview_api import runtime
 
-    def __init__(self, *items):
-        self.items = list(items)
-        self.calls = 0
-
-    def complete_json(self, system, user, schema, *, timeout_s):
-        self.calls += 1
-        item = self.items.pop(0) if self.items else "not json"
-        return LLMResponse(json.dumps(item), self.model, 1000, 500)
+    fake = FakeInterviewerLLM()
+    monkeypatch.setattr(runtime, "llm_chain", lambda: (fake,))
+    return fake
 
 
 # ------------------------------------------------------------------ auth
@@ -110,10 +106,16 @@ def test_admin_role_from_allowlist(client):
 
 
 def _create(client, role="Backend Software Engineer", **form):
-    data = {"role": role, "seniority": "mid", "length": "4", **form}
+    data = {"role": role, "seniority": "mid", "duration_minutes": "10", "interview_type": "technical", **form}
     pdf = (REPO / "legacy/desktop/sample_resume.pdf").read_bytes()  # synthetic fixture
     r = client.post("/sessions", data=data, files={"resume": ("cv.pdf", pdf, "application/pdf")})
     assert r.status_code == 201, r.text
+    return r.json()
+
+
+def _answer(client, sid, **body):
+    r = client.post(f"/sessions/{sid}/turn", json=body)
+    assert r.status_code == 200, r.text
     return r.json()
 
 
@@ -123,43 +125,53 @@ def test_session_requires_consent(client):
     assert r.status_code == 403 and "data_processing" in r.json()["detail"]
 
 
-def test_full_offline_session_with_signals_and_report(client, user):
-    created = _create(client)
+def test_options_expose_parameters_and_personas(client, user):
+    o = client.get("/sessions/options").json()
+    assert "system_design" in o["interview_types"] and "final" in o["rounds"]
+    assert {p["id"] for p in o["personas"]} >= {"maya", "daniel", "priya", "arjun"}
+
+
+def test_full_session_with_signals_and_report(client, user, llm):
+    created = _create(client, company="Acme", skills="Postgres, Kafka", round="onsite")
     sid = created["id"]
-    assert "Python" in " ".join(created["resume_profile"]["skills"]) or created["resume_profile"]["sections"]
-    assert created["capabilities"]["llm"] is None  # offline: deterministic bank
+    assert created["capabilities"]["llm"] == "scripted"
+    first = _answer(client, sid)["turn"]
+    assert first["action"] == "open" and not first["emergency"]
+    info = client.get(f"/sessions/{sid}").json()
+    assert info["params"]["company"] == "Acme" and info["params"]["skills"] == ["Postgres", "Kafka"]
+    assert [c["name"] for c in info["blueprint"]["competencies"]] == [
+        "System design",
+        "Operations",
+        "Collaboration",
+    ]
     answered = 0
-    while True:
-        q = client.post(f"/sessions/{sid}/next").json()
-        if q.get("done"):
-            break
-        assert "question" in q and "expected_points" not in q
+    while answered < 3:
         audio, times, values = speech_and_mouth(seed=answered)
         words = [{"word": w, "start": i * 0.4, "end": i * 0.4 + 0.3} for i, w in enumerate(ANSWER.split())]
-        r = client.post(
-            f"/sessions/{sid}/answer",
-            json={
-                "transcript": ANSWER,
-                "words": words,
-                "audio_wav": wav_b64(audio),
-                "mouth": {"times": times, "values": values},
-                "gaze_samples": [[i * 0.1, i % 10 != 0] for i in range(60)],
-            },
+        body = _answer(
+            client,
+            sid,
+            text=ANSWER,
+            words=words,
+            audio_wav=wav_b64(audio),
+            mouth={"times": times, "values": values},
+            gaze_samples=[[i * 0.1, i % 10 != 0] for i in range(60)],
         )
-        assert r.status_code == 200, r.text
-        body = r.json()
-        assert body["evaluation"]["label"] == "experimental"
-        assert body["signals"]["lipsync"]["decision"] == "match"
-        assert body["signals"]["delivery"]["words_per_minute"] > 0
-        assert body["signals"]["voice"]["status"] == "not_enrolled"
+        assert body["turn"] and not body["turn"]["emergency"]
         answered += 1
-    assert answered >= 4
+    st = client.get(f"/sessions/{sid}").json()
+    assert all(t["answered"] for t in st["turns"][:-1]) and not st["turns"][-1]["answered"]
     report = client.post(f"/sessions/{sid}/finish").json()
-    assert report["summary"]["answers"] == answered and report["summary"]["label"] == "experimental"
+    assert report["summary"]["answers"] == answered and report["summary"]["emergency_questions"] == 0
+    assert report["summary"]["label"] == "experimental" and report["company"] == "Acme"
+    assert all(a["lipsync"]["decision"] == "match" for a in report["answers"])
+    assert all(a["delivery"]["words_per_minute"] > 0 for a in report["answers"])
+    assert all(a["method"] == "llm" and a["evidence"] for a in report["answers"])
+    assert {s["name"] for s in report["skills"]} == {"System design", "Operations", "Collaboration"}
+    assert report["transcript"][0]["speaker"] == "interviewer" and report["moments"]
     assert report["appendix"]["prototype_nine_factor"]["score"] >= 0
-    assert all(a["lipsync"]["measured"] for a in report["answers"])
     assert client.get("/sessions").json()[0]["overall"] == report["summary"]["overall"]
-    assert client.post(f"/sessions/{sid}/next").status_code == 409
+    assert client.post(f"/sessions/{sid}/turn", json={"text": "late"}).status_code == 409
 
     link = client.post(f"/reports/{sid}/share", json={"days": 7}).json()["url"]
     token = link.rsplit("/", 1)[1]
@@ -169,35 +181,38 @@ def test_full_offline_session_with_signals_and_report(client, user):
     assert client.get(f"/shared/{token}").status_code == 404
 
 
-def test_lipsync_mismatch_raises_integrity_notice(client, user):
+def test_lipsync_mismatch_raises_integrity_notice(client, user, llm):
     sid = _create(client)["id"]
-    client.post(f"/sessions/{sid}/next")
+    _answer(client, sid)
     audio, times, values = speech_and_mouth(seed=3, mismatch=True)
-    r = client.post(
-        f"/sessions/{sid}/answer",
-        json={"transcript": ANSWER, "audio_wav": wav_b64(audio), "mouth": {"times": times, "values": values}},
-    ).json()
-    assert r["signals"]["lipsync"]["decision"] == "mismatch"
+    r = _answer(client, sid, text=ANSWER, audio_wav=wav_b64(audio), mouth={"times": times, "values": values})
     assert r["notices"][0]["event"] == "lipsync_mismatch" and not r["notices"][0]["end_session"]
 
 
-def test_answer_without_question_and_double_answer(client, user):
+def test_pending_question_is_idempotent(client, user, llm):
     sid = _create(client)["id"]
-    assert client.post(f"/sessions/{sid}/answer", json={"transcript": "hi"}).status_code == 409
-    client.post(f"/sessions/{sid}/next")
-    assert client.post(f"/sessions/{sid}/answer", json={"transcript": "hi"}).status_code == 200
-    assert client.post(f"/sessions/{sid}/answer", json={"transcript": "hi"}).status_code == 409
+    a = _answer(client, sid)["turn"]
+    b = _answer(client, sid)["turn"]  # no answer given: the same question is returned
+    assert a == b and llm.calls == 2  # blueprint + opening only
 
 
-def test_sessions_are_private(client, user):
+def test_no_llm_uses_flagged_emergency_questions(client, user):
+    sid = _create(client)["id"]
+    t = _answer(client, sid)["turn"]
+    assert t["emergency"] is True and t["action"] == "open"
+    st = client.get(f"/sessions/{sid}").json()
+    assert st["blueprint"]["emergency"] is True and st["capabilities"]["llm"] is None
+
+
+def test_sessions_are_private(client, user, llm):
     sid = _create(client)["id"]
     client.post("/auth/logout")
     signup(client, "other@example.com")
     assert client.get(f"/sessions/{sid}").status_code == 404
-    assert client.post(f"/sessions/{sid}/next").status_code == 404
+    assert client.post(f"/sessions/{sid}/turn", json={}).status_code == 404
 
 
-def test_phone_debounce_and_proctored_policy(client, user):
+def test_phone_debounce_and_proctored_policy(client, user, llm):
     sid = _create(client, mode="proctored")["id"]
     obs = [{"t": i * 0.5, "type": "phone", "present": True} for i in range(3)]
     r = client.post(f"/sessions/{sid}/events", json={"observations": obs[:2]}).json()
@@ -218,10 +233,10 @@ def test_phone_debounce_and_proctored_policy(client, user):
             },
         ).json()
     assert r["status"] == "ended_by_policy"
-    assert client.post(f"/sessions/{sid}/next").status_code == 409
+    assert client.post(f"/sessions/{sid}/turn", json={}).status_code == 409
 
 
-def test_coaching_mode_never_ends_on_integrity(client, user):
+def test_coaching_mode_never_ends_on_integrity(client, user, llm):
     sid = _create(client)["id"]
     for k in range(6):
         client.post(
@@ -236,15 +251,9 @@ def test_coaching_mode_never_ends_on_integrity(client, user):
     assert client.get(f"/sessions/{sid}").json()["status"] == "active"
 
 
-def test_coding_challenge_attached_and_graded(client, user):
+def test_coding_challenge_attached_and_graded(client, user, llm):
     sid = _create(client, role="Data Analyst")["id"]
-    challenge = None
-    for _ in range(6):
-        q = client.post(f"/sessions/{sid}/next").json()
-        if q.get("done"):
-            break
-        challenge = challenge or q.get("challenge")
-        client.post(f"/sessions/{sid}/answer", json={"transcript": ANSWER})
+    challenge = client.get(f"/sessions/{sid}").json()["challenge"]
     assert challenge is not None and "tests" not in challenge
     if challenge["languages"] == ["sql"]:
         r = client.post(
@@ -254,6 +263,8 @@ def test_coding_challenge_attached_and_graded(client, user):
     else:
         r = client.post(f"/sessions/{sid}/code", json={"language": "python", "source": "print(1)"}).json()
         assert "not configured" in r["error"]
+    behavioural = _create(client, role="Data Analyst", interview_type="behavioral")["id"]
+    assert client.get(f"/sessions/{behavioural}").json()["challenge"] is None
 
 
 # ------------------------------------------------------------------ limits and cost caps
@@ -267,19 +278,9 @@ def test_plan_session_limit(client, user, monkeypatch):
     assert r.status_code == 402
 
 
-def test_cost_cap_switches_to_offline_bank(client, user, monkeypatch):
-    from interview_api import metering, runtime
+def test_cost_cap_stops_paid_calls_and_flags_emergency(client, user, llm, monkeypatch):
+    from interview_api import metering
 
-    q = {
-        "question": "Tell me about a hard bug you fixed.",
-        "category": "behavioral",
-        "difficulty": 3,
-        "competency": "debugging",
-        "rationale": "r",
-        "expected_points": ["a", "b"],
-    }
-    prov = ScriptedProvider(q)
-    monkeypatch.setattr(runtime, "llm_provider", lambda: prov)
     monkeypatch.setenv(
         "PRICE_TABLE_JSON",
         json.dumps(
@@ -292,19 +293,18 @@ def test_cost_cap_switches_to_offline_bank(client, user, monkeypatch):
     monkeypatch.setenv("FREE_SESSION_CAP_MICRO_USD", "1000")
     metering.prices.cache_clear()
     sid = _create(client)["id"]
-    first = client.post(f"/sessions/{sid}/next").json()
-    assert first["source"] == "llm" and prov.calls == 1
-    client.post(f"/sessions/{sid}/answer", json={"transcript": ANSWER})
-    second = client.post(f"/sessions/{sid}/next").json()
-    assert second["source"] in ("bank", "follow_up") and prov.calls == 1  # cap reached: no more paid calls
+    first = _answer(client, sid)["turn"]
+    assert not first["emergency"] and llm.calls == 2
+    second = _answer(client, sid, text=ANSWER)["turn"]
+    assert second["emergency"] is True and llm.calls == 2  # cap reached: no more paid calls, badge shown
 
 
 # ------------------------------------------------------------------ privacy
 
 
-def test_export_and_delete_account(client, user):
+def test_export_and_delete_account(client, user, llm):
     sid = _create(client)["id"]
-    client.post(f"/sessions/{sid}/next")
+    _answer(client, sid)
     exp = client.get("/privacy/export").json()
     assert exp["account"]["email"] == "user@example.com" and exp["sessions"][0]["id"] == sid
     assert any(c["kind"] == "data_processing" for c in exp["consents"])
@@ -326,8 +326,8 @@ def test_retention_purge(client, user):
     assert out["sessions"] == 1 and out["auth_sessions"] >= 1
 
 
-@pytest.mark.parametrize("payload", [{"transcript": "x" * 9000}, {"audio_wav": "!!notbase64!!"}])
-def test_input_validation(client, user, payload):
+@pytest.mark.parametrize("payload", [{"text": "x" * 9000}, {"audio_wav": "!!notbase64!!"}])
+def test_input_validation(client, user, llm, payload):
     sid = _create(client)["id"]
-    client.post(f"/sessions/{sid}/next")
-    assert client.post(f"/sessions/{sid}/answer", json=payload).status_code == 422
+    _answer(client, sid)
+    assert client.post(f"/sessions/{sid}/turn", json=payload).status_code == 422

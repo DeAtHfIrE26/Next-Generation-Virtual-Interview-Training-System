@@ -20,6 +20,8 @@ resemblyzer = ["resemblyzer>=0.1.4"]
 aws = ["boto3>=1.34"]
 gcp = ["google-cloud-kms>=3.0"]
 whisper = ["faster-whisper>=1.0"]
+local-speech = ["sherpa-onnx>=1.13.8", "sherpa-onnx-core>=1.13.8"]
+realtime = ["websockets>=13"]
 
 [dependency-groups]
 dev = ["opencv-python-headless>=4.9", "pytest>=8", "hypothesis>=6"]

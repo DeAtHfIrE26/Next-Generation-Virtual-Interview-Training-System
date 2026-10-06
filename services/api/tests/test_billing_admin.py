@@ -125,11 +125,11 @@ def test_admin_requires_admin_and_reports_costs(client, monkeypatch):
     client.post("/auth/logout")
     signup(client, "admin@example.com")
     sid = client.post("/sessions", data={"role": "Data Analyst"}).json()["id"]
-    client.post(f"/sessions/{sid}/next")
-    client.post(f"/sessions/{sid}/answer", json={"transcript": "I built a dashboard."})
+    client.post(f"/sessions/{sid}/turn", json={})
+    client.post(f"/sessions/{sid}/turn", json={"text": "I built a dashboard."})
     client.post("/metrics/latency", json={"metric": "question_to_first_avatar_frame", "ms": 640})
     ov = client.get("/admin/overview").json()
-    assert ov["llm_quality"]["none/question"]["fallback_rate"] == 1.0
+    assert ov["llm_quality"]["emergency/interviewer"]["fallback_rate"] == 1.0  # no LLM configured
     assert ov["latency"]["question_to_first_avatar_frame"]["p95_ms"] == 640
     assert ov["cost"]["prices_configured"]["llm_input_tokens"] is True
     manifest = client.get("/admin/export/llm_schema_validity").text.strip().splitlines()

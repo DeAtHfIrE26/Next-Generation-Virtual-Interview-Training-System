@@ -8,7 +8,7 @@ import os
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from interview_api import observability
+from interview_api import live, observability, runtime
 from interview_api.db import Base, engine
 from interview_api.routers import (
     admin,
@@ -27,7 +27,7 @@ from interview_api.settings import get_settings
 
 CSRF_EXEMPT_PREFIXES = ("/billing/webhooks/",)
 INTERNAL_HEADER = "x-ic-internal"
-INTERNAL_EXEMPT_PATHS = ("/health",)
+INTERNAL_EXEMPT_PATHS = ("/health", "/ws/interview")  # the WebSocket is protected by single-use tickets
 
 
 def create_app(*, create_tables: bool = True) -> FastAPI:
@@ -81,11 +81,13 @@ def create_app(*, create_tables: bool = True) -> FastAPI:
         avatar.router,
     ):
         app.include_router(r)
+    app.include_router(live.router)
     app.include_router(billing.router)
     app.include_router(admin.router)
     observability.install(app)
     if create_tables:
         Base.metadata.create_all(engine())
+    runtime.warm_up_async()
     return app
 
 

@@ -11,6 +11,7 @@ from interview_core.crypto import encrypt_template
 from interview_core.face import FaceVerifier
 from interview_core.face.liveness import Challenge as LiveChallenge
 from interview_core.face.liveness import issue_challenge, series_digest, verify_challenge
+from interview_core.realtime import stt
 from interview_core.voice import PhraseChallenge, VoiceVerifier, check_phrase, issue_phrase
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
@@ -152,7 +153,7 @@ def enrol_voice(
     emb = runtime.speaker_embedder()
     if emb is None:
         raise HTTPException(503, "voice verification is not configured on this server")
-    asr = runtime.asr_provider()
+    asr = runtime.stt_provider()
     utterances, checks = [], []
     for rec in body.recordings:
         row = db.get(Challenge, rec.nonce)
@@ -160,7 +161,7 @@ def enrol_voice(
             raise HTTPException(422, "phrase challenge missing, expired or already used")
         row.used = True
         audio, sr = decode_wav(rec.audio_wav)
-        heard = asr.transcribe(audio, sr).text if asr else rec.client_transcript
+        heard = stt.transcribe(asr, audio, sr).text if asr else rec.client_transcript
         ch = PhraseChallenge(
             row.nonce, row.payload["phrase"], datetime.fromisoformat(row.payload["expires_at"])
         )

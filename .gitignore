@@ -52,3 +52,4 @@ services/api/var/
 apps/web/public/vision/
 apps/web/next-env.d.ts
 apps/web/tsconfig.tsbuildinfo
+/.models/

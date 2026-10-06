@@ -55,10 +55,10 @@ def _env_int(name: str, default: int) -> int:
 def plan_limits(plan: str) -> PlanLimits:
     if plan in ("pro", "team"):
         return PlanLimits(
-            _env_int("PRO_SESSIONS_PER_MONTH", 60), _env_int("PRO_SESSION_CAP_MICRO_USD", 2_000_000), True
+            _env_int("PRO_SESSIONS_PER_MONTH", 60), _env_int("PRO_SESSION_CAP_MICRO_USD", 3_000_000), True
         )
     return PlanLimits(
-        _env_int("FREE_SESSIONS_PER_MONTH", 3), _env_int("FREE_SESSION_CAP_MICRO_USD", 250_000), False
+        _env_int("FREE_SESSIONS_PER_MONTH", 3), _env_int("FREE_SESSION_CAP_MICRO_USD", 1_000_000), False
     )
 
 
@@ -114,6 +114,50 @@ def record_llm_calls(db: Session, user: User, session_id: str | None, calls: lis
             key = f"{c.provider}:{c.model}"
             record(db, user, session_id, "llm_input_tokens", key, c.input_tokens)
             record(db, user, session_id, "llm_output_tokens", key, c.output_tokens)
+
+
+def record_agent_attempts(db: Session, user: User, session_id: str | None, task: str, attempts) -> None:
+    """Meter the interviewer agent's LLM attempts (interview_core.agent.interviewer.Attempt)."""
+    from interview_api.observability import record_model_call
+
+    for a in attempts:
+        record_model_call(a.provider, task, a.ok, False, a.ms / 1000)
+        db.add(
+            LLMCall(
+                session_id=session_id,
+                task=task,
+                provider=a.provider,
+                model=a.model,
+                raw_valid=a.ok,
+                delivered_valid=a.ok,
+                used_fallback=False,
+                attempts=1,
+                latency_ms=a.ms,
+            )
+        )
+        key = f"{a.provider}:{a.model}"
+        record(db, user, session_id, "llm_input_tokens", key, a.input_tokens)
+        record(db, user, session_id, "llm_output_tokens", key, a.output_tokens)
+
+
+def record_emergency(db: Session, session_id: str | None) -> None:
+    """An LLM-free emergency question was used: counted as a fallback in metrics and the admin view."""
+    from interview_api.observability import record_model_call
+
+    record_model_call("emergency", "interviewer", False, True, 0.0)
+    db.add(
+        LLMCall(
+            session_id=session_id,
+            task="interviewer",
+            provider="emergency",
+            model="none",
+            raw_valid=False,
+            delivered_valid=True,
+            used_fallback=True,
+            attempts=0,
+            latency_ms=0.0,
+        )
+    )
 
 
 def session_cost(db: Session, session_id: str) -> int:

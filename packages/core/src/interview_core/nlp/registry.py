@@ -31,5 +31,16 @@ def eval_answer_scorers() -> dict[str, Callable[[str, str, str, str], float]]:
 
 
 def eval_asr_systems() -> dict[str, Callable[[np.ndarray, int], str]]:
+    """The live interview's streaming STT (local sherpa-onnx by default) plus any batch ASR adapter."""
+    from interview_core.realtime import assets, stt
+
+    out: dict[str, Callable[[np.ndarray, int], str]] = {}
+    if assets.is_present("stt-streaming"):
+        live = stt.sherpa_provider()
+        out["sherpa:nemotron-streaming+parakeet-final"] = lambda audio, sr: (
+            stt.transcribe(live, audio, sr).text
+        )
     p = asr.from_env()
-    return {} if p is None else {p.name: lambda audio, sr: p.transcribe(audio, sr).text}
+    if p is not None:
+        out[p.name] = lambda audio, sr: p.transcribe(audio, sr).text
+    return out

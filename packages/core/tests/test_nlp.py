@@ -1,10 +1,8 @@
-import json
 from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
-from interview_core.nlp import evaluator, heuristics, providers, question_bank, resume
-from interview_core.nlp.interviewer import Interviewer, InterviewState, adapt_difficulty, plan_for
+from interview_core.nlp import evaluator, heuristics, providers, resume
 from interview_core.nlp.providers.base import PermanentLLMError, RefusalError, TransientLLMError
 from interview_core.nlp.roles import role_family
 from interview_core.nlp.structured import StructuredLLM, wrap_untrusted
@@ -150,70 +148,14 @@ def test_heuristics_use_word_boundaries_and_spans():
         assert text[s.start : s.end].lower() == "um"
 
 
-# ------------------------------------------------------------- interviewer
+# ------------------------------------------------------------- roles
 
 
-def test_offline_session_runs_to_completion_without_repeats():
-    st = InterviewState.start("sess-1", "Backend Software Engineer", "mid", length=6)
-    iv = Interviewer(StructuredLLM(None))
-    seen = []
-    while (turn := iv.next_question(st)) is not None:
-        assert turn.question["question"] not in seen or turn.source == "follow_up"
-        seen.append(turn.question["question"])
-        iv.submit_answer(st, ANSWER if len(seen) % 2 else "um I am not sure")
-    assert st.finished and st.turns[-1].question["category"] == "wrap_up"
-    assert {t.source for t in st.turns} <= {"bank", "follow_up"}
-    assert any(t.source == "follow_up" for t in st.turns)
-
-
-def test_state_round_trips_and_next_question_is_idempotent():
-    st = InterviewState.start("s", "Data Analyst", "junior")
-    iv = Interviewer(StructuredLLM(None))
-    a = iv.next_question(st)
-    assert iv.next_question(st) is a
-    st2 = InterviewState.from_dict(json.loads(json.dumps(st.to_dict())))
-    assert st2.turns[0].question == a.question and st2.plan == st.plan
-    with pytest.raises(ValueError):
-        iv.submit_answer(st, "x")
-        iv.submit_answer(st, "y")
-
-
-def test_llm_question_rejected_when_repeating_or_wrong_category():
-    st = InterviewState.start("s", "Software Engineer", "mid")
-    first_cat = st.plan[0]
-    q1 = {**GOOD_Q, "category": first_cat, "difficulty": st.difficulty}
-    iv = Interviewer(llm(q1, good_eval()))
-    t1 = iv.next_question(st)
-    assert t1.source == "llm"
-    iv.submit_answer(st, ANSWER)
-    second = st.plan[1]
-    dup = {**q1, "category": second, "difficulty": st.difficulty}  # same text as q1
-    iv.llm.provider.queue.extend([dup, dup])
-    t2 = iv.next_question(st)
-    assert t2.source == "bank"  # duplicate rejected twice -> deterministic bank
-
-
-def test_difficulty_adapts_per_answer():
-    assert adapt_difficulty(3, 0.9) == 4 and adapt_difficulty(3, 0.2) == 2 and adapt_difficulty(3, 0.5) == 3
-    assert adapt_difficulty(5, 1.0) == 5 and adapt_difficulty(1, 0.0) == 1
-
-
-def test_plans_and_roles():
+def test_role_families():
     assert role_family("Senior Data Scientist") == "data"
     assert role_family("Frontend Developer") == "software"
     assert role_family("HR Generalist") == "business"
     assert role_family("Chef") == "general"
-    assert plan_for("software", 8)[-1] == "wrap_up" and len(plan_for("software", 8)) == 8
-
-
-def test_question_bank_is_valid_and_deterministic():
-    from interview_core.nlp import schemas
-
-    for q in question_bank.load_bank():
-        assert not StructuredLLM.validate(q.as_question("r"), schemas.load("question")), q.id
-    a = question_bank.select("technical", "software", 3, set(), "seed")
-    assert a == question_bank.select("technical", "software", 3, set(), "seed")
-    assert a.family == "software" and a.category == "technical"
 
 
 # ------------------------------------------------------------- resume

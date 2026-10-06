@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "HTTP API for the AI Interview Coach."
 requires-python = ">=3.11"
 dependencies = [
-    "interview-core",
+    "interview-core[local-speech,realtime]",
     "fastapi>=0.115",
     "uvicorn[standard]>=0.30",
     "sqlalchemy>=2.0",
