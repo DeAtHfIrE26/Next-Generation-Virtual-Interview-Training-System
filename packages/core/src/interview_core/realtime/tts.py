@@ -108,6 +108,7 @@ KOKORO_VOICES = {
     "michael": Voice("michael", "Michael (US, steady)", "16"),  # am_michael
     "priya": Voice("priya", "Priya (Hindi voice speaking English)", "31"),  # hf_alpha
     "arjun": Voice("arjun", "Arjun (Hindi voice speaking English)", "33"),  # hm_omega
+    "ananya": Voice("ananya", "Ananya (Hindi voice speaking English)", "32"),  # hf_beta
 }
 
 

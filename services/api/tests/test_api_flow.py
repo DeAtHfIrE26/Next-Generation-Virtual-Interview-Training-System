@@ -128,7 +128,7 @@ def test_session_requires_consent(client):
 def test_options_expose_parameters_and_personas(client, user):
     o = client.get("/sessions/options").json()
     assert "system_design" in o["interview_types"] and "final" in o["rounds"]
-    assert {p["id"] for p in o["personas"]} >= {"maya", "daniel", "priya", "arjun"}
+    assert {p["id"] for p in o["personas"]} >= {"maya", "emma", "priya", "ananya"}
 
 
 def test_full_session_with_signals_and_report(client, user, llm):

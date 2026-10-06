@@ -78,3 +78,11 @@ Newest decisions are at the bottom. "Verified" means checked against a primary s
 ## D5. Dockerfiles must not depend on ghcr.io (2026-10-06)
 
 The truth run showed that `COPY --from=ghcr.io/astral-sh/uv` fails on networks that block ghcr.io. Images now install `uv` from PyPI instead, which works wherever pip works.
+
+## D6. Personas are female-presenting until a second avatar model exists (2026-10-06)
+
+There is exactly one commercially usable rigged avatar with ARKit blendshapes (the MPFB CC0 model in D4), and it is female. Pairing a male voice with it looks wrong, so the four personas are Maya (US), Emma (UK), Priya and Ananya (Indian English voices). The male Kokoro and Polly voices stay in the voice tables. Adding male personas needs a second model exported from MPFB (Blender + MPFB add-on, CC0) and run through `apps/web/scripts/optimize-avatar.sh`. That is a follow-up, listed in `NEEDS_FROM_KASHYAP.md` only if a commissioned or paid avatar is wanted instead.
+
+## D7. Avatar instances mount into their own node (2026-10-06)
+
+React mounts effects twice in development. The first, cancelled TalkingHead instance used to tear down the shared container when it finished loading, which removed the second instance's canvas and left the stage empty. Each instance now renders into its own child element.

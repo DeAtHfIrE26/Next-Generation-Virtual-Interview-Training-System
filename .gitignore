@@ -53,3 +53,6 @@ apps/web/public/vision/
 apps/web/next-env.d.ts
 apps/web/tsconfig.tsbuildinfo
 /.models/
+
+# 3D and voice runtimes copied from node_modules at install (scripts/vendor-3d.mjs)
+apps/web/public/vendor/
