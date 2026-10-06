@@ -18,7 +18,11 @@ let consoleLines: string[] = [];
 test.beforeEach(({ page }) => { consoleLines = captureConsole(page); });
 test.afterEach(async ({ page }, info) => {
   if (info.status === info.expectedStatus) return;
-  const events = await page.evaluate(() => (window as unknown as { __room?: { diag: { events: string[] } } }).__room?.diag.events ?? []).catch(() => []);
+  // a frozen page must not eat the rest of the timeout: give the diagnostics 5 s
+  const events = await Promise.race([
+    page.evaluate(() => (window as unknown as { __room?: { diag: { events: string[] } } }).__room?.diag.events ?? []).catch(() => [] as string[]),
+    new Promise<string[]>((r) => setTimeout(() => r(["(page did not respond)"]), 5000)),
+  ]);
   console.log(`[${info.project.name}] FAILED "${info.title}"\nprotocol events:\n${events.join("\n")}\nbrowser console:\n${consoleLines.slice(-60).join("\n")}`);
 });
 

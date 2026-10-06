@@ -17,6 +17,7 @@ export class VisionMonitor {
   private raf = 0;
   private lastFace = 0;
   private lastObj = 0;
+  private failures = 0;
   private constructor(private face: FaceLandmarker, private objects: ObjectDetector | null) {}
 
   static async create(): Promise<VisionMonitor> {
@@ -26,7 +27,9 @@ export class VisionMonitor {
       baseOptions: { modelAssetPath: "/vision/face_landmarker.task", delegate },
       runningMode: "VIDEO", numFaces: 2,
     });
-    const face = await make("GPU").catch(() => make("CPU"));
+    // The GPU delegate needs a hardware WebGL2 context. Without one (software GL, or engines that
+    // fall back to WebGL 1) it throws on every frame and can wedge the page on close: use the CPU.
+    const face = gpuUsable() ? await make("GPU").catch(() => make("CPU")) : await make("CPU");
     const objects = await ObjectDetector.createFromOptions(fs, {
       baseOptions: { modelAssetPath: "/vision/efficientdet_lite0.tflite", delegate: "CPU" },
       runningMode: "VIDEO", scoreThreshold: 0.4, maxResults: 3, categoryAllowlist: ["cell phone"],
@@ -42,13 +45,23 @@ export class VisionMonitor {
       const now = performance.now();
       if (video.readyState < 2 || now - this.lastFace < 1000 / faceFps) return;
       this.lastFace = now;
-      const r = this.face.detectForVideo(video as HTMLVideoElement, now);
-      const first = r.faceLandmarks[0]?.map((p) => ({ x: p.x, y: p.y })) ?? null;
+      let r: ReturnType<FaceLandmarker["detectForVideo"]>;
       let phone: boolean | null = null;
-      if (this.objects && now - this.lastObj >= 1000 / objectFps) {
-        this.lastObj = now;
-        phone = this.objects.detectForVideo(video as HTMLVideoElement, now).detections.length > 0;
+      try {
+        r = this.face.detectForVideo(video as HTMLVideoElement, now);
+        if (this.objects && now - this.lastObj >= 1000 / objectFps) {
+          this.lastObj = now;
+          phone = this.objects.detectForVideo(video as HTMLVideoElement, now).detections.length > 0;
+        }
+        this.failures = 0;
+      } catch (e) {
+        if (++this.failures >= 10) {
+          console.warn("on-device vision stopped after repeated errors", e);
+          this.stop();
+        }
+        return;
       }
+      const first = r.faceLandmarks[0]?.map((p) => ({ x: p.x, y: p.y })) ?? null;
       onSample({
         t: now, faces: r.faceLandmarks.length, landmarks: first,
         aperture: first ? mouthAperture(first) : null,
@@ -60,7 +73,29 @@ export class VisionMonitor {
 
   stop() { cancelAnimationFrame(this.raf); }
 
-  close() { this.stop(); this.face.close(); this.objects?.close(); }
+  close() {
+    this.stop();
+    try {
+      this.face.close();
+      this.objects?.close();
+    } catch (e) {
+      console.warn("on-device vision close failed", e);
+    }
+  }
+}
+
+function gpuUsable(): boolean {
+  try {
+    const c = typeof OffscreenCanvas !== "undefined" ? new OffscreenCanvas(1, 1) : document.createElement("canvas");
+    const gl = c.getContext("webgl2") as WebGL2RenderingContext | null;
+    if (!gl) return false;
+    const ext = gl.getExtension("WEBGL_debug_renderer_info");
+    const renderer = ext ? String(gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)).toLowerCase() : "";
+    gl.getExtension("WEBGL_lose_context")?.loseContext();
+    return !/swiftshader|llvmpipe|software/.test(renderer);
+  } catch {
+    return false;
+  }
 }
 
 type HTTPVideoLike = HTMLVideoElement;

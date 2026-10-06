@@ -79,6 +79,7 @@ function Room() {
   useEffect(() => () => {
     void ctl.destroy();
     vision.current?.close();
+    vision.current = null;
   }, [ctl]);
   useEffect(() => () => stopStream(stream), [stream]);
 
@@ -110,7 +111,11 @@ function Room() {
         m.start(v, (s) => ctl.onVision(s), soft ? 4 : 12, soft ? 0.5 : 2);
       })
       .catch((e) => console.warn("on-device vision unavailable", e));
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+      vision.current?.close();
+      vision.current = null;
+    };
   }, [state.joined, stream, ctl]);
 
   // keyboard: M mute, T type, Esc closes typing
