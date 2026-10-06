@@ -22,7 +22,7 @@ from interview_core.agent.interviewer import (
     turn_schema,
 )
 from interview_core.agent.llm import Usage
-from interview_core.agent.state import AgentState, InterviewParams
+from interview_core.agent.state import AgentState, InterviewParams, Turn
 from interview_core.nlp.providers.base import PermanentLLMError, TransientLLMError
 
 BLUEPRINT = {
@@ -551,3 +551,72 @@ def test_over_long_blueprint_minutes_are_scaled_without_a_repair_call():
     assert len(llm.calls) == 1 and not bp.emergency
     assert [c.minutes for c in bp.competencies] == [4.0, 3.0, 3.0]
     assert sum(c.minutes for c in bp.competencies) <= 10
+
+
+def test_repeated_questions_get_a_focused_fresh_question_before_any_emergency():
+    """Agent-evidence cases 10, 11, 16: in long sessions a 7B model kept re-asking earlier questions
+    through every repair. A short focused call now writes one new question on the least-covered
+    competency; the flagged emergency question stays the last resort."""
+    first = "Tell me about an API you designed recently?"
+    again = reply(
+        "new_topic", comp="c2", say=first, last={"score": 3, "strengths": "", "gaps": "", "vague": False}
+    )
+    llm = Scripted(
+        "primary",
+        [
+            json.dumps(BLUEPRINT),
+            reply("open", say=first),
+            again,
+            again,
+            again,  # the turn and both repairs repeat the opening question
+            "How do you decide on an index strategy when Postgres write latency starts to climb?",
+        ],
+    )
+    ag = InterviewerAgent([llm])
+    st = state()
+    ag.next_turn(st, now=0.5)
+    t = ag.next_turn(st, Answer("I built a billing API with versioned endpoints.", seconds=20), now=40)
+    assert not t.emergency and t.provider == "primary"
+    assert t.action == "new_topic" and t.competency == "c2"  # least covered, highest weight
+    assert t.say.startswith("How do you decide on an index strategy")
+    assert any("fresh-question" in c for c in t.corrections)
+    assert "fresh_question" in {e["kind"] for e in st.events}
+    fresh_prompt = llm.calls[-1]["messages"][-1]["content"]
+    assert "Databases" in fresh_prompt and first[:40] in fresh_prompt
+
+
+def test_fresh_question_is_skipped_when_the_provider_is_down_and_still_rejects_repeats():
+    first = "Tell me about an API you designed recently?"
+    llm = Scripted(
+        "p",
+        [
+            json.dumps(BLUEPRINT),
+            reply("open", say=first),
+            *[reply("new_topic", comp="c2", say=first)] * 3,
+            first,
+            first,
+            first,
+        ],
+    )
+    ag = InterviewerAgent([llm])
+    st = state()
+    ag.next_turn(st, now=0.5)
+    t = ag.next_turn(st, Answer("I built a billing API.", seconds=20), now=40)
+    assert t.emergency and t.provider == "emergency"  # the focused call repeated too
+    assert not llm.script
+
+    dead = Scripted("dead", [json.dumps(BLUEPRINT), PermanentLLMError("401")])
+    st2 = state()
+    t2 = InterviewerAgent([dead]).next_turn(st2, now=1)
+    assert t2.emergency and not dead.script  # no extra call against a provider that is down
+
+
+def test_fresh_angle_skips_angles_already_asked_about():
+    from interview_core.agent.interviewer import fresh_angle
+
+    st = state()
+    st.blueprint = InterviewerAgent([Scripted("p", [json.dumps(BLUEPRINT)])]).plan(st)
+    c1 = st.blueprint.by_id("c1")
+    assert fresh_angle(st, c1) == "versioning"
+    st.turns.append(Turn(0, "open", "c1", 3, "How do you handle versioning of a public API?"))
+    assert fresh_angle(st, c1) == "a mistake or failure and what was learned from it"

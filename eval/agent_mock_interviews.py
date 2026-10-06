@@ -428,6 +428,8 @@ def check(result: dict) -> dict:
         "difficulty_transitions": transitions,
         "difficulty_corrections_by_code": corrections,
         "emergency_questions": sum(t.emergency for t in st.turns),
+        # LLM-written by the focused fresh-question call after the full turn failed validation (D19)
+        "fresh_questions": sum(any("fresh-question" in c for c in t.corrections) for t in st.turns),
         "rejected_attempts": reasons,
         "emergency_blueprint": bool(st.blueprint and st.blueprint.emergency),
         "repeats": len(repeats),
@@ -464,7 +466,11 @@ def to_markdown(i: int, case: Case, result: dict, checks: dict) -> str:
         lines.append(f"- **{c.name}** ({c.minutes:g} min): {c.why}")
     lines += ["", "## Transcript", ""]
     for t in st.turns:
-        tag = f"[{t.action}, {t.competency}, difficulty {t.difficulty}{', EMERGENCY' if t.emergency else ''}]"
+        fresh = any("fresh-question" in c for c in t.corrections)
+        tag = (
+            f"[{t.action}, {t.competency}, difficulty {t.difficulty}"
+            f"{', EMERGENCY' if t.emergency else ''}{', focused fresh-question call' if fresh else ''}]"
+        )
         lines.append(f"**Interviewer** {tag}: {t.say}")
         if t.anchor_quote:
             lines.append(f'  - builds on: "{t.anchor_quote}"')

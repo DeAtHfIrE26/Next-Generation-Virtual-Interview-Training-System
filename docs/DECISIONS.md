@@ -282,3 +282,26 @@ Test: `test_plan_is_prepared_while_the_candidate_checks_devices`. It checks that
 **Follow-up (77719ad).** The real-LLM E2E still had no first question after 10 minutes. The Ollama log showed prompt processing at 6.3 tokens/s on the CI CPU. The blueprint for the 10-minute test interview budgeted more minutes than the interview has. Validation rejected it, so planning cost a second full LLM call.
 
 Minutes are a budget, not a reason to reject the plan. Over-long minutes are now scaled to fit the duration (rounded to 0.5, at least 1 minute each), and the correction is logged. Test: `test_over_long_blueprint_minutes_are_scaled_without_a_repair_call`.
+
+## D19. A focused fresh-question call before the emergency question (2026-10-06)
+
+**Measured.** Agent-evidence run 9 (7af8800, Qwen2.5-7B on CI CPUs) passed 16 of the 17 cases that had finished. Cases 4 and 19 from D16 now pass.
+
+Cases 10, 11 and 16 failed the same way. Each turn, and both of its repairs, re-asked an earlier question; the repeat check rejected these attempts 24, 6 and 15 times. The rejected questions really were repeats: the model had run out of new angles on its competencies. Case 10 asked 23 questions in a 15-minute interview. In case 11, the closing line repeated the wrap-up's wording.
+
+**Chosen.** When the model replies but every full-context attempt fails validation, one more short call runs before the emergency question. It has no transcript and one concrete task:
+- a question on the least-covered competency, from an angle no earlier question covered (the blueprint's unexplored signals first, then a fixed list of interview angles such as a failure, a trade-off, or measuring success);
+- or the wrap-up, closing or opening line, when that turn is forced.
+
+Its prompt lists the earlier questions. Its reply goes through the same checks (asks a question, no lists or markdown, no repeat of any earlier question) with the usual repairs.
+
+The question is still written by the LLM, not taken from a bank or a template. The turn records `written by the focused fresh-question call...` in its corrections, the session log records a `fresh_question` event, and the evidence counts these questions (`fresh_questions`) and marks them in the transcripts.
+
+The flagged emergency question remains the last resort, used when this call fails too or when no provider replies. When the providers are down, this call is skipped and the emergency question is used straight away.
+
+Tests:
+- `test_repeated_questions_get_a_focused_fresh_question_before_any_emergency`
+- `test_fresh_question_is_skipped_when_the_provider_is_down_and_still_rejects_repeats`
+- `test_fresh_angle_skips_angles_already_asked_about`
+
+**Evidence video.** A CI job log keeps only its last 5,000 lines. The real-LLM interview runs about 15 minutes on a CI CPU, and its real-time video did not fit. The `evidence-log` job now prints a 4× time-lapse (560 px, 5 fps) and labels it as one.

@@ -174,3 +174,43 @@ def turn_state(st: AgentState, now: float, forced: str | None, corrections: list
         )
     lines.append("Reply with <plan>...</plan> then <say>...</say>.")
     return "\n".join(lines)
+
+
+FRESH_SYSTEM = (
+    "You are a human interviewer in a live, spoken mock interview. Write exactly what you say next, "
+    "as plain spoken English: no lists, no markdown, no quotation marks, no stage directions."
+)
+
+
+def fresh_line(st: AgentState, forced: str | None, target, angle: str, who: str) -> str:
+    """The prompt for the focused fresh-question call: no transcript, one concrete task, and the
+    earlier questions to stay away from."""
+    p = st.params
+    lines = [f"Interview: {p.role} ({p.seniority}) at {p.company or 'a company'}, {p.interview_type} round."]
+    if forced == "close":
+        lines.append("Time is up. In one or two sentences, thank the candidate and say goodbye. Ask nothing.")
+    elif forced == "wrap_up":
+        lines.append(
+            "Time is nearly up. In one or two sentences, say so and ask whether the candidate has any "
+            "questions for you."
+        )
+    elif forced == "open":
+        lines.append(
+            f"Greet the candidate as {who}, then ask one opening question about {target.name}. "
+            "Two sentences at most, ending with '?'."
+        )
+    else:
+        lines.append(
+            f"Ask ONE new question about {target.name}"
+            + (f" ({target.why})" if target.why else "")
+            + f", from this angle: {angle}. Difficulty {st.difficulty} of 5. "
+            "One or two sentences, ending with '?'."
+        )
+    asked = [t.say for t in st.turns if t.say]
+    if asked:
+        lines.append(
+            "Already said in this interview. Yours must differ in topic and wording:\n"
+            + "\n".join(f"- {a[:140]}" for a in asked[-20:])
+        )
+    lines.append("Reply with only the words to say.")
+    return "\n".join(lines)
