@@ -86,3 +86,14 @@ There is exactly one commercially usable rigged avatar with ARKit blendshapes (t
 ## D7. Avatar instances mount into their own node (2026-10-06)
 
 React mounts effects twice in development. The first, cancelled TalkingHead instance used to tear down the shared container when it finished loading, which removed the second instance's canvas and left the stage empty. Each instance now renders into its own child element.
+
+## D8. Schema-constrained replies for local and Gemini models; grounded anchor quotes (2026-10-06)
+
+**Measured** (first CI evidence run, Qwen2.5-7B-Instruct on a 4-vCPU GitHub runner, case mock-03): calls took 1–4 minutes. Of the first 12 turns, 6 ended in the flagged emergency question. The causes were missing `<plan>` tags, invalid plan JSON, paraphrased `anchor_quote`s, an out-of-range competency or difficulty, and read timeouts. The harness then crashed because `AgentState.from_dict` mutated its input.
+
+**Chosen:**
+- Providers that support it (OpenAI-compatible endpoints, including Ollama ≥ 0.5 and vLLM, plus Gemini) now get a JSON schema for every call. The schema covers the blueprint, and for each turn: the action (only the forced one when timing forces it), competency ids, difficulty 1–5, the assessment and `say`. The decoder can then only produce valid structure.
+- Anthropic keeps the tagged format, and the agent accepts both.
+- A follow-up's quote that is not verbatim is replaced with the candidate's real words it overlaps (at least half of the quote's words, at least three), logged as a correction. Otherwise the reply is still rejected. The stored anchor is always verbatim, which is stricter than before: an 80% bag-of-words match used to be stored as the model wrote it.
+- The evidence job runs one interview per job (20 jobs), because one 20-minute simulated interview takes up to an hour on CPU.
+- `from_dict` deep-copies its input.

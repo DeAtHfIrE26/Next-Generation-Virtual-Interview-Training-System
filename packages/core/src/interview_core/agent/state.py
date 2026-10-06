@@ -6,6 +6,7 @@ turn and resumed after a reconnect.
 
 from __future__ import annotations
 
+import copy
 import time
 from dataclasses import asdict, dataclass, field
 from typing import Any, Literal
@@ -162,7 +163,7 @@ class AgentState:
 
     @classmethod
     def from_dict(cls, d: dict[str, Any]) -> AgentState:
-        d = dict(d)
+        d = copy.deepcopy(d)  # never mutate the caller's dict (it may be parsed again)
         params = InterviewParams(**d.pop("params"))
         bp = d.pop("blueprint", None)
         blueprint = None

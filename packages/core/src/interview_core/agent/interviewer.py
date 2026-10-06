@@ -13,7 +13,8 @@ and an audit event) so the UI can show it and tests can fail on it.
 
 Code enforces what must hold regardless of model quality:
 - difficulty moves with performance (direction rules, at most one step per turn);
-- follow-ups and challenges must quote the candidate's last answer verbatim;
+- follow-ups and challenges must quote the candidate's last answer verbatim (a loosely remembered
+  quote is replaced by the real words it overlaps, or the reply is rejected);
 - no repeated or rephrased questions (content-word Jaccard below 0.6);
 - the interview wraps up and closes on time.
 """
@@ -89,6 +90,92 @@ def quote_matches(quote: str, answer: str) -> bool:
     return sum(w in aset for w in q) / len(q) >= 0.8
 
 
+def ground_quote(quote: str, answer: str) -> str | None:
+    """Replace a loosely remembered quote with the real words it refers to.
+
+    Scans ``answer`` with a window of 1.5x the quote's length for the span sharing the most words
+    with ``quote``, trimmed to its first and last shared word. Returns that span, verbatim from the
+    answer, when it contains at least half of the quote's words (and at least three); otherwise
+    None. The stored anchor is therefore always the candidate's actual words, never a paraphrase."""
+    q = _norm_tokens(quote)
+    words = answer.split()
+    if len(q) < 3 or not words:
+        return None
+    norm = [" ".join(_norm_tokens(w)) for w in words]
+    qset = set(q)
+    n = min(len(words), -(-len(q) * 3 // 2))
+    best, span = 0, (0, 0)
+    for i in range(len(words) - n + 1):
+        idx = [j for j in range(i, i + n) if norm[j] and norm[j] in qset]
+        hits = len({norm[j] for j in idx})
+        if hits > best:
+            best, span = hits, (idx[0], idx[-1])
+    if best >= 3 and best / len(qset) >= 0.5:
+        return " ".join(words[span[0] : span[1] + 1]).strip(" ,;:.")
+    return None
+
+
+def turn_schema(ids: list[str], forced: str | None, needs_last_answer: bool) -> dict[str, Any]:
+    """JSON schema for one interviewer turn (used for grammar-constrained decoding)."""
+    actions = [forced] if forced else [a for a in ACTIONS if a != "open"]
+    props: dict[str, Any] = {}
+    if needs_last_answer:
+        props["last_answer"] = {
+            "type": "object",
+            "properties": {
+                "score": {"type": "integer", "enum": [1, 2, 3, 4, 5]},
+                "strengths": {"type": "string"},
+                "gaps": {"type": "string"},
+                "vague": {"type": "boolean"},
+            },
+            "required": ["score", "strengths", "gaps", "vague"],
+            "additionalProperties": False,
+        }
+    props |= {
+        "action": {"type": "string", "enum": actions},
+        "competency": {"type": "string", "enum": ids},
+        "difficulty": {"type": "integer", "enum": [1, 2, 3, 4, 5]},
+        "anchor_quote": {"type": "string"},
+        "reason": {"type": "string"},
+        "say": {"type": "string"},
+    }
+    return {"type": "object", "properties": props, "required": list(props), "additionalProperties": False}
+
+
+BLUEPRINT_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "properties": {
+        "summary": {"type": "string"},
+        "competencies": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {"type": "string"},
+                    "name": {"type": "string"},
+                    "why": {"type": "string"},
+                    "weight": {"type": "number"},
+                    "minutes": {"type": "number"},
+                    "signals": {"type": "array", "items": {"type": "string"}},
+                },
+                "required": ["id", "name", "why", "weight", "minutes", "signals"],
+                "additionalProperties": False,
+            },
+        },
+        "opening": {"type": "string"},
+        "style_notes": {"type": "string"},
+        "start_difficulty": {"type": "integer", "enum": [1, 2, 3, 4, 5]},
+    },
+    "required": ["summary", "competencies", "opening", "style_notes", "start_difficulty"],
+    "additionalProperties": False,
+}
+
+JSON_FORMAT_NOTE = (
+    "\n\nOutput format for this conversation: reply with a single JSON object containing the plan "
+    'fields and a "say" field holding exactly what you say out loud (instead of <plan> and <say> tags).'
+)
+
+
 def jaccard(a: str, b: str) -> float:
     wa, wb = content_words(a), content_words(b)
     return len(wa & wb) / len(wa | wb) if wa and wb else 0.0
@@ -107,8 +194,20 @@ def is_repeat(a: str, b: str) -> bool:
 
 
 def parse_reply(text: str) -> tuple[dict[str, Any] | None, str, list[str]]:
+    """Accepts the tagged format (``<plan>{json}</plan><say>...</say>``) or, from providers using
+    schema-constrained output, one JSON object holding the plan fields plus ``say``."""
     errors: list[str] = []
     plan = None
+    stripped = text.strip()
+    if stripped.startswith("{") and "<plan>" not in stripped:
+        try:
+            obj = json.loads(stripped)
+        except json.JSONDecodeError as e:
+            return None, "", [f"reply is not valid JSON ({e.msg})"]
+        if not isinstance(obj, dict):
+            return None, "", ["reply must be a JSON object"]
+        say = " ".join(str(obj.pop("say", "") or "").split())
+        return obj, say, ([] if say else ["missing say"])
     m = _PLAN.search(text)
     if not m:
         errors.append("missing <plan>...</plan>")
@@ -148,9 +247,21 @@ class InterviewerAgent:
         self.attempts: list[Attempt] = []
 
     # ---- low-level call with retry and provider fail-over
-    def _call(self, system: str, messages: list[dict[str, str]], *, max_tokens: int, effort: str, validate):
+    def _call(
+        self,
+        system: str,
+        messages: list[dict[str, str]],
+        *,
+        max_tokens: int,
+        effort: str,
+        validate,
+        schema: dict[str, Any] | None = None,
+        json_note: str = "",
+    ):
         """Return (result, provider_name) or (None, None) when every provider failed."""
         for llm in self.chain:
+            use_schema = schema is not None and getattr(llm, "supports_schema", False)
+            sys_prompt = system + json_note if use_schema else system
             corrections: list[str] = []
             repaired = False
             tries = 0
@@ -171,7 +282,12 @@ class InterviewerAgent:
                 try:
                     text = "".join(
                         llm.stream(
-                            system, msgs, max_tokens=max_tokens, timeout_s=self.timeout_s, effort=effort
+                            sys_prompt,
+                            msgs,
+                            max_tokens=max_tokens,
+                            timeout_s=self.timeout_s,
+                            effort=effort,
+                            **({"schema": schema} if use_schema else {}),
                         )
                     )
                 except TransientLLMError as e:
@@ -280,6 +396,7 @@ class InterviewerAgent:
             max_tokens=1600,
             effort="medium",
             validate=validate,
+            schema=BLUEPRINT_SCHEMA,
         )
         if bp is None:
             bp = emergency_blueprint(st)
@@ -363,8 +480,13 @@ class InterviewerAgent:
             if action in ("follow_up", "challenge"):
                 if not quote:
                     errs.append(f"{action} needs an anchor_quote from the last answer")
-                elif not quote_matches(quote, last_answer or ""):
-                    errs.append("anchor_quote must be copied verbatim from the candidate's last answer")
+                elif " ".join(_norm_tokens(quote)) not in " ".join(_norm_tokens(last_answer or "")):
+                    real = ground_quote(quote, last_answer or "")
+                    if real is None:
+                        errs.append("anchor_quote must be copied verbatim from the candidate's last answer")
+                    else:
+                        plan["anchor_quote"] = real
+                        plan["_grounded_from"] = quote
             if len(say) > MAX_SAY_CHARS:
                 errs.append(f"say must be under {MAX_SAY_CHARS} characters")
             if re.search(r"(^|\s)([-*•]|\d+\.)\s", say) or "**" in say:
@@ -378,7 +500,15 @@ class InterviewerAgent:
             return (plan, say), errs
 
         t0 = time.monotonic()
-        res, provider = self._call(system, messages, max_tokens=900, effort="low", validate=validate)
+        res, provider = self._call(
+            system,
+            messages,
+            max_tokens=900,
+            effort="low",
+            validate=validate,
+            schema=turn_schema(sorted(ids), forced, last_answer is not None),
+            json_note=JSON_FORMAT_NOTE,
+        )
         gen_ms = round((time.monotonic() - t0) * 1000, 1)
         if res is None:
             turn = emergency_turn(st, forced, now)
@@ -416,6 +546,10 @@ class InterviewerAgent:
         if st.turns and la:
             st.turns[-1].score = score
             st.turns[-1].assessment = {k: la.get(k) for k in ("strengths", "gaps", "vague")}
+        if plan.get("_grounded_from"):
+            corrections.append(
+                f"anchor_quote grounded to the candidate's words (model wrote {plan['_grounded_from'][:80]!r})"
+            )
         wanted = int(plan["difficulty"])
         diff = enforce_difficulty(prev_diff, wanted, score, st.params.difficulty)
         if diff != wanted:

@@ -18,11 +18,13 @@ permissions:
 jobs:
   mock-interviews:
     runs-on: ubuntu-latest
-    timeout-minutes: 300
+    # One interview per job: a 7B model on a 4-vCPU runner takes about 1-3 minutes per call, so a
+    # 20-minute simulated interview (interviewer + simulated candidate) takes up to an hour.
+    timeout-minutes: 180
     strategy:
       fail-fast: false
       matrix:
-        shard: [0, 1, 2, 3]
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
     env:
       LLM_PROVIDER: ollama
       OPENAI_COMPAT_BASE_URL: http://127.0.0.1:11434/v1
@@ -41,11 +43,12 @@ jobs:
           (OLLAMA_CONTEXT_LENGTH=16384 OLLAMA_NUM_PARALLEL=2 ollama serve > /tmp/ollama.log 2>&1 &)
           for i in $(seq 1 30); do curl -sf http://127.0.0.1:11434/api/version && break; sleep 2; done
           ollama pull qwen2.5:7b-instruct
-      - name: Run mock interviews (shard ${{ matrix.shard }}/4)
-        run: uv run python eval/agent_mock_interviews.py --out out --shard ${{ matrix.shard }}/4 || echo "CHECKS_FAILED=1" >> "$GITHUB_ENV"
+      - name: Run mock interview ${{ matrix.shard }} of 20
+        run: uv run python eval/agent_mock_interviews.py --out out --shard ${{ matrix.shard }}/20 || echo "CHECKS_FAILED=1" >> "$GITHUB_ENV"
       - name: Print transcripts
         if: always()
         run: |
+          shopt -s nullglob
           for f in out/*.md out/*.json; do echo "BEGIN_FILE $(basename $f)"; cat "$f"; echo; echo "END_FILE $(basename $f)"; done
       - uses: actions/upload-artifact@v4
         if: always()

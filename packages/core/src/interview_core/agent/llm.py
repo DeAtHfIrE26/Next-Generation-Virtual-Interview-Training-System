@@ -5,6 +5,10 @@ model produces them; ``last_usage`` holds token counts after the stream ends. Er
 to :class:`TransientLLMError` (retry or fail over), :class:`PermanentLLMError` (fail over) and
 :class:`RefusalError`.
 
+``schema`` (optional) asks providers that support it (``supports_schema = True``: Gemini and
+OpenAI-compatible endpoints) for grammar-constrained JSON output. Anthropic models follow the tagged
+reply format reliably, so the Anthropic provider ignores it and the agent accepts either format.
+
 Providers:
 - ``anthropic``: official SDK, streaming, prompt caching on the stable system prompt, server-side
   refusal fallback. Default model ``claude-opus-5-5`` at low effort for conversational turns.
@@ -46,6 +50,7 @@ class ChatLLM(Protocol):
         max_tokens: int = 1200,
         timeout_s: float = 30.0,
         effort: str = "low",
+        schema: dict | None = None,
     ) -> Iterator[str]: ...
 
 
@@ -80,7 +85,7 @@ class AnthropicChat:
         self.model = model or self.DEFAULT_MODEL
         self.last_usage = Usage()
 
-    def stream(self, system, messages, *, max_tokens=1200, timeout_s=30.0, effort="low"):
+    def stream(self, system, messages, *, max_tokens=1200, timeout_s=30.0, effort="low", schema=None):
         a = self._a
         self.last_usage = Usage()
         try:
@@ -116,6 +121,7 @@ class AnthropicChat:
 
 
 class GeminiChat:
+    supports_schema = True
     name = "gemini"
     DEFAULT_MODEL = "gemini-2.5-flash"
     URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:streamGenerateContent"
@@ -124,7 +130,7 @@ class GeminiChat:
         self._key, self.model = api_key, model or self.DEFAULT_MODEL
         self.last_usage = Usage()
 
-    def stream(self, system, messages, *, max_tokens=1200, timeout_s=30.0, effort="low"):
+    def stream(self, system, messages, *, max_tokens=1200, timeout_s=30.0, effort="low", schema=None):
         self.last_usage = Usage()
         body = {
             "systemInstruction": {"parts": [{"text": system}]},
@@ -136,6 +142,9 @@ class GeminiChat:
         }
         if effort == "low":
             body["generationConfig"]["thinkingConfig"] = {"thinkingBudget": 0}
+        if schema is not None:
+            body["generationConfig"]["responseMimeType"] = "application/json"
+            body["generationConfig"]["responseJsonSchema"] = schema
         try:
             with httpx.stream(
                 "POST",
@@ -172,11 +181,13 @@ class GeminiChat:
 class OpenAICompatChat:
     """Chat Completions streaming against any compatible endpoint (Ollama, Groq, OpenRouter, ...)."""
 
+    supports_schema = True
+
     def __init__(self, base_url: str, model: str, api_key: str = "", name: str = "openai_compat"):
         self.base_url, self.model, self._key, self.name = base_url.rstrip("/"), model, api_key, name
         self.last_usage = Usage()
 
-    def stream(self, system, messages, *, max_tokens=1200, timeout_s=30.0, effort="low"):
+    def stream(self, system, messages, *, max_tokens=1200, timeout_s=30.0, effort="low", schema=None):
         self.last_usage = Usage()
         body = {
             "model": self.model,
@@ -186,6 +197,13 @@ class OpenAICompatChat:
             "stream": True,
             "stream_options": {"include_usage": True},
         }
+        if schema is not None:
+            # Grammar-constrained decoding (Ollama >= 0.5, vLLM, OpenAI): the reply is guaranteed to
+            # parse as JSON matching the schema, which removes format failures on small local models.
+            body["response_format"] = {
+                "type": "json_schema",
+                "json_schema": {"name": "reply", "schema": schema, "strict": True},
+            }
         headers = {"Authorization": f"Bearer {self._key}"} if self._key else {}
         try:
             with httpx.stream(
