@@ -124,9 +124,11 @@ def build_report(
 
     # Concrete tips: the most frequent improvement themes, with the answers they came from
     tips: list[dict[str, Any]] = []
-    for a in sorted(rated, key=lambda a: a["overall"])[:4]:
-        for imp in a["improvements"][:1]:
-            tips.append({"tip": imp, "from_answer": a["index"]})
+    for a in sorted(rated, key=lambda a: a["overall"]):
+        for imp in a["improvements"]:
+            if len(tips) < 4 and all(t["tip"].lower() != imp.lower() for t in tips):
+                tips.append({"tip": imp, "from_answer": a["index"]})
+                break  # at most one tip per answer, and never the same tip twice
 
     wpm = _avg([a["delivery"].get("words_per_minute") for a in answers])
     off = _avg([a["gaze"].get("off_screen_fraction") for a in answers])

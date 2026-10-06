@@ -259,3 +259,40 @@ def test_anthropic_adapter_request_shape_and_errors():
         _anthropic(exc=_FakeAnthropicModule.RateLimitError()).complete_json("s", "u", {}, timeout_s=1)
     with pytest.raises(PermanentLLMError):
         _anthropic(exc=_FakeAnthropicModule.APIStatusError()).complete_json("s", "u", {}, timeout_s=1)
+
+
+def test_heuristic_evidence_quotes_whole_sentences_verbatim():
+    from interview_core.nlp.evaluator import quote_in_answer
+    from interview_core.nlp.heuristics import heuristic_evaluation
+
+    answer = (
+        "In my last role I owned the billing service. I profiled the job and it dropped by 85% in a week."
+    )
+    ev = heuristic_evaluation({"question": "Tell me about performance work", "expected_points": []}, answer)
+    quotes = [e["quote"] for e in ev["evidence"]]
+    assert quotes and all(quote_in_answer(q, answer) and len(q.split()) >= 5 for q in quotes)
+    assert len(quotes) == len(set(quotes))
+
+
+def test_report_tips_are_never_repeated():
+    from interview_core.report import build_report
+
+    def turn(i, imp):
+        return {
+            "index": i,
+            "say": f"Q{i}?",
+            "action": "new_topic",
+            "competency": "c1",
+            "difficulty": 3,
+            "answer": "an answer",
+            "evaluation": {"overall": 0.3 + i / 10, "scores": {}, "improvements": imp},
+        }
+
+    same = "End with the outcome."
+    st = {
+        "params": {"role": "Engineer"},
+        "blueprint": {"competencies": [{"id": "c1", "name": "X"}]},
+        "turns": [turn(0, [same]), turn(1, [same, "Use 'I' for your own actions."]), turn(2, [same])],
+    }
+    tips = [t["tip"] for t in build_report(st)["tips"]]
+    assert len(tips) == len(set(tips)) and set(tips) == {same, "Use 'I' for your own actions."}

@@ -95,7 +95,7 @@ export function ReportView({ r, shared }: { r: Report; shared?: boolean }) {
           <SectionTitle icon={<Target className="size-4" />} title="By skill" sub={r.blueprint?.summary} />
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {r.skills.map((k) => (
-              <Card key={k.id} className={cn("flex flex-col gap-2 p-4", !k.covered && "opacity-60")}>
+              <Card key={k.id} className={cn("flex flex-col gap-2 p-4", !k.covered && "border-dashed bg-transparent")}>
                 <div className="flex items-start justify-between gap-2">
                   <h3 className="text-[15px] font-semibold">{k.name}</h3>
                   <span className="font-mono text-[18px] font-semibold tabular">{k.covered ? pct(k.overall) : "–"}</span>
@@ -282,7 +282,12 @@ function DimBar({ label, value, compact }: { label: string; value: number | null
   return (
     <div className="flex items-center gap-3">
       <span className={cn("shrink-0 text-fg-muted", compact ? "w-32 text-[12px]" : "w-36 text-[13px]")}>{label}</span>
-      <div className="h-2 flex-1 overflow-hidden rounded-full bg-surface-3" role="meter" aria-label={label} aria-valuemin={1} aria-valuemax={5} aria-valuenow={value ?? undefined}>
+      <div
+        className="h-2 flex-1 overflow-hidden rounded-full bg-surface-3"
+        {...(value === null
+          ? { role: "img", "aria-label": `${label}: not measured` }
+          : { role: "meter", "aria-label": label, "aria-valuemin": 1, "aria-valuemax": 5, "aria-valuenow": value })}
+      >
         <div className="h-full rounded-full bg-accent" style={{ width: `${Math.max(value === null ? 0 : 4, w)}%` }} />
       </div>
       <span className="w-10 text-right font-mono text-[12px] tabular">{value === null ? "–" : value.toFixed(1)}</span>

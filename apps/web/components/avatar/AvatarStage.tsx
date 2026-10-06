@@ -23,6 +23,7 @@ export function AvatarStage({
   className,
   name,
   compact,
+  deferUntilIdle,
 }: {
   look: Look;
   state: AvatarState;
@@ -30,6 +31,8 @@ export function AvatarStage({
   className?: string;
   name?: string;
   compact?: boolean;
+  /** Start loading the 3D model only once the page is idle (marketing pages: keeps load fast). */
+  deferUntilIdle?: boolean;
 }) {
   const host = useRef<HTMLDivElement>(null);
   const speakerRef = useRef<Speaker | null>(null);
@@ -47,6 +50,14 @@ export function AvatarStage({
     el.style.cssText = "position:absolute;inset:0";
     host.current.appendChild(el);
     (async () => {
+      if (deferUntilIdle) {
+        await new Promise<void>((r) => {
+          const w = window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number };
+          if (w.requestIdleCallback) w.requestIdleCallback(() => r(), { timeout: 3000 });
+          else setTimeout(r, 1500);
+        });
+        if (cancelled) return;
+      }
       let sp: Speaker;
       if (webglAvailable()) {
         try {

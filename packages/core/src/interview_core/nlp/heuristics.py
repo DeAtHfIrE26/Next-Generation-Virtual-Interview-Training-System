@@ -164,6 +164,22 @@ def _band(value: float, cuts: tuple[float, ...]) -> int:
     return 1 + sum(value >= c for c in cuts)
 
 
+def sentence_around(answer: str, span: Span, max_words: int = 30) -> str:
+    """The sentence of ``answer`` containing ``span``, verbatim (trimmed to ``max_words`` words
+    around the span), so evidence quotes are readable rather than a bare cue phrase."""
+    start = max(answer.rfind(c, 0, span.start) for c in ".!?\n") + 1
+    ends = [i for i in (answer.find(c, span.end) for c in ".!?\n") if i != -1]
+    end = min(ends) + 1 if ends else len(answer)
+    sent = answer[start:end].strip()
+    words = sent.split()
+    if len(words) <= max_words:
+        return sent
+    # keep the window that contains the span
+    offset = len(answer[start : span.start].split())
+    lo = max(0, min(offset - max_words // 3, len(words) - max_words))
+    return " ".join(words[lo : lo + max_words])
+
+
 def heuristic_evaluation(question: dict, answer: str) -> dict:
     """Schema-valid evaluation from observable features only (fallback path)."""
     f = extract_features(answer)
@@ -179,9 +195,13 @@ def heuristic_evaluation(question: dict, answer: str) -> dict:
     for comp in ("situation", "action", "result"):
         if f.star[comp]:
             s = f.star[comp][0]
-            evidence.append({"dimension": "structure", "quote": s.text, "comment": f"signals the {comp}"})
+            quote = sentence_around(answer, s)
+            if all(e["quote"] != quote for e in evidence):
+                evidence.append({"dimension": "structure", "quote": quote, "comment": f"signals the {comp}"})
     if f.numbers:
-        evidence.append({"dimension": "depth", "quote": f.numbers[0].text, "comment": "quantified detail"})
+        quote = sentence_around(answer, f.numbers[0])
+        if all(e["quote"] != quote for e in evidence):
+            evidence.append({"dimension": "depth", "quote": quote, "comment": "quantified detail"})
     if f.fillers:
         evidence.append(
             {

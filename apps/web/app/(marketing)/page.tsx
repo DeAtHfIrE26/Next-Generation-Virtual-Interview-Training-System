@@ -55,7 +55,7 @@ export default function Landing() {
             </ul>
           </div>
           <div className="relative">
-            <AvatarStage look={{ skin: "#c99a7a", hair: "#2b1d16", top: "#1f2a44" }} state="idle" className="aspect-[4/5] w-full sm:aspect-[5/5]" name="Maya · Engineering Manager" />
+            <AvatarStage deferUntilIdle look={{ skin: "#c99a7a", hair: "#2b1d16", top: "#1f2a44" }} state="idle" className="aspect-[4/5] w-full sm:aspect-[5/5]" name="Maya · Engineering Manager" />
             <div className="absolute -bottom-5 left-4 right-4 sm:left-10 sm:right-10">
               <Card className="px-4 py-3 shadow-[var(--shadow-float)]">
                 <p className="text-[12px] font-medium text-fg-subtle">Example follow-up</p>

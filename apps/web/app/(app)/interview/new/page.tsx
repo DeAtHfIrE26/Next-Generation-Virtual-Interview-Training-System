@@ -20,7 +20,8 @@ const TYPE_HINT: Record<string, string> = {
   case: "Structuring an ambiguous problem and recommending",
   mixed: "A realistic blend for the role",
 };
-const label = (s: string) => s.replace(/_/g, " ").replace(/^\w/, (c) => c.toUpperCase());
+const SPECIAL: Record<string, string> = { hr: "HR and culture", system_design: "System design" };
+const label = (s: string) => SPECIAL[s] ?? s.replace(/_/g, " ").replace(/^\w/, (c) => c.toUpperCase());
 
 export default function NewInterview() {
   const router = useRouter();
@@ -95,8 +96,8 @@ export default function NewInterview() {
 
         <Section icon={<Building2 className="size-4" />} title="Company" optional>
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Company" htmlFor="company" optional><Input id="company" maxLength={120} value={company} onChange={(e) => setCompany(e.target.value)} placeholder="e.g. Razorpay" /></Field>
-            <Field label="How they interview" htmlFor="style" optional hint="Tone, format, what they're known to probe."><Input id="style" maxLength={400} value={companyStyle} onChange={(e) => setCompanyStyle(e.target.value)} placeholder="e.g. bar-raiser style, deep on ownership" /></Field>
+            <Field label="Company" htmlFor="company"><Input id="company" maxLength={120} value={company} onChange={(e) => setCompany(e.target.value)} placeholder="e.g. Razorpay" /></Field>
+            <Field label="How they interview" htmlFor="style" hint="Tone, format, what they're known to probe."><Input id="style" maxLength={400} value={companyStyle} onChange={(e) => setCompanyStyle(e.target.value)} placeholder="e.g. bar-raiser style, deep on ownership" /></Field>
           </div>
         </Section>
 
@@ -130,11 +131,11 @@ export default function NewInterview() {
         </Section>
 
         <Section icon={<FileText className="size-4" />} title="Context" optional>
-          <Field label="Job description" htmlFor="jd" optional hint="Paste the posting. Questions will target what it asks for.">
+          <Field label="Job description" htmlFor="jd" hint="Paste the posting. Questions will target what it asks for.">
             <Textarea id="jd" rows={5} maxLength={6000} value={jd} onChange={(e) => setJd(e.target.value)} />
           </Field>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
-            <Field label="Skills to probe" htmlFor="skills" optional hint="Press Enter or comma to add.">
+            <Field label="Skills to probe" htmlFor="skills" hint="Press Enter or comma to add.">
               <div className="flex flex-wrap items-center gap-1.5 rounded-[12px] border border-line bg-surface px-2 py-1.5 focus-within:border-accent">
                 {skills.map((s) => (
                   <span key={s} className="inline-flex items-center gap-1 rounded-full bg-surface-3 px-2 py-0.5 text-[12px]">
@@ -146,7 +147,7 @@ export default function NewInterview() {
                   placeholder={skills.length ? "" : "e.g. Postgres, API design"} className="min-w-[120px] flex-1 bg-transparent py-1 text-[14px] outline-none" />
               </div>
             </Field>
-            <Field label="Resume (PDF, up to 2 MB)" htmlFor="resume" optional hint="Contact details are removed before any AI sees it.">
+            <Field label="Resume (PDF, up to 2 MB)" htmlFor="resume" hint="Contact details are removed before any AI sees it.">
               <input ref={fileRef} id="resume" type="file" accept="application/pdf" className="sr-only" onChange={(e) => setResume(e.target.files?.[0] ?? null)} />
               <Button type="button" variant="secondary" className="w-full justify-start" onClick={() => fileRef.current?.click()}>
                 <Upload className="size-4" /> <span className="truncate">{resume ? resume.name : "Upload resume"}</span>

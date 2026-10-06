@@ -407,6 +407,7 @@ function fmt(s: number) {
 }
 
 function label(s: string) {
+  if (s === "hr") return "HR";
   return s.replace(/_/g, " ").replace(/^\w/, (c) => c.toUpperCase());
 }
 

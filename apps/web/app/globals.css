@@ -37,13 +37,13 @@
     --fg: #09090b;
     --fg-muted: #52525b;
     --fg-subtle: #71717a;
-    --accent: #5b5bef;
-    --accent-strong: #4646dc;
+    --accent: #4848dd;
+    --accent-strong: #3a3ac8;
     --accent-ink: #ffffff;
-    --live: #0d9488;
-    --warn: #b45309;
-    --danger: #dc2626;
-    --success: #16a34a;
+    --live: #0f766e;
+    --warn: #a14a08;
+    --danger: #b91c1c;
+    --success: #166534;
     --highlight: inset 0 1px 0 rgb(255 255 255 / 0.7);
     --shadow-float: 0 12px 40px -12px rgb(9 9 11 / 0.18), 0 2px 8px rgb(9 9 11 / 0.06);
     --stage-glow: radial-gradient(60% 55% at 50% 38%, rgb(91 91 239 / 0.14), transparent 70%),
@@ -62,13 +62,13 @@
   --fg: #09090b;
   --fg-muted: #52525b;
   --fg-subtle: #71717a;
-  --accent: #5b5bef;
-  --accent-strong: #4646dc;
+  --accent: #4848dd;
+  --accent-strong: #3a3ac8;
   --accent-ink: #ffffff;
-  --live: #0d9488;
-  --warn: #b45309;
-  --danger: #dc2626;
-  --success: #16a34a;
+  --live: #0f766e;
+  --warn: #a14a08;
+  --danger: #b91c1c;
+  --success: #166534;
   --highlight: inset 0 1px 0 rgb(255 255 255 / 0.7);
   --shadow-float: 0 12px 40px -12px rgb(9 9 11 / 0.18), 0 2px 8px rgb(9 9 11 / 0.06);
   --stage-glow: radial-gradient(60% 55% at 50% 38%, rgb(91 91 239 / 0.14), transparent 70%),
