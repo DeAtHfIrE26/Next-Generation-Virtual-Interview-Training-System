@@ -19,6 +19,11 @@ on:
 permissions:
   contents: read
 
+# A newer push supersedes a running evidence run (they compete for the same runners).
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   browsers:
     runs-on: ubuntu-latest

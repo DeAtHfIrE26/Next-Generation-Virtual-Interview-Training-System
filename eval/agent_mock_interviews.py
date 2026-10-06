@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 import time
 from dataclasses import dataclass
@@ -415,6 +416,12 @@ def check(result: dict) -> dict:
             diff_ok = False
     repeats = [(i, j) for i in range(len(says)) for j in range(i) if is_repeat(says[i], says[j])]
     corrections = sum(len(t.corrections) for t in st.turns)
+    # why LLM attempts were rejected (compact, for the CI log)
+    reasons: dict[str, int] = {}
+    for a in result.get("attempts", []):
+        for err in filter(None, (a.get("error") or "").split("; ")):
+            key = re.sub(r":.*", "", err)[:60]
+            reasons[key] = reasons.get(key, 0) + 1
     return {
         "questions": len(says),
         "bank_overlap": len(overlaps),
@@ -424,6 +431,7 @@ def check(result: dict) -> dict:
         "difficulty_transitions": transitions,
         "difficulty_corrections_by_code": corrections,
         "emergency_questions": sum(t.emergency for t in st.turns),
+        "rejected_attempts": reasons,
         "emergency_blueprint": bool(st.blueprint and st.blueprint.emergency),
         "repeats": len(repeats),
         "closed_on_time": st.finished,

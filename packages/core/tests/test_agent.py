@@ -15,6 +15,7 @@ from interview_core.agent.interviewer import (
     ground_quote,
     parse_reply,
     quote_matches,
+    repair_turn_hint,
     repair_turn_schema,
     turn_schema,
 )
@@ -395,3 +396,13 @@ def test_schema_provider_repair_uses_narrowed_grammar():
     t = agent.next_turn(st, Answer(answer), now=1060.0)
     assert t is not None and not t.emergency and t.anchor_quote == "cut failed runs by sixty percent"
     assert "enum" in llm.calls[3]["schema"]["properties"]["anchor_quote"]
+
+
+def test_repair_hint_names_a_new_competency_and_fixes_missing_questions():
+    st = state()
+    st.blueprint = InterviewerAgent([Scripted("p", [json.dumps(BLUEPRINT)])]).plan(st)
+    h = repair_turn_hint(["repeats an earlier question: 'x'"], st, "c1")
+    assert "c2" in h or "c3" in h
+    assert "c1 (" not in h
+    assert "'?'" in repair_turn_hint(["say must ask the candidate a question"], st, "c1")
+    assert repair_turn_hint(["difficulty must be an integer 1-5"], st, "c1") == ""

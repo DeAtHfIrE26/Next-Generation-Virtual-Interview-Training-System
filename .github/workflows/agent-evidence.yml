@@ -15,6 +15,11 @@ on:
 permissions:
   contents: read
 
+# A newer push supersedes a running evidence run (they compete for the same runners).
+concurrency:
+  group: agent-evidence-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   mock-interviews:
     runs-on: ubuntu-latest

@@ -24,6 +24,8 @@ Justification:
 - `report/__init__.py:5` is a docstring recording that the prototype used `random.uniform`. That code path was removed.
 - `codeexec/challenges.py` breaks ties among coding challenges that are equally close to the target difficulty, using `random.Random(session_id)`. The result is deterministic per session, so a reload shows the same challenge. Challenge selection is neither question generation (every spoken question comes from the LLM agent) nor scoring.
 
+Also checked: `grep -rn "secrets\.SystemRandom" packages/core/src` finds `voice/prompts.py`. It generates unpredictable phrases for voice enrolment, which is the anti-replay measure for E3, so it is intentionally random. It is not scoring or question logic.
+
 ## 3. Mock, fake, stub or dummy objects in product code
 
 ```

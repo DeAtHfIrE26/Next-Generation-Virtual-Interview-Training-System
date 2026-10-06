@@ -174,6 +174,25 @@ def repair_turn_schema(
     return s
 
 
+def repair_turn_hint(errors: list[str], st: AgentState, last_comp: str | None) -> str:
+    """Concrete instructions for the repair attempt: what to ask instead of a repeat, how to fix a
+    reply that asks nothing."""
+    text = " ".join(errors)
+    hints: list[str] = []
+    if "repeats an earlier question" in text and st.blueprint:
+        cov = st.coverage()
+        others = [c for c in st.blueprint.competencies if c.id != last_comp] or st.blueprint.competencies
+        target = min(others, key=lambda c: (cov.get(c.id, {}).get("turns", 0), -c.weight))
+        hints.append(
+            f"Do not ask for the same detail again. Move on to competency {target.id} ({target.name}"
+            + (f": {target.why}" if target.why else "")
+            + ") and ask one new, specific question about it."
+        )
+    if "must ask the candidate a question" in text:
+        hints.append("End 'say' with exactly one direct question to the candidate, ending with '?'.")
+    return " ".join(hints) + (" " if hints else "")
+
+
 BLUEPRINT_SCHEMA: dict[str, Any] = {
     "type": "object",
     "properties": {
@@ -298,6 +317,7 @@ class InterviewerAgent:
         schema: dict[str, Any] | None = None,
         json_note: str = "",
         repair_schema=None,
+        repair_hint=None,
     ):
         """Return (result, provider_name) or (None, None) when every provider failed.
 
@@ -322,7 +342,9 @@ class InterviewerAgent:
                             "role": "user",
                             "content": "Your previous reply was rejected: "
                             + "; ".join(corrections)
-                            + ". Reply again in the required format.",
+                            + ". "
+                            + (repair_hint(corrections) if repair_hint else "")
+                            + "Reply again in the required format.",
                         },
                     ]
                 try:
@@ -560,6 +582,7 @@ class InterviewerAgent:
             repair_schema=lambda errs: repair_turn_schema(
                 errs, sorted(ids), forced, last_answer, last.competency if last else None
             ),
+            repair_hint=lambda errs: repair_turn_hint(errs, st, last.competency if last else None),
         )
         gen_ms = round((time.monotonic() - t0) * 1000, 1)
         if res is None:
