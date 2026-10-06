@@ -145,3 +145,13 @@ Both Dockerfiles accept an optional BuildKit secret `extra_ca` (`--secret id=ext
 4. The client never awaits `AudioContext.resume()` when joining. Without an audio device, for example in headless Firefox, it can stay pending forever.
 
 Tests: `test_server_detects_barge_in_and_keeps_the_interrupting_words` and `test_socket_stays_responsive_while_a_slow_llm_thinks` (real speech models).
+
+## D14. Repair prompts carry a concrete next step (2026-10-06)
+
+**Measured** (agent-evidence run 4, after D11): cases that failed had exactly one backup question each. The rejected attempts were mostly a repeated drill-down (asking again for metrics the candidate had already said they lacked) and replies that asked no question.
+
+**Chosen:**
+- After a repeat, the repair message names the least-covered other competency (its id, name and why) to move to.
+- After a reply with no question, the repair message asks for exactly one direct question ending in "?".
+- The evidence harness now reports counts of rejection reasons for each case.
+- Superseded evidence and E2E runs are cancelled automatically.
