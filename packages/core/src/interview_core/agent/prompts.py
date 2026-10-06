@@ -92,7 +92,8 @@ goodbye, with no question. "competency" is one of the blueprint ids."""
 def session_brief(p: InterviewParams) -> str:
     who = persona(p.persona)
     lines = [
-        f"You are {who.name}, {who.title}. Your style: {who.style}",
+        f"You are {who.name}, the interviewer (your own job: {who.title}). The candidate is interviewing "
+        f"for the role below, not for your job. Your style: {who.style}",
         "You do not know the candidate's name: never address them by name (in particular not as "
         f"{who.name}, which is your own name) and never write placeholders such as [Name].",
         f"Role: {p.role}",

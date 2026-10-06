@@ -80,8 +80,8 @@ class Scripted:
 
 
 def state(**kw):
-    kw = {"duration_minutes": 20, "skills": ["Postgres"], **kw}
-    return AgentState.new("s1", InterviewParams(role="Backend Engineer", **kw))
+    kw = {"role": "Backend Engineer", "duration_minutes": 20, "skills": ["Postgres"], **kw}
+    return AgentState.new("s1", InterviewParams(**kw))
 
 
 def test_full_interview_flow_follow_up_difficulty_and_close():
@@ -671,3 +671,25 @@ def test_the_interviewer_never_names_the_candidate():
     t = InterviewerAgent([llm]).next_turn(state(), now=1)
     assert t.say.startswith("Hi, I'm Maya") and not t.emergency
     assert "your own name" in llm.calls[-1]["messages"][-1]["content"]
+
+
+def test_the_interviewers_own_title_is_not_planned_as_the_candidates_role():
+    """Agent evidence on c14704c: the persona brief "You are Maya, Engineering Manager" leaked into a
+    nurse's and a teacher's blueprint ("a mid-level Engineering Manager role at Delhi Public School")."""
+    from interview_core.agent.interviewer import own_title_errors
+
+    nurse = InterviewParams(role="Registered Nurse", persona="maya")
+    assert own_title_errors("Leads a ward like a mid-level engineering manager.", nurse)
+    assert not own_title_errors("Clinical judgement on a surgical ward.", nurse)
+    # When the candidate really is interviewing for the persona's title, it is not a leak.
+    assert not own_title_errors("Engineering Manager scope", InterviewParams(role="Engineering Manager"))
+
+    leaked = {**BLUEPRINT, "summary": "Assesses a mid-level Engineering Manager role at the hospital."}
+    llm = Scripted("p", [json.dumps(leaked), json.dumps(BLUEPRINT)])
+    st = state(role="Registered Nurse", skills=[], persona="maya")
+    bp = InterviewerAgent([llm]).plan(st)
+    assert bp.summary == BLUEPRINT["summary"] and len(llm.calls) == 2
+    assert "your own job title" in llm.calls[-1]["messages"][-1]["content"]
+    assert "not for your job" in llm.calls[0]["system"] or "not for your job" in json.dumps(
+        llm.calls[0]["messages"]
+    )

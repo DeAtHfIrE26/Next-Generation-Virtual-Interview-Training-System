@@ -326,6 +326,22 @@ def is_repeat(a: str, b: str) -> bool:
 _PLACEHOLDER = re.compile(r"\[[^\]]{1,40}\]")
 
 
+def own_title_errors(text: str, p) -> list[str]:
+    """The persona's own job title must not leak into the plan as the candidate's role.
+
+    A 7B model read "You are Maya, Engineering Manager" and planned a nurse's interview as "a mid-level
+    Engineering Manager role" (agent evidence on c14704c, cases 07 and 18).
+    """
+    title = persona(p.persona).title
+    hiring = " ".join([p.role, p.job_description or "", p.resume_context or ""]).lower()
+    if title.lower() in hiring or title.lower() not in text.lower():
+        return []
+    return [
+        f"{title} is your own job title as the interviewer, not the role being hired for: "
+        f"the candidate is interviewing for {p.role}"
+    ]
+
+
 def address_errors(say: str, own_name: str) -> list[str]:
     """The interviewer never knows the candidate's name. Agent evidence showed a 7B model greeting the
     candidate with the interviewer's own persona name ("Hi Maya") and speaking template placeholders
@@ -580,6 +596,11 @@ class InterviewerAgent:
             ]
             if missing and len(missing) == len(p.skills):
                 errs.append("include the skills to probe: " + ", ".join(p.skills))
+            errs.extend(
+                own_title_errors(
+                    " ".join([str(d.get("summary", ""))] + [c.name + " " + c.why for c in parsed]), p
+                )
+            )
             if errs:
                 return None, errs
             try:

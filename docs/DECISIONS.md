@@ -319,6 +319,11 @@ The real defect is that a close asked anything at all. The interview ends after 
   - No check caught either.
 - **Fix.** The interviewer never knows the candidate's name. The session brief says so. `address_errors` rejects bracketed placeholders, and any use of the persona's own name other than a self-introduction ("I'm Maya"). The rule applies to normal turns and to the focused fresh-question call. Test: `test_the_interviewer_never_names_the_candidate`.
 
+**Follow-up (agent-evidence run 12 on c14704c).**
+- **Result so far.** The first 12 finished cases all passed. No opening names the candidate: the 10 uses of "Maya" are all the interviewer introducing herself. No line contains a placeholder, and no closing line asks a question. The new check rejected "Hi Maya" twice in case 07 and repaired it.
+- **Defect found by reading the output.** In 2 of 12 blueprints, the persona's own job title leaked into the candidate's role. A nurse's plan read "a mid-level engineering manager oversees a team"; a maths teacher's read "a mid-level Engineering Manager role at Delhi Public School". The brief said "You are Maya, Engineering Manager", and a 7B model took the title for the role being hired. No check caught it.
+- **Fix.** The brief now says the title is the interviewer's own job, and that the candidate is interviewing for the role given. `own_title_errors` rejects a blueprint whose summary or competencies use the persona's title, unless the role, job description or resume contains it. Test: `test_the_interviewers_own_title_is_not_planned_as_the_candidates_role`.
+
 ## D20. Model downloads resume after a dropped connection (2026-10-06)
 
 **Measured.** A fresh `docker compose up` in the build sandbox failed: the proxy dropped the connection while the `models` init service was downloading, and the service exited with `BrokenPipeError`. The test written for this showed a second problem. When a connection closes early, Python's `http.client` returns a short read without raising, so a truncated file would have been treated as complete. The checksum would then have failed it, without any retry.
