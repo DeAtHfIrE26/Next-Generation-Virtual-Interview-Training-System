@@ -82,6 +82,86 @@ The owner's report is accurate:
 
 Several of these pass their unit tests only because they run under offline defaults, and the one end-to-end test types its answers instead of speaking. The rebuild order follows from this: voice pipeline, then question engine, then avatar, then UI.
 
-## Run 2: after the rebuild
+## Run 2: after the rebuild (2026-10-06, commit `f1a2634`)
 
-*Re-run at the end of the rebuild, using the same method.*
+**How it was run.** Same questions as Run 1, answered by running the product the way a user would and by the automated runs that do the same, each linked below.
+- Stack: `docker compose up -d --build` from empty volumes, with the `.env.example` defaults. The only sandbox-specific addition is a proxy override that is not committed. Log: [`compose-up.log`](evidence/compose/compose-up.log).
+- Voice: synthetic WAV answers (Kokoro voices, one of them a Hindi voice speaking English) are played into the browser's microphone. The spoken-interview E2E (`apps/web/tests/interview.e2e.ts`) then drives the real UI from the device check to the report.
+- Real LLM: no API key is available here. The CI `full` job runs the same E2E with an open-weights model (Qwen2.5-7B-Instruct on Ollama, CPU only) and `E2E_REQUIRE_LLM=1`, which fails the run on any backup question or any answer left with offline scoring.
+
+### Starting the app
+
+| Feature | Status | Evidence |
+|---|---|---|
+| One command: `docker compose up --build` | **WORKS** | [`compose-up.log`](evidence/compose/compose-up.log): 3 min 12 s from empty volumes, including the checksum-verified download of the four speech models. The spoken E2E then passed against that stack (3/3, [`e2e/compose-no-llm/`](evidence/e2e/compose-no-llm/)). The Run 1 blockers are fixed: the API image no longer pulls `uv` from ghcr.io, and an interrupted model download now resumes (D20). |
+| Native start (`uvicorn` + `next start`) | **WORKS** | This is how the CI E2E jobs start the app (`apps/web/playwright.config.ts`). `/ready` reports `stt: sherpa, tts: kokoro` with 7 voices. |
+
+### Core interview loop (what the owner reported)
+
+| Question asked | Answer | Evidence |
+|---|---|---|
+| Does question text come from a static list? | **NO. WORKS.** | The question bank is gone. Every question is written live by the LLM interviewer agent from a blueprint, the candidate's parameters and their answers. *(Mock-interview pass rate: pending the final run.)* The real-LLM E2E fails on any backup question, and it passed (*pending: final CI run*). With no LLM configured (the compose default), questions are clearly badged backup questions, never silent. |
+| Does the mic actually capture audio? | **YES. WORKS.** | AudioWorklet capture at 16 kHz over the WebSocket. The spoken E2E passes on Chromium, Firefox, WebKit, Edge, mobile Chrome and mobile Safari (CI `browsers` jobs). |
+| Does voice activity detection end the turn on its own? | **YES. WORKS.** | Silero VAD on the server ends the turn after the WAV answer finishes. The protocol log shows `stt.final` then `phase thinking` without any click (E2E failure dumps and the `?debug=1` panel). |
+| Does speech-to-text return real transcripts? | **YES. WORKS.** | Local sherpa-onnx: Nemotron streaming for live captions, Parakeet for the final transcript. On the synthetic 5-voice set, WER is 2.4% streaming and 0.0% final ([`stt_bench.txt`](evidence/voice/stt_bench.txt)). That set is synthetic speech, not human recordings, so it is not a field accuracy figure. Captions and transcript are visible in `04-transcript.png`. |
+| Does text-to-speech play? | **YES. WORKS.** | Kokoro neural TTS (local, 7 voices), streamed sentence by sentence. `tts.start` → `audio started` → `audio ended` events appear in every browser run. |
+| Does the avatar's mouth move in sync with the audio? | **YES. WORKS.** | A TalkingHead 3D avatar whose visemes are derived from the audio actually playing (HeadAudio). The compose run counted 729 visemes (`03-barge-in.png`, diagnostics panel). |
+| Is the feedback derived from the answer? | **YES. WORKS.** | Each answer is scored by the LLM rubric, and every score cites the candidate's own words. Answers not scored yet show "offline scoring" until the LLM finishes (D21). The real-LLM E2E fails if any answer is left with offline scoring (*pending: final CI run*). |
+
+### Everything else
+
+| Feature | Status | Evidence |
+|---|---|---|
+| Landing, sign-up, consent, dashboard | **WORKS** | [`evidence/ui/`](evidence/ui/): 12 screens × 3 viewports × dark/light. |
+| Interview set-up (role, JD, resume) | **WORKS** | Role, seniority, company and its interview style, JD, resume PDF, skills to probe, interview type, round, difficulty, language, duration and persona (`new-interview--*.jpg`). |
+| Adaptive difficulty and follow-ups | **WORKS** | Follow-ups must quote the previous answer and ask about it. Difficulty moves at most one step per turn and never against the score. Both are checked by code in every mock interview (*(pending: final mock-interview run)*). |
+| Interview blueprint or plan | **WORKS** | Planned at session creation while the candidate checks devices (D18). Shown in the room's sidebar and in the report's "By skill". |
+| Streaming STT with partial captions | **WORKS** | Live captions while the candidate speaks (E2E asserts them). |
+| Streaming TTS | **WORKS** | First audio after a sentence, not the whole reply. On the CPU-only sandbox, TTS first audio was p50 2.4 s. |
+| Barge-in | **WORKS** | The E2E talks over the interviewer while its audio is playing; playback stops and the turn passes to the candidate. `barge-ins 1` appears in the diagnostics. Detected in the browser and on the server. |
+| Mic permission errors, device picker, reconnect | **WORKS** | The "microphone blocked" E2E passes on all browsers (recovery steps shown, typing still works). The device check picks the mic and camera (`01-device-check.png`). Reconnect and resume are covered by `services/api/tests/test_live.py`. |
+| Diagnostics panel (`?debug=1`) | **WORKS** | Connection, RTT, VAD, mic level, avatar fps, visemes, barge-ins, and per-stage p50/p95 latency (`03-barge-in.png`). |
+| 3D avatar, personas, idle/listening/thinking states | **WORKS** | 4 interviewer personas (Maya, Emma, Priya, Ananya), each with its own look and neural voice (7 voices available). Quality tiers with an audio-only fallback. |
+| Candidate-side lip-sync verification (patent E4) | **WORKS** | Audio-visual correlation per answer, from the realtime audio and the browser's mouth series. A mismatch raises an integrity notice (`test_lipsync_mismatch_raises_integrity_notice`). |
+| Face and voice verification (E2, E3) | **WORKS once a model is configured; off in the default config** | The code and tests are in place (`interview_core.face`, `interview_core.voice`). They need a commercially licensed face-embedding model and a speaker model, which are owner decisions (licence and cost). `/ready` shows `face_verification: false, voice_verification: false` until then. |
+| Gaze and integrity notices (E5, E7) | **WORKS** | On-device MediaPipe. With the fake camera's test pattern, "We can't see your face" is correct. Phone detection runs in the same loop. |
+| Coding challenge (E8) | **WORKS for SQL; other languages need Judge0** | SQL is graded locally with hidden tests. Python and other languages need a Judge0 server (`code_execution: false` without one). |
+| Report and share link (E9) | **WORKS** | The spoken E2E ends on the report (`05-report.png`). Share links are revocable and hide the transcript (`test_full_session_with_signals_and_report`). |
+| Design quality | **WORKS** | [`docs/DESIGN.md`](DESIGN.md) design system, dark and light, WCAG AA contrast. Lighthouse mobile: landing 94 / 100, report 98 / 100 (performance / accessibility; [`evidence/lighthouse/`](evidence/lighthouse/)). |
+| End-to-end test through voice | **WORKS** | `interview.e2e.ts` speaks into the microphone. The old typed-answer test is gone. |
+| Cross-browser tests (Firefox, WebKit, mobile) | **WORKS** | CI `browsers` matrix: Firefox, WebKit, Edge, mobile Chrome (Pixel 7) and mobile Safari (iPhone 14), each with a virtual audio device (*pending: final CI run*). |
+| Hosted preview (Vercel) | **NOT LIVE: needs a realtime host (owner decision)** | The web app's preview builds, but Vercel functions cannot host the realtime speech service (WebSocket, speech models, LLM). Going live needs a container host and an LLM key, chosen and paid for by the owner. |
+| Legacy desktop prototypes (`legacy/`) | **Kept as reference, not run** | Their algorithms are preserved in `interview_core.legacy` and pinned by characterization tests against the original code. |
+
+### Randomness in product code (re-run: [`evidence/audit/no-mocks.md`](evidence/audit/no-mocks.md))
+
+| Location | Why | Verdict |
+|---|---|---|
+| Question selection | The bank is deleted; questions come from the LLM | **Removed** |
+| `voice/prompts.py`, `face/liveness.py` | Unpredictable enrolment phrases and liveness steps | **Keep.** Anti-replay. |
+| `codeexec/challenges.py` | Tie-break among equally suitable challenges, seeded by session id | **Keep.** Deterministic per session; not scoring. |
+| `lib/voice/realtime.ts` | Reconnect backoff jitter | **Keep.** Networking only. |
+| Avatar blinking | TalkingHead's own animation | Cosmetic, in a vendored library |
+
+### Tests on this commit
+
+- Python: 158 passed (core and API, including the live speech-model tests).
+- Web unit: 13 passed.
+- Spoken E2E: 3 per browser on 6 browser projects in CI, plus the compose run.
+- Real-LLM E2E: *pending: final CI run*.
+- Mock interviews with the real LLM: *(pending: final mock-interview run)*.
+
+### Verdict
+
+Every item the owner reported is fixed and observed working:
+- **Questions** are generated live by an LLM, not taken from a list.
+- **Transcripts** are real.
+- **The interviewer** speaks with a neural voice.
+- **The avatar** is 3D and lip-synced to the audio it plays.
+- **The UI** follows a design system.
+
+Two items are not WORKS by default, and both need an owner decision rather than code:
+- **Face and voice verification** need licensed models.
+- **Hosting** needs a server for the realtime service and an LLM key.
+
+Accuracy is still not measured on real users. No consented evaluation data exists (`docs/EVAL_REPORT.md`), so every score in the product is labelled "experimental".
