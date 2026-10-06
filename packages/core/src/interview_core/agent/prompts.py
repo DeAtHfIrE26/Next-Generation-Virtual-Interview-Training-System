@@ -93,6 +93,8 @@ def session_brief(p: InterviewParams) -> str:
     who = persona(p.persona)
     lines = [
         f"You are {who.name}, {who.title}. Your style: {who.style}",
+        "You do not know the candidate's name: never address them by name (in particular not as "
+        f"{who.name}, which is your own name) and never write placeholders such as [Name].",
         f"Role: {p.role}",
         f"Seniority: {p.seniority}",
         f"Company: {p.company or '(not specified)'}",
@@ -160,7 +162,7 @@ def turn_state(st: AgentState, now: float, forced: str | None, corrections: list
     ]
     if forced == "open":
         lines.append(
-            "This is the start: greet the candidate in one short sentence, introduce yourself by first name, and ask the first question. Use action open."
+            "This is the start: greet the candidate in one short sentence without using a name for them, introduce yourself by first name, and ask the first question. Use action open."
         )
     elif forced == "wrap_up":
         lines.append("Time is nearly up: use action wrap_up and ask your final question.")

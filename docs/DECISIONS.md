@@ -310,6 +310,15 @@ Tests:
 
 The real defect is that a close asked anything at all. The interview ends after close, so the candidate could never answer. Validation now rejects a question mark in a close, and the turn prompt says so. Inviting the candidate's questions belongs to wrap-up. Test: `test_the_closing_line_never_asks_a_question`.
 
+**Follow-up (45a3f4a).**
+- **Agent evidence (run 11).** 19 of 20 cases passed; the 20th was still running when this note was written.
+- **Real-LLM E2E.** It passed, with LLM scoring of every answer.
+- **Defect found by reading the output.**
+  - In 11 of 13 mock interviews, the opening greeted the candidate as "Hi Maya", but Maya is the interviewer persona's own name.
+  - In the E2E, the model spoke a placeholder: "Hi [Candidate's Name]".
+  - No check caught either.
+- **Fix.** The interviewer never knows the candidate's name. The session brief says so. `address_errors` rejects bracketed placeholders, and any use of the persona's own name other than a self-introduction ("I'm Maya"). The rule applies to normal turns and to the focused fresh-question call. Test: `test_the_interviewer_never_names_the_candidate`.
+
 ## D20. Model downloads resume after a dropped connection (2026-10-06)
 
 **Measured.** A fresh `docker compose up` in the build sandbox failed: the proxy dropped the connection while the `models` init service was downloading, and the service exited with `BrokenPipeError`. The test written for this showed a second problem. When a connection closes early, Python's `http.client` returns a short read without raising, so a truncated file would have been treated as complete. The checksum would then have failed it, without any retry.

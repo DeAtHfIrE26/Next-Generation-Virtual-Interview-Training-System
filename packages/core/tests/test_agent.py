@@ -646,3 +646,28 @@ def test_the_closing_line_never_asks_a_question():
     t = ag.next_turn(st, Answer("No questions.", seconds=3), now=261)
     assert t.action == "close" and "?" not in t.say and not t.emergency
     assert "must not ask anything" in llm.calls[-1]["messages"][-1]["content"]
+
+
+def test_the_interviewer_never_names_the_candidate():
+    """Agent evidence: 11 of 13 openings said "Hi Maya" (Maya is the interviewer's own persona), and
+    the real-LLM E2E spoke "Hi [Candidate's Name]". Both are rejected and repaired."""
+    from interview_core.agent.interviewer import address_errors
+
+    assert address_errors("Hi Maya, welcome! Tell me about a project?", "Maya")
+    assert address_errors("Hi [Candidate's Name], welcome. Tell me about a project?", "Maya")
+    assert not address_errors(
+        "Hi, I'm Maya, and I'll be interviewing you today. Tell me about a project?", "Maya"
+    )
+    assert not address_errors("Hello and welcome. Tell me about a recent project?", "Maya")
+
+    llm = Scripted(
+        "p",
+        [
+            json.dumps(BLUEPRINT),
+            reply("open", say="Hi Maya, welcome. Tell me about an API you designed recently?"),
+            reply("open", say="Hi, I'm Maya. Tell me about an API you designed recently?"),
+        ],
+    )
+    t = InterviewerAgent([llm]).next_turn(state(), now=1)
+    assert t.say.startswith("Hi, I'm Maya") and not t.emergency
+    assert "your own name" in llm.calls[-1]["messages"][-1]["content"]

@@ -323,6 +323,27 @@ def is_repeat(a: str, b: str) -> bool:
     return small >= 4 and len(wa & wb) / small >= 0.75
 
 
+_PLACEHOLDER = re.compile(r"\[[^\]]{1,40}\]")
+
+
+def address_errors(say: str, own_name: str) -> list[str]:
+    """The interviewer never knows the candidate's name. Agent evidence showed a 7B model greeting the
+    candidate with the interviewer's own persona name ("Hi Maya") and speaking template placeholders
+    ("Hi [Candidate's Name]")."""
+    errs = []
+    if _PLACEHOLDER.search(say):
+        errs.append(
+            "say must not contain placeholders in square brackets; you do not know the candidate's name"
+        )
+    name = re.escape(own_name)
+    rest = re.sub(rf"\b(i'?m|i am|my name is|this is|it's)\s+{name}\b", " ", say, flags=re.I)
+    if re.search(rf"\b{name}\b", rest, re.I):
+        errs.append(
+            f"{own_name} is your own name: do not call the candidate {own_name} (you do not know their name)"
+        )
+    return errs
+
+
 def parse_reply(text: str) -> tuple[dict[str, Any] | None, str, list[str]]:
     """Accepts the tagged format (``<plan>{json}</plan><say>...</say>``) or, from providers using
     schema-constrained output, one JSON object holding the plan fields plus ``say``."""
@@ -684,6 +705,7 @@ class InterviewerAgent:
                 errs.append(f"say must be under {MAX_SAY_CHARS} characters")
             if re.search(r"(^|\s)([-*•]|\d+\.)\s", say) or "**" in say:
                 errs.append("say must be plain spoken text without lists or markdown")
+            errs.extend(address_errors(say, persona(st.params.persona).name))
             if action == "close" and "?" in say:
                 errs.append(
                     "close ends the interview, so it must not ask anything: thank the candidate and say goodbye"
@@ -770,6 +792,7 @@ class InterviewerAgent:
                 errs.append("must end with a question to the candidate")
             if forced == "close" and "?" in say:
                 errs.append("the closing line must not ask anything")
+            errs.extend(address_errors(say, persona(st.params.persona).name))
             for prev in st.turns:
                 if is_repeat(say, prev.say):
                     errs.append(f"repeats an earlier question: {prev.say[:80]!r}")
