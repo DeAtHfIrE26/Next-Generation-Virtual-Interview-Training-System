@@ -1,6 +1,6 @@
 # No mocks, fakes or randomness in scoring or question logic (DoD #3)
 
-Audit run: 2026-10-06T17:00Z on commit f1a2634 (first run 2026-10-06T08:27Z on 2bb9a84). Re-run with the commands below.
+Audit run: 2026-10-06T20:45Z on commit 3e0f5b1 (earlier runs: f1a2634; first run 2026-10-06T08:27Z on 2bb9a84). Re-run with the commands below.
 
 ## 1. `Math.random` in the web app (vendored libraries excluded)
 
@@ -32,7 +32,7 @@ Also checked: `grep -rn "secrets\.SystemRandom" packages/core/src services/api/s
 $ grep -rniE "\b(mock|fake|stub|dummy)\b" packages/core/src services/api/src apps/web/app apps/web/lib apps/web/components --include=*.py --include=*.ts --include=*.tsx
 packages/core/src/interview_core/agent/prompts.py:27:PLANNER_SYSTEM = f"""You are a senior interviewer preparing a realistic mock interview. Before the interview starts you
 packages/core/src/interview_core/agent/prompts.py:53:INTERVIEWER_SYSTEM = f"""You are a skilled, human-sounding interviewer conducting a live, spoken mock interview. Your words are
-packages/core/src/interview_core/agent/prompts.py:180:    "You are a human interviewer in a live, spoken mock interview. Write exactly what you say next, "
+packages/core/src/interview_core/agent/prompts.py:183:    "You are a human interviewer in a live, spoken mock interview. Write exactly what you say next, "
 apps/web/lib/siteGate.test.ts:18:    process.env.SITE_PASSWORD = "dummy-pass";
 apps/web/lib/siteGate.test.ts:23:    expect(proxy(req(`Basic ${btoa("anyone:dummy-pass")}`)).status).toBe(200);
 ```
