@@ -27,7 +27,9 @@ RUBRIC = """Score each dimension 1-5 using this rubric:
 - technical_accuracy: null for non-technical questions; otherwise 1 incorrect; 3 partly correct; 5 correct and precise.
 Judge only the words of the answer. Do not infer personality, emotions, nervousness, confidence
 as a trait, accent, gender or any protected characteristic. Each evidence quote must be copied
-exactly from the answer. Strengths and improvements must be specific and actionable."""
+exactly from the answer. Strengths and improvements must be specific and actionable.
+Be concise: at most 3 evidence items, 3 strengths and 3 improvements, each one short sentence, and
+a one-sentence summary."""
 
 SYSTEM = (
     "You are an experienced interview coach giving fair, specific feedback on one answer in a "

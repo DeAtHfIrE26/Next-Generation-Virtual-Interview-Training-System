@@ -351,3 +351,9 @@ Fixes:
 - **Constrained decoding.** The evaluator's JSON adapter asks schema-capable providers for grammar-constrained output, so the reply always parses. If a server rejects the schema with HTTP 400, 422 or 500, the adapter retries once without it and stops sending the schema to that provider and model.
 
 Tests: `test_slow_llm_scoring_finishes_in_the_background` (now also asserts one job) and `test_json_provider.py`.
+
+**Follow-up (c14704c, real-LLM E2E).** The run timed out without any functional failure. The interview completed, and LLM scoring continued in the background as designed, but the test hit its 25-minute overall limit. That CI runner was slower than the one in the passing run: 572 s to the first question against 466 s. One evaluation generated 521 tokens at 4.6 tokens/s, which took 4 min 52 s.
+
+Changes:
+- **Evaluator output.** The evaluator is now asked for at most 3 evidence items, 3 strengths and 3 improvements, one short sentence each. This cuts its output, and so its latency and cost, for every provider.
+- **Test budget.** The real-LLM test's overall budget is 50 minutes, consistent with its 10-minute per-step waits on a CPU-hosted 7B model. A hosted model finishes the same flow in a few minutes.

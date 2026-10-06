@@ -35,7 +35,8 @@ async function phase(page: Page, name: "Listening" | "Speaking" | "Thinking", ti
 }
 
 test("spoken interview: speech in, live captions, LLM follow-ups, spoken questions, barge-in, report", async ({ page }, info) => {
-  test.setTimeout(REQUIRE_LLM ? 1_500_000 : 600_000);
+  // A CPU-hosted 7B model in CI takes 2-8 min per LLM step (planning, questions, background scoring).
+  test.setTimeout(REQUIRE_LLM ? 3_000_000 : 600_000);
   await installFakeMedia(page);
   await page.goto("/");
   const id = await newSession(page, {
