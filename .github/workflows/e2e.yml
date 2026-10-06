@@ -135,6 +135,21 @@ jobs:
           find test-results -name '*.png' -exec cp {} e2e-evidence/ \;
           tail -n 200 /tmp/ollama.log > e2e-evidence/ollama-tail.log || true
           ls -la e2e-evidence
+      # The same evidence, small enough to print: environments that cannot download artifacts
+      # rebuild it from the job log with eval/extract_job_log_files.py (base64 blocks).
+      - name: Print evidence into the log
+        if: always()
+        run: |
+          cd e2e-evidence
+          for f in *.webm; do
+            [ -f "$f" ] || continue
+            ffmpeg -loglevel error -y -i "$f" -vf "scale=720:-2,fps=8" -c:v libvpx-vp9 -b:v 250k -an "../e2e-full-${f}"
+          done
+          cd ..
+          for f in e2e-full-*.webm e2e-evidence/*.png; do
+            [ -f "$f" ] || continue
+            echo "BEGIN_FILE $(basename "$f").b64"; base64 -w 160 "$f"; echo "END_FILE $(basename "$f").b64"
+          done
       - uses: actions/upload-artifact@v4
         if: always()
         with:
