@@ -20,7 +20,7 @@ export function DiagPanel({ ctl, state }: { ctl: RoomController; state: RoomStat
     ["stt / tts", `${state.providers?.stt ?? "-"} / ${state.providers?.tts ?? "-"}`],
     ["vad", `${state.vadKind} p=${d.vadProb.toFixed(2)}${state.userSpeaking ? " speaking" : ""}`],
     ["mic", `level ${d.micLevel.toFixed(2)} · ${d.sampleRate} Hz · ctx ${d.audioCtx} · frames ${d.framesSent}`],
-    ["avatar", `${d.speakerKind} · ${d.fps.toFixed(0)} fps`],
+    ["avatar", `${d.speakerKind} · ${d.fps.toFixed(0)} fps · visemes ${d.visemeUpdates}`],
     ["barge-ins", String(d.bargeIns)],
     ["emergency questions", String(state.emergencyCount)],
   ];

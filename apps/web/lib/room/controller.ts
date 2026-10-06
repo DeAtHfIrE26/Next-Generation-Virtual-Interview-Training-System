@@ -50,6 +50,7 @@ export interface DiagSnapshot {
   bargeIns: number;
   framesSent: number;
   events: string[]; // recent protocol events (debug panel)
+  visemeUpdates: number;
 }
 
 const initial: RoomState = {
@@ -84,7 +85,7 @@ export class RoomController {
   private countdownAt = 0;
   readonly diag: DiagSnapshot = {
     rttMs: 0, stages: {}, reconnects: 0, bufferedAudio: 0, speakerKind: "-", fps: 0, vadProb: 0, micLevel: 0,
-    sampleRate: 0, audioCtx: "-", bargeIns: 0, framesSent: 0, events: [],
+    sampleRate: 0, audioCtx: "-", bargeIns: 0, framesSent: 0, events: [], visemeUpdates: 0,
   };
   allowBargeIn = true;
 
@@ -117,6 +118,7 @@ export class RoomController {
   // ---------------------------------------------------------------- setup
   attachSpeaker(sp: Speaker) {
     this.speaker = sp;
+    (window as unknown as { __speaker?: Speaker }).__speaker = sp; // diagnostics (?debug=1 tooling)
     this.diag.speakerKind = sp.kind;
     sp.onStarted = () => { this.log("audio started"); this.speakerStarted = true; this.speakStartedAt = performance.now(); this.set({ audioPlaying: true }); this.startCaptionClock(); };
     sp.onEnded = () => this.onPlaybackEnded();
@@ -393,6 +395,7 @@ export class RoomController {
 
   private tickDiag() {
     this.diag.fps = this.speaker?.fps() ?? 0;
+    this.diag.visemeUpdates = this.speaker?.visemeUpdates() ?? 0;
     this.diag.reconnects = this.rt?.reconnects ?? 0;
     this.diag.audioCtx = this.mic?.ctx.state ?? "-";
   }

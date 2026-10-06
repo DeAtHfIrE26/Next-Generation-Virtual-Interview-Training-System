@@ -59,6 +59,10 @@ test("spoken interview: speech in, live captions, LLM follow-ups, spoken questio
   await info.attach("protocol-events", { body: events.join("\n"), contentType: "text/plain" });
   if (process.env.E2E_DEBUG) console.log(events.join("\n"));
   await expect(page.getByTestId("diag")).toContainText(/barge-ins\s*[1-9]/);
+  if (info.project.name === "chromium") {
+    // the 3D avatar's mouth is driven by the interviewer audio that actually played
+    await expect(page.getByTestId("diag")).toContainText(/talkinghead.*visemes [1-9]/);
+  }
 
   if (REQUIRE_LLM) {
     await expect.poll(() => interviewerLines(page), { timeout: LLM_TIMEOUT }).toBeGreaterThanOrEqual(3);

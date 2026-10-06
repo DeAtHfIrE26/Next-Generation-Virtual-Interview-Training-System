@@ -13,6 +13,9 @@ export interface Speaker {
   setState(s: AvatarState): void;
   level(): number; // 0..1 output level (drives the speaking ring)
   fps(): number;
+  /** Mouth-shape updates driven by the playing audio since load (0 for the audio-only fallback). */
+  visemeUpdates(): number;
+  debug?: () => Record<string, unknown>;
   onStarted: (() => void) | null;
   onEnded: (() => void) | null;
   unlock(): Promise<void>; // resume the AudioContext from a user gesture
@@ -65,6 +68,7 @@ interface TalkingHeadLike {
   mtAvatar: Record<string, { newvalue: number; needsUpdate: boolean }>;
   opt: { update: ((dt: number) => void) | null; modelFPS: number };
   armature?: { traverse(fn: (o: { isMesh?: boolean; material?: { name?: string; color?: { set(c: string): void } } }) => void): void };
+  initAudioGraph?(sampleRate?: number | null): void;
   showAvatar(avatar: Record<string, unknown>, onprogress?: (e: ProgressEvent) => void): Promise<void>;
   streamStart(opt: Record<string, unknown>, onStart?: () => void, onEnd?: () => void): Promise<void> | void;
   streamAudio(r: { audio: ArrayBuffer }): void;
@@ -79,6 +83,9 @@ interface TalkingHeadLike {
   stop(): void;
   start(): void;
 }
+
+/** Sample rate of the default TTS (Kokoro). Other providers trigger an automatic re-wire. */
+const TTS_SAMPLE_RATE = 24000;
 
 export interface Look { skin?: string; hair?: string; top?: string }
 
@@ -122,20 +129,47 @@ export async function createTalkingHeadSpeaker(
   applyLook(head, look);
 
   // Audio-driven lip-sync: HeadAudio listens to the interviewer audio actually playing.
-  await head.audioCtx.audioWorklet.addModule("/vendor/headaudio/headworklet.min.mjs");
+  // TalkingHead rebuilds its AudioContext (and every node) when a stream's sample rate differs
+  // from the context's, so the graph is created at the TTS rate up front and HeadAudio is re-wired
+  // whenever the context changes; otherwise it would listen to a dead graph and the mouth would
+  // not move (found by the viseme counter in the E2E diagnostics).
   const { HeadAudio } = await import(/* webpackIgnore: true */ /* turbopackIgnore: true */ haUrl);
-  const ha = new HeadAudio(head.audioCtx, { processorOptions: {}, parameterData: { vadGateActiveDb: -45, vadGateInactiveDb: -60, speakerMeanHz: 210 } });
-  await ha.loadModel("/vendor/headaudio/model-en-mixed.bin");
-  head.audioStreamGainNode.connect(ha);
-  ha.onvalue = (key: string, value: number) => {
-    const t = head.mtAvatar[key];
-    if (t) Object.assign(t, { newvalue: value, needsUpdate: true });
+  let visemeUpdates = 0;
+  const dbg = { calls: 0, max: 0, keys: new Set<string>() };
+  let ha: { update(dt: number): void; onvalue: ((k: string, v: number) => void) | null; disconnect(): void } | null = null;
+  let wiredCtx: AudioContext | null = null;
+  let wiring: Promise<void> | null = null;
+  const wire = async () => {
+    const ctx = head.audioCtx;
+    if (wiredCtx === ctx) return;
+    wiredCtx = ctx;
+    await ctx.audioWorklet.addModule("/vendor/headaudio/headworklet.min.mjs");
+    const node = new HeadAudio(ctx, { processorOptions: {}, parameterData: { vadGateActiveDb: -45, vadGateInactiveDb: -60, speakerMeanHz: 210 } });
+    await node.loadModel("/vendor/headaudio/model-en-mixed.bin"); // browser-cached after the first load
+    if (head.audioCtx !== ctx) return; // replaced again meanwhile
+    head.audioStreamGainNode.connect(node);
+    node.onvalue = (key: string, value: number) => {
+      const t = head.mtAvatar[key];
+      if (t) Object.assign(t, { newvalue: value, needsUpdate: true });
+      dbg.calls += 1;
+      dbg.max = Math.max(dbg.max, value);
+      if (t) dbg.keys.add(key);
+      if (value > 0.15) visemeUpdates += 1;
+    };
+    try { ha?.disconnect(); } catch { /* old context closed */ }
+    ha = node;
   };
+  const ensureWired = () => {
+    if (wiredCtx !== head.audioCtx) wiring = wire().catch((e) => console.warn("lip-sync wiring failed", e));
+    return wiring;
+  };
+  head.initAudioGraph?.(TTS_SAMPLE_RATE);
+  await ensureWired();
   let frames = 0;
   let last = performance.now();
   let measured = quality.fps;
   head.opt.update = (dt: number) => {
-    ha.update(dt);
+    ha?.update(dt);
     frames += 1;
     const now = performance.now();
     if (now - last >= 1000) {
@@ -145,8 +179,7 @@ export async function createTalkingHeadSpeaker(
     }
   };
 
-  const analyser = head.audioAnalyzerNode;
-  const buf = new Uint8Array(analyser.fftSize);
+  const buf = new Uint8Array(256);
   let streaming = false;
   let sr = 0;
   // Per-utterance bookkeeping. TalkingHead's stream callbacks fire once per stream session, not per
@@ -172,7 +205,7 @@ export async function createTalkingHeadSpeaker(
     onEnded: null,
     start(sampleRate) {
       if (!streaming || sr !== sampleRate) {
-        void head.streamStart(
+        const stream = head.streamStart(
           { sampleRate, lipsyncType: "visemes", waitForAudioChunks: true, gain: 1 },
           undefined,
           // The library also reports "ended" when playback catches up with synthesis mid-utterance
@@ -180,6 +213,7 @@ export async function createTalkingHeadSpeaker(
           // It can also fire before the queued audio has played out, so never end before that.
           () => { if (endRequested && performance.now() >= firstAt + queuedS * 1000 - 150) finish(utt); },
         );
+        void Promise.resolve(stream).then(() => ensureWired()); // the context may have been rebuilt
         streaming = true;
         sr = sampleRate;
       }
@@ -232,12 +266,20 @@ export async function createTalkingHeadSpeaker(
       }
     },
     level() {
-      analyser.getByteTimeDomainData(buf);
+      head.audioAnalyzerNode.getByteTimeDomainData(buf);
       let sum = 0;
       for (let i = 0; i < buf.length; i++) { const v = ((buf[i] ?? 128) - 128) / 128; sum += v * v; }
       return Math.min(1, Math.sqrt(sum / buf.length) * 4);
     },
     fps: () => measured,
+    visemeUpdates: () => visemeUpdates,
+    debug: () => {
+      const buf2 = new Uint8Array(head.audioAnalyzerNode.fftSize);
+      head.audioAnalyzerNode.getByteTimeDomainData(buf2);
+      let peak = 0;
+      for (const v of buf2) peak = Math.max(peak, Math.abs(v - 128));
+      return { ctx: head.audioCtx.state, peak, haCalls: dbg.calls, haMax: dbg.max, keys: [...dbg.keys].slice(0, 5), streaming };
+    },
     async unlock() {
       if (head.audioCtx.state === "suspended") await head.audioCtx.resume().catch(() => undefined);
     },
@@ -321,6 +363,7 @@ export function createAudioSpeaker(): Speaker {
       return Math.min(1, Math.sqrt(sum / buf.length) * 4);
     },
     fps: () => 0,
+    visemeUpdates: () => 0,
     async unlock() {
       if (ctx.state === "suspended") await ctx.resume().catch(() => undefined);
     },

@@ -155,3 +155,14 @@ Tests: `test_server_detects_barge_in_and_keeps_the_interrupting_words` and `test
 - After a reply with no question, the repair message asks for exactly one direct question ending in "?".
 - The evidence harness now reports counts of rejection reasons for each case.
 - Superseded evidence and E2E runs are cancelled automatically.
+
+## D15. HeadAudio is re-wired whenever TalkingHead rebuilds its audio graph (2026-10-06)
+
+**Measured** (new viseme counter in `?debug=1`, chromium E2E against `docker compose up`): 0 audio-driven viseme updates during interviewer speech. The cause: `streamStart({sampleRate: 24000})` makes TalkingHead call `initAudioGraph(24000)` whenever the context runs at a different rate, which closes the AudioContext and recreates every node. HeadAudio, and the analyser used for the speaking ring, stayed attached to the closed graph, so **the avatar's mouth never followed the audio** and the ring read zero.
+
+**Chosen:**
+- The graph is created at the TTS rate (24 kHz) before wiring.
+- HeadAudio is re-wired after any `streamStart` that rebuilds the context (for other providers' rates).
+- Level and diagnostics always read the current analyser.
+
+**After the fix:** viseme updates with five distinct viseme shapes and a peak weight of 0.75 in the same run. The E2E now asserts `visemes > 0` on Chromium.
