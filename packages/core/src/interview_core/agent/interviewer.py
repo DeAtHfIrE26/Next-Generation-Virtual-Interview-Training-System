@@ -684,6 +684,10 @@ class InterviewerAgent:
                 errs.append(f"say must be under {MAX_SAY_CHARS} characters")
             if re.search(r"(^|\s)([-*•]|\d+\.)\s", say) or "**" in say:
                 errs.append("say must be plain spoken text without lists or markdown")
+            if action == "close" and "?" in say:
+                errs.append(
+                    "close ends the interview, so it must not ask anything: thank the candidate and say goodbye"
+                )
             if action not in ("close",) and say and not _ASKS.search(say):
                 errs.append("say must ask the candidate a question")
             for prev in st.turns:
@@ -764,6 +768,8 @@ class InterviewerAgent:
                 errs.append("must be plain spoken text without lists or markdown")
             if forced != "close" and "?" not in say:
                 errs.append("must end with a question to the candidate")
+            if forced == "close" and "?" in say:
+                errs.append("the closing line must not ask anything")
             for prev in st.turns:
                 if is_repeat(say, prev.say):
                     errs.append(f"repeats an earlier question: {prev.say[:80]!r}")

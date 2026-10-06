@@ -306,6 +306,10 @@ Tests:
 
 **Evidence video.** A CI job log keeps only its last 5,000 lines. The real-LLM interview runs about 15 minutes on a CI CPU, and its real-time video did not fit. The `evidence-log` job now prints a 4× time-lapse (560 px, 5 fps) and labels it as one.
 
+**Follow-up (agent-evidence run 10 on 8e9be2a).** 13 of the first 14 finished cases passed, including the earlier failures 10, 11 and 16 (case 16 used the focused call twice and no emergency question). Case 3 failed one check, bank overlap. The overlapping line was the interviewer's closing line: "...Is there anything else you would like to add?" matched the old bank's "Is there anything about your experience we have not covered that you would like to highlight?" on 4 of its 5 content words.
+
+The real defect is that a close asked anything at all. The interview ends after close, so the candidate could never answer. Validation now rejects a question mark in a close, and the turn prompt says so. Inviting the candidate's questions belongs to wrap-up. Test: `test_the_closing_line_never_asks_a_question`.
+
 ## D20. Model downloads resume after a dropped connection (2026-10-06)
 
 **Measured.** A fresh `docker compose up` in the build sandbox failed: the proxy dropped the connection while the `models` init service was downloading, and the service exited with `BrokenPipeError`. The test written for this showed a second problem. When a connection closes early, Python's `http.client` returns a short read without raising, so a truncated file would have been treated as complete. The checksum would then have failed it, without any retry.

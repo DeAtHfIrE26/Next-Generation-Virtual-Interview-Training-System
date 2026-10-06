@@ -620,3 +620,29 @@ def test_fresh_angle_skips_angles_already_asked_about():
     assert fresh_angle(st, c1) == "versioning"
     st.turns.append(Turn(0, "open", "c1", 3, "How do you handle versioning of a public API?"))
     assert fresh_angle(st, c1) == "a mistake or failure and what was learned from it"
+
+
+def test_the_closing_line_never_asks_a_question():
+    """Agent-evidence case 3: the close ended with "Is there anything else you would like to add?",
+    but the interview ends after close, so the candidate could never answer."""
+    short = {**BLUEPRINT, "competencies": [{**c, "minutes": 1} for c in BLUEPRINT["competencies"]]}
+    read = {"score": 3, "strengths": "", "gaps": "", "vague": False}
+    llm = Scripted(
+        "p",
+        [
+            json.dumps(short),
+            reply("open"),
+            reply("wrap_up", comp="c3", say="We're nearly out of time. Any questions for me?", last=read),
+            reply("close", comp="c3", say="Thanks! Is there anything else you would like to add?", last=read),
+            reply(
+                "close", comp="c3", say="Thank you for your time today, and good luck. Goodbye.", last=read
+            ),
+        ],
+    )
+    ag = InterviewerAgent([llm])
+    st = state(duration_minutes=5)
+    ag.next_turn(st, now=1)
+    ag.next_turn(st, Answer("answer", seconds=200), now=251)
+    t = ag.next_turn(st, Answer("No questions.", seconds=3), now=261)
+    assert t.action == "close" and "?" not in t.say and not t.emergency
+    assert "must not ask anything" in llm.calls[-1]["messages"][-1]["content"]

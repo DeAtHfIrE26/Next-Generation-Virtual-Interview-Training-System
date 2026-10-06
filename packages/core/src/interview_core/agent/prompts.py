@@ -166,7 +166,7 @@ def turn_state(st: AgentState, now: float, forced: str | None, corrections: list
         lines.append("Time is nearly up: use action wrap_up and ask your final question.")
     elif forced == "close":
         lines.append(
-            "The interview is over: use action close, thank the candidate and say goodbye in one or two sentences."
+            "The interview is over: use action close, thank the candidate and say goodbye in one or two sentences. Ask nothing: the candidate cannot reply after close."
         )
     if corrections:
         lines.append(
