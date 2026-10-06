@@ -195,7 +195,11 @@ def advance(
         sig[pending.index] = signals
         s.signals = sig
     agent = agent_for(db, user, s)
-    if s.status == "active":
+    active = s.status == "active"
+    # End the transaction before the (slow) LLM call so other requests on this session, such as
+    # integrity events, are never blocked behind it; the turn is written in a new transaction.
+    db.commit()
+    if active:
         turn = agent.next_turn(st, answer)
     else:  # ended by policy: record the answer, no further questions
         if answer is not None and pending is not None:

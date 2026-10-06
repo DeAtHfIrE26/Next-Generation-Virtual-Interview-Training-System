@@ -82,6 +82,49 @@ class STTProvider(ABC):
     @abstractmethod
     def open(self, language: str = "en") -> STTSession: ...
 
+    def gate(self) -> SpeechGate | None:
+        """A voice-activity gate for barge-in detection, or None if this provider has none."""
+        if not assets.is_present("vad"):
+            return None
+        try:
+            return SpeechGate(str(assets.require("vad")))
+        except ImportError:  # sherpa-onnx not installed
+            return None
+
+
+class SpeechGate:
+    """Server-side barge-in detector (Silero VAD) for the candidate's mic stream while the
+    interviewer is speaking. ``accept`` returns True once, when sustained speech starts. (The caller
+    keeps the recent audio so the new turn starts with the words that interrupted.)"""
+
+    def __init__(self, vad_model: str, threshold: float = 0.6, min_speech_s: float = 0.3):
+        import sherpa_onnx  # optional extra: interview-core[local-speech]
+
+        cfg = sherpa_onnx.VadModelConfig()
+        cfg.silero_vad.model = vad_model
+        cfg.silero_vad.threshold = threshold
+        cfg.silero_vad.min_silence_duration = 0.25
+        cfg.silero_vad.min_speech_duration = min_speech_s
+        cfg.sample_rate = SAMPLE_RATE
+        self.vad = sherpa_onnx.VoiceActivityDetector(cfg, buffer_size_in_seconds=10)
+        self._window = np.zeros(0, dtype=np.float32)
+        self.fired = False
+
+    def accept(self, pcm16: bytes) -> bool:
+        if self.fired:
+            return False
+        self._window = np.concatenate([self._window, pcm16_to_float(pcm16)])
+        n = (self._window.size // 512) * 512
+        for i in range(0, n, 512):
+            self.vad.accept_waveform(self._window[i : i + 512])
+        self._window = self._window[n:]
+        while not self.vad.empty():  # segments are not needed, only the onset
+            self.vad.pop()
+        if self.vad.is_speech_detected():
+            self.fired = True
+            return True
+        return False
+
 
 def pcm16_to_float(pcm16: bytes) -> np.ndarray:
     return np.frombuffer(pcm16, dtype="<i2").astype(np.float32) / 32768.0

@@ -86,7 +86,10 @@ test("microphone blocked: clear recovery steps and typing still works", async ({
   await page.goto("/");
   const id = await newSession(page, { role: "Product Manager", interview_type: "behavioral", duration_minutes: "5" });
   await page.goto(`/interview/${id}`);
-  await expect(page.getByText("Microphone access is blocked")).toBeVisible({ timeout: 90_000 });
+  // Engines word a blocked mic differently (denied / insecure / unsupported); each must show recovery steps.
+  const help = page.getByRole("status").filter({ hasText: /Microphone access is blocked|isn't secure|can't capture audio|Couldn't start the microphone/ });
+  await expect(help.first()).toBeVisible({ timeout: 90_000 });
+  console.log(`[${test.info().project.name}] mic error shown: ${(await help.first().innerText()).split("\n")[0]}`);
   const typeInstead = page.getByRole("button", { name: "Type answers instead" });
   await expect(typeInstead).toBeEnabled({ timeout: 240_000 });
   await typeInstead.click();

@@ -130,3 +130,18 @@ Timing-forced actions (`open`, `wrap_up`, `close`) are never overridden. The che
 ## D12. Docker builds behind TLS-intercepting proxies (2026-10-06)
 
 Both Dockerfiles accept an optional BuildKit secret `extra_ca` (`--secret id=extra_ca,src=ca.pem`) used only during dependency installation. Without it, builds behave exactly as before. The API image no longer runs `apt-get`: the speech runtime works on `python:3.11-slim` as is, which was verified by running the full E2E against the compose stack.
+
+## D13. Barge-in is detected on the server too; the socket never blocks on the LLM (2026-10-06)
+
+**Measured** (CI, cd12703):
+- On 4-vCPU runners with software WebGL, the browser's VAD fired only after the question audio had ended (Chromium and Edge failed the barge-in check; WebKit passed).
+- In the real-LLM job (Qwen2.5-7B on CPU, 60–130 s for the first turn), the connection dropped 3 times. The receive loop was awaiting the turn, mic frames went unread, and pings timed out. Each reconnect started another planning call.
+- SQLite reported "database is locked" because the turn's transaction stayed open during the LLM call.
+
+**Chosen:**
+1. The server runs a Silero gate (sherpa-onnx) on the mic stream while the interviewer's audio is playing. On sustained speech (≥ 0.3 s, p ≥ 0.6) it cancels the question and starts the turn with the last 2.5 s of audio, so the interrupting words are kept. The same pre-roll is used when the browser detects the barge-in. Set `SERVER_BARGE_IN=0` to disable.
+2. Commands that can wait on the LLM run on a per-connection consumer task. The receive loop only reads frames and handles quick messages. A turn that is in flight survives a dropped connection, and the reconnect waits for it instead of generating a second one.
+3. `advance()` commits before calling the LLM and writes the turn in a new transaction.
+4. The client never awaits `AudioContext.resume()` when joining. Without an audio device, for example in headless Firefox, it can stay pending forever.
+
+Tests: `test_server_detects_barge_in_and_keeps_the_interrupting_words` and `test_socket_stays_responsive_while_a_slow_llm_thinks` (real speech models).

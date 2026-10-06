@@ -110,7 +110,8 @@ export class MicCapture {
       onFrame(e.data.pcm);
     };
     cap.src.connect(cap.node).connect(cap.sink).connect(ctx.destination);
-    if (ctx.state === "suspended") await ctx.resume().catch(() => undefined);
+    // resume() may never settle without an audio device; capture still runs once it does
+    if (ctx.state === "suspended") void ctx.resume().catch(() => undefined);
     return cap;
   }
 

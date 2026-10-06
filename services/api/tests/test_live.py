@@ -128,6 +128,70 @@ def test_barge_in_cancels_speech_and_starts_listening(live_client):
         _until(ws, "listening")
 
 
+def test_server_detects_barge_in_and_keeps_the_interrupting_words(live_client):
+    """No client barge_in message: the server's VAD hears the candidate over the interviewer,
+    cancels the question audio and starts the turn with the words that interrupted it."""
+    client, sid = live_client
+    with client.websocket_connect(f"/ws/interview?ticket={_ticket(client, sid)}") as ws:
+        _until(ws, "ready")
+        ws.send_text(json.dumps({"type": "start"}))
+        q = _until(ws, "question")
+        _until(ws, "tts.start")
+        pcm = _speech_pcm16()
+        seen: list = []
+        sent = 0
+        for i in range(0, len(pcm), 3200):  # stream the answer in 100 ms frames
+            ws.send_bytes(pcm[i : i + 3200])
+            sent = i + 3200
+            if i == 3200 * 12:  # after 1.2 s, the server should have noticed
+                break
+        barge = _until(ws, "barge_in", seen)
+        assert barge["source"] == "server"
+        assert any(
+            isinstance(m, dict) and m["type"] == "tts.cancel" and m["utterance"] == q["utterance"]
+            for m in seen
+        )
+        _until(ws, "listening", seen)
+        for i in range(sent, len(pcm), 3200):
+            ws.send_bytes(pcm[i : i + 3200])
+        final = _until(ws, "stt.final", seen)
+        while not final.get("final"):
+            final = _until(ws, "stt.final", seen)
+        hyp = re.findall(r"[a-z]+", final["text"].lower())
+        assert hyp[:3] == ["in", "my", "last"], final["text"]  # the first words were not lost
+
+
+def test_socket_stays_responsive_while_a_slow_llm_thinks(client, monkeypatch):
+    """A slow LLM (CPU-only local models take 30-60 s) must not stall the socket: mic frames and
+    pings are still read and answered while the turn is being generated."""
+    import time as _time
+
+    from interview_api import runtime
+
+    class SlowLLM(FakeInterviewerLLM):
+        def stream(self, *a, **kw):
+            _time.sleep(3)
+            yield from super().stream(*a, **kw)
+
+    slow = SlowLLM()
+    monkeypatch.setattr(runtime, "llm_chain", lambda: (slow,))
+    signup(client)
+    sid = client.post("/sessions", data={"role": "Backend Engineer", "duration_minutes": "10"}).json()["id"]
+    with client.websocket_connect(f"/ws/interview?ticket={_ticket(client, sid)}") as ws:
+        _until(ws, "ready")
+        ws.send_text(json.dumps({"type": "start"}))
+        _until(ws, "thinking")
+        for _ in range(60):  # 6 s of (silent) mic frames while the LLM is busy
+            ws.send_bytes(b"\x00\x00" * 1600)
+        ws.send_text(json.dumps({"type": "ping", "t": 1}))
+        seen: list = []
+        _until(ws, "pong", seen)
+        assert not any(
+            isinstance(m, dict) and m["type"] == "question" for m in seen
+        )  # answered while thinking
+        _until(ws, "question")
+
+
 def test_tickets_are_single_use_and_signed(live_client):
     client, sid = live_client
     t = _ticket(client, sid)

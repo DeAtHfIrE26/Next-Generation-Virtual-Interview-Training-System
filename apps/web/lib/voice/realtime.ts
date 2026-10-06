@@ -16,6 +16,7 @@ export type ServerMessage =
   | { type: "tts.chunk"; utterance: number; text: string; offset: number; duration: number; marks: Mark[] }
   | { type: "tts.end"; utterance: number; audio: boolean; duration?: number }
   | { type: "tts.cancel"; utterance: number }
+  | { type: "barge_in"; source: "server" }
   | { type: "listening"; turn: number }
   | { type: "notice"; event: string; message: string; episode: number; end_session: boolean }
   | { type: "diag"; stage: string; ms: number; provider?: string }

@@ -13,7 +13,7 @@ Client -> server
 
 Server -> client
   ready, phase, stt.partial, stt.final, turn.end, thinking, question, tts.start, tts.chunk,
-  tts.end, tts.cancel, listening, notice, diag, error, done, pong
+  tts.end, tts.cancel, barge_in (server-detected), listening, notice, diag, error, done, pong
   binary: 1 byte (utterance mod 256) + PCM16LE interviewer audio at tts.start's sample_rate
 
 Turn-taking: the candidate's turn ends after a pause (shorter when the transcript so far ends a
@@ -58,11 +58,17 @@ router = APIRouter(tags=["realtime"])
 TICKET_TTL_S = 60
 MAX_ANSWER_S = 240.0
 SILENCE_END_MS = float(os.getenv("TURN_SILENCE_MS", "1000"))
+# Detect barge-in on the server too (Silero VAD on the mic stream while the interviewer speaks).
+SERVER_BARGE_IN = os.getenv("SERVER_BARGE_IN", "1") != "0"
+SLOW_COMMANDS = {"start", "text_answer", "skip", "repeat"}  # "end" stays immediate
 SILENCE_TRAILING_MS = float(os.getenv("TURN_SILENCE_TRAILING_MS", "1800"))
 _TRAILING = re.compile(r"\b(and|but|so|because|or|um+|uh+|like|then|which|that|the|a|to|of|with)\W*$", re.I)
 _SECRET = os.getenv("REALTIME_SECRET", "").encode() or secrets.token_bytes(32)
 _used_nonces: dict[str, float] = {}
 _live: dict[str, Conversation] = {}
+# Interviewer turns in flight per session. A turn outlives a dropped connection; a reconnect waits
+# for it instead of generating a second one.
+_advancing: dict[str, asyncio.Future] = {}
 
 
 # ----------------------------------------------------------------------------- tickets
@@ -142,6 +148,10 @@ class Conversation:
         self.meta_event = asyncio.Event()
         self.meta: dict[str, Any] = {}
         self.closing_turn = False
+        self.audio_out = False  # interviewer audio is being streamed for the current utterance
+        self.recent_in = bytearray()  # last 2.5 s of mic audio while the interviewer speaks
+        self.cmd_q: asyncio.Queue = asyncio.Queue()
+        self.consumer: asyncio.Task | None = None
         self.send_lock = asyncio.Lock()
         self.stt_provider = runtime.stt_provider()
         self.tts_provider = runtime.tts_provider()
@@ -222,6 +232,7 @@ class Conversation:
     def _stt_worker(self) -> None:
         sess = None
         turn = -1
+        gate, gate_utt = None, -1
         while True:
             item = self.audio_q.get()
             if item is _STOP:
@@ -240,6 +251,12 @@ class Conversation:
                         for e in events:
                             self._post(self.on_stt_event(e, turn))
                         self._post(self.on_transcript(tr, turn, (time.monotonic() - t0) * 1000))
+                elif isinstance(item, tuple) and item[0] == "gate":
+                    gate, gate_utt = (self.stt_provider.gate() if self.stt_provider else None), item[1]
+                elif isinstance(item, tuple) and item[0] == "gate_audio":
+                    if gate is not None and gate.accept(item[1]):
+                        self._post(self.server_barge_in(gate_utt))
+                        gate = None
                 elif isinstance(item, tuple) and item[0] == "discard":
                     if sess is not None:
                         sess.close()
@@ -286,7 +303,9 @@ class Conversation:
         await self.respond(tr.text, tr.words, tr.audio_seconds, tr.provider)
 
     # ---- turn control
-    async def begin_listening(self) -> None:
+    async def begin_listening(self, preroll: bytes = b"") -> None:
+        self.audio_out = False
+        self.recent_in = bytearray()
         if self.stt_provider is None:
             await self.set_phase("listening")
             return
@@ -296,6 +315,9 @@ class Conversation:
         self.meta_event.clear()
         self.meta = {}
         self.audio_q.put(("begin", self.turn_id))
+        if preroll:  # speech that triggered a server-side barge-in: the turn starts with it
+            self.turn_audio.extend(preroll)
+            self.audio_q.put(preroll)
         self.listen_started = time.monotonic()
         await self.set_phase("listening")
         await self.send({"type": "listening", "turn": self.turn_id})
@@ -313,10 +335,23 @@ class Conversation:
         await self.send({"type": "thinking"})
         t0 = time.monotonic()
         audio, meta = bytes(self.turn_audio), dict(self.meta)
+        inflight = _advancing.get(self.session_id)
+        if inflight is not None and not inflight.done() and text is None:
+            # (re)start while a previous connection's turn is still being generated: wait for it
+            with contextlib.suppress(Exception):
+                await asyncio.shield(inflight)
+            snap = await asyncio.to_thread(self._snapshot)
+            if snap["current"]:
+                await self.speak(snap["current"])
+            elif snap["finished"] or snap["status"] != "active":
+                await self.finish()
+            return
         try:
-            turn, finished, notices, status = await asyncio.to_thread(
-                self._advance, text, words, seconds, source, audio, meta
+            fut = asyncio.ensure_future(
+                asyncio.to_thread(self._advance, text, words, seconds, source, audio, meta)
             )
+            _advancing[self.session_id] = fut
+            turn, finished, notices, status = await asyncio.shield(fut)
         except Exception as e:
             log.exception("interviewer turn failed")
             await self.send(
@@ -324,7 +359,12 @@ class Conversation:
             )
             await self.begin_listening()
             return
+        done_fut = _advancing.get(self.session_id)
+        if done_fut is not None and done_fut.done():
+            _advancing.pop(self.session_id, None)
         await self.diag("llm", (time.monotonic() - t0) * 1000)
+        if self.phase == "done":  # ended while the turn was being generated
+            return
         for n in notices:
             await self.send({"type": "notice", **n})
         if turn is None or status != "active":
@@ -355,6 +395,9 @@ class Conversation:
                     break
                 if first:
                     first = False
+                    if SERVER_BARGE_IN and not self.closing_turn:
+                        self.audio_out = True
+                        self.audio_q.put(("gate", utt))
                     await self.send(
                         {
                             "type": "tts.start",
@@ -426,7 +469,20 @@ class Conversation:
         if self.tts_task:
             self.tts_task.cancel()
         await self.send({"type": "tts.cancel", "utterance": self.utterance - 1})
-        await self.begin_listening()
+        await self.begin_listening(bytes(self.recent_in))  # keep the words that interrupted
+
+    async def server_barge_in(self, utt: int) -> None:
+        """The server's VAD heard the candidate talk over the interviewer (works even when the
+        browser's own VAD lags, e.g. on a busy main thread)."""
+        if utt != self.utterance or self.phase != "speaking" or self.closing_turn:
+            return
+        self.utterance += 1
+        if self.tts_task:
+            self.tts_task.cancel()
+        await self.send({"type": "tts.cancel", "utterance": self.utterance - 1})
+        await self.send({"type": "barge_in", "source": "server"})
+        # recent_in holds every frame up to this moment, including any that arrived after the VAD fired
+        await self.begin_listening(bytes(self.recent_in))
 
     async def finish(self) -> None:
         await self.set_phase("done")
@@ -479,6 +535,11 @@ class Conversation:
         if self.phase == "listening" and self.stt_provider is not None:
             self.turn_audio.extend(data)
             self.audio_q.put(data)
+        elif self.phase == "speaking" and self.audio_out:
+            self.recent_in.extend(data)
+            if len(self.recent_in) > 80000:  # 2.5 s at 16 kHz PCM16
+                del self.recent_in[: len(self.recent_in) - 80000]
+            self.audio_q.put(("gate_audio", data))
 
     async def run(self) -> None:
         old = _live.get(self.session_id)
@@ -497,6 +558,7 @@ class Conversation:
             )
         )
         self.worker.start()
+        self.consumer = asyncio.create_task(self._consume())
         caps = runtime.capabilities()
         await self.send(
             {
@@ -524,13 +586,30 @@ class Conversation:
                     self.on_audio(msg["bytes"])
                 elif msg.get("text"):
                     try:
-                        await self.on_json(json.loads(msg["text"]))
+                        m = json.loads(msg["text"])
+                        if not isinstance(m, dict):
+                            raise TypeError
                     except (ValueError, TypeError):
                         await self.send({"type": "error", "code": "bad_message", "recoverable": True})
+                        continue
+                    # Commands that may wait on the LLM run in order on a consumer task, so this loop
+                    # keeps reading mic frames and pings (a blocked reader stalls the socket).
+                    if m.get("type") in SLOW_COMMANDS:
+                        self.cmd_q.put_nowait(m)
+                    else:
+                        await self.on_json(m)
         except WebSocketDisconnect:
             pass
         finally:
             await self.cleanup()
+
+    async def _consume(self) -> None:
+        while True:
+            m = await self.cmd_q.get()
+            try:
+                await self.on_json(m)
+            except Exception:
+                log.exception("command failed: %s", m.get("type"))
 
     async def close(self, code: int, reason: str) -> None:
         with contextlib.suppress(Exception):
@@ -541,7 +620,7 @@ class Conversation:
         if _live.get(self.session_id) is self:
             del _live[self.session_id]
         self.utterance += 1
-        for task in (self.tts_task, self.playback_timer):
+        for task in (self.tts_task, self.playback_timer, self.consumer):
             if task:
                 task.cancel()
         self.audio_q.put(_STOP)

@@ -126,7 +126,9 @@ export class RoomController {
   async join(stream: MediaStream | null) {
     if (this.state.joined) return;
     this.set({ joined: true, error: null });
-    await this.speaker?.unlock();
+    // resume() can stay pending forever without an audio output device (e.g. headless Firefox):
+    // never block joining on it.
+    await withTimeout(this.speaker?.unlock() ?? Promise.resolve(), 1500);
     this.stream = stream;
     if (stream && stream.getAudioTracks().length) {
       const audioOnly = new MediaStream(stream.getAudioTracks());
@@ -249,6 +251,11 @@ export class RoomController {
         break;
       case "tts.cancel":
         if (m.utterance === this.audioUtt) { this.speaker?.interrupt(); this.stopCaptionClock(true); }
+        break;
+      case "barge_in": // detected by the server's VAD (the browser's may lag on a busy device)
+        this.diag.bargeIns += 1;
+        this.speaker?.interrupt();
+        this.stopCaptionClock(true);
         break;
       case "listening":
         this.listenT0 = performance.now();
@@ -398,6 +405,10 @@ export class RoomController {
     await this.mic?.stop();
     this.stream = null;
   }
+}
+
+function withTimeout<T>(p: Promise<T>, ms: number): Promise<T | undefined> {
+  return Promise.race([p, new Promise<undefined>((r) => setTimeout(() => r(undefined), ms))]);
 }
 
 export function percentile(xs: number[], p: number): number {
