@@ -1,0 +1,552 @@
+{
+ "checks": {
+  "questions": 9,
+  "bank_overlap": 0,
+  "follow_ups": 4,
+  "follow_ups_referencing_answer": 4,
+  "difficulty_tracks_performance": true,
+  "difficulty_transitions": [
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   }
+  ],
+  "difficulty_corrections_by_code": 1,
+  "emergency_questions": 0,
+  "fresh_questions": 0,
+  "rejected_attempts": {
+   "repeats an earlier question": 2
+  },
+  "emergency_blueprint": false,
+  "repeats": 0,
+  "closed_on_time": true,
+  "passed": true
+ },
+ "state": {
+  "session_id": "mock-03",
+  "params": {
+   "role": "Product Manager",
+   "seniority": "mid",
+   "company": "Atlassian",
+   "company_style": "Values-based behavioural questions, product sense",
+   "job_description": "Own the onboarding funnel for a B2B SaaS product; define metrics, run discovery with customers, work with design and engineering.",
+   "resume_context": "",
+   "skills": [],
+   "interview_type": "behavioral",
+   "round": "final",
+   "difficulty": "auto",
+   "language": "en",
+   "duration_minutes": 15,
+   "persona": "maya"
+  },
+  "blueprint": {
+   "summary": "This interview assesses the candidate's ability to own and improve a critical product feature and their customer engagement and cross-functional collaboration skills, which are essential for a mid-level Product Manager at Atlassian.",
+   "competencies": [
+    {
+     "id": "c1",
+     "name": "Ownership",
+     "why": "Ownership is crucial for a mid-level Product Manager to drive improvements and success in key product areas.",
+     "weight": 0.3,
+     "minutes": 4.0,
+     "signals": [
+      "Demonstrates clear action plans and measurable outcomes",
+      "Shows a track record of success in owning a product feature"
+     ]
+    },
+    {
+     "id": "c2",
+     "name": "Customer Engagement",
+     "why": "Atlassian values understanding and addressing customer needs, and a Product Manager must actively engage with customers to ensure product success.",
+     "weight": 0.3,
+     "minutes": 4.0,
+     "signals": [
+      "Exhibits a proactive approach to customer discovery and feedback",
+      "Provides examples of effective customer engagement strategies"
+     ]
+    },
+    {
+     "id": "c3",
+     "name": "Cross-Functional Collaboration",
+     "why": "Collaboration with design and engineering teams is essential to align product vision and deliver successful outcomes.",
+     "weight": 0.2,
+     "minutes": 3.0,
+     "signals": [
+      "Illustrates strong communication and coordination skills",
+      "Cites specific examples of successful collaboration"
+     ]
+    },
+    {
+     "id": "c4",
+     "name": "Product Sense",
+     "why": "Atlassian looks for individuals who can make strategic decisions based on product intuition and data-driven insights.",
+     "weight": 0.1,
+     "minutes": 2.0,
+     "signals": [
+      "Demonstrates an ability to identify key metrics and improve product performance",
+      "Shows a strategic mindset in product development"
+     ]
+    }
+   ],
+   "opening": "Greeting: 'Hi, thank you for joining us today. Let's start with a few questions to understand your experience with owning a product feature and your approach to customer engagement.'",
+   "style_notes": "Atlassian's interview style is values-based, focusing on behavioral questions and product sense. The tone will be warm and encouraging, with a precise focus on the candidate's actions, metrics, and impact.",
+   "start_difficulty": 3,
+   "emergency": false,
+   "provider": "ollama"
+  },
+  "turns": [
+   {
+    "index": 0,
+    "action": "open",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Hi, thank you for joining us today. Let's start with a few questions to understand your experience with owning a product feature and your approach to customer engagement. Can you tell me about a time when you were responsible for owning a product feature, what was the feature, and what was your initial goal?",
+    "anchor_quote": "",
+    "reason": "Starting with ownership as per the blueprint. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000000.0,
+    "answer": "Sure, I can share that experience. At my previous role, I was part of the team that owned the project management features in our collaboration tool. My initial goal was to enhance the task tracking functionality to make it more intuitive for our users. We wanted to improve the visibility and manageability of tasks, especially for teams that were ramping up on the platform. By the end of the project, we had streamlined the workflow, which led to a 25% increase in user satisfaction.",
+    "answer_words": [],
+    "answer_seconds": 33.6,
+    "answered_at": 1000041.6,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a clear example of ownership with measurable outcomes.",
+     "gaps": "The example could benefit from more detail on specific actions and contributions.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 1,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "That's great to hear. Can you elaborate on the specific actions you took to streamline the workflow and how you ensured that the 25% increase in user satisfaction was achieved?",
+    "anchor_quote": "By the end of the project, we had streamlined the workflow, which led to a 25% increase in user satisfaction.",
+    "reason": "To explore the candidate's specific contributions and the process they used. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000041.6,
+    "answer": "Sure, to streamline the workflow, we first conducted a user feedback session to understand pain points. We then reorganized the task layout to group similar tasks together and added clear labels. We also introduced a drag-and-drop feature to make moving tasks easier. To ensure the satisfaction increase, we ran A/B tests and gathered post-implementation feedback. We also set up a metrics dashboard to monitor key performance indicators like task completion time and user engagement. The combination of these actions definitely helped us meet our goal.",
+    "answer_words": [],
+    "answer_seconds": 34.0,
+    "answered_at": 1000083.6,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a clear example of owning a product feature and detailed the actions taken, including user feedback sessions, reorganization of task layout, and metrics dashboard setup.",
+     "gaps": "The answer was strong but could benefit from more specific numbers or trade-offs.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 2,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "That's excellent. Can you provide more details on the specific metrics you used to measure the success of the improvements? Were there any trade-offs or challenges you faced during this process?",
+    "anchor_quote": "We also set up a metrics dashboard to monitor key performance indicators like task completion time and user engagement.",
+    "reason": "To explore more quantitative aspects and the trade-offs made in the process of improvement, deepening the understanding of the candidate's ownership experience at Atlassian. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000083.6,
+    "answer": "Absolutely. We focused on a few key metrics: task completion time, user engagement, and the number of support tickets related to task management. We saw a 20% reduction in task completion time and a 30% increase in user engagement. Regarding challenges, we faced some resistance from users who were accustomed to the old layout, but we managed this by providing comprehensive training sessions and a clear change management plan. There was also a trade-off in initial implementation time, as we had to pause some other initiatives to focus on this project, but the long-term benefits outweighed the short-term costs.",
+    "answer_words": [],
+    "answer_seconds": 39.6,
+    "answered_at": 1000131.2,
+    "score": 4,
+    "assessment": {
+     "strengths": "Provided clear actions and metrics, demonstrated ownership and impact.",
+     "gaps": "Could elaborate more on the proactive approach to customer discovery.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 3,
+    "action": "new_topic",
+    "competency": "c2",
+    "difficulty": 4,
+    "say": "That's great. Can you tell me about a time when you took a proactive approach to discover customer needs and how you engaged with them to improve a product feature?",
+    "anchor_quote": "",
+    "reason": "Transition to customer engagement for a more rounded assessment. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000131.2,
+    "answer": "Sure, at my previous role, I noticed that users were frequently asking for better integration options with third-party tools. To address this, I organized a series of user interviews and focus groups. We also set up an internal survey to gather more quantitative data on the issue. Based on the feedback, we decided to prioritize a feature that would allow seamless integration with popular tools. We engaged with a cross-functional team, including developers and designers, to create a prototype. We then tested this prototype with a small group of users and collected their feedback. This iterative process helped us refine the feature, ensuring it met the needs of our users. The result was a 40% increase in user retention in the following quarter, which was a significant improvement.",
+    "answer_words": [],
+    "answer_seconds": 51.2,
+    "answered_at": 1000190.3999999999,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a detailed example of customer engagement through user interviews and surveys, leading to a successful product feature improvement.",
+     "gaps": "",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 4,
+    "action": "follow_up",
+    "competency": "c2",
+    "difficulty": 4,
+    "say": "Great. Can you walk us through the process of engaging with the cross-functional team and how their contributions helped in the successful implementation of the feature?",
+    "anchor_quote": "Based on the feedback, we decided to prioritize a feature that would allow seamless integration with popular tools. We engaged with a cross-functional team, including developers and designers, to create a prototype.",
+    "reason": "Expanding on the cross-functional collaboration and the impact of the customer engagement. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000190.3999999999,
+    "answer": "Definitely. When we identified the need for better integration options, we organized a kickoff meeting with key stakeholders from the engineering, design, and product teams. We shared the insights from our user interviews and surveys and discussed potential approaches. The engineering team was responsible for developing the integration endpoints, while the design team worked on the user interface to make it seamless. We held regular check-ins and shared progress updates to keep everyone aligned. The cross-functional collaboration was crucial; the engineering team's technical expertise helped us overcome some implementation hurdles, and the design team ensured the feature was user-friendly. This teamwork ensured that the feature was not only technically sound but also met the user's needs, leading to the successful implementation and positive user feedback.",
+    "answer_words": [],
+    "answer_seconds": 50.0,
+    "answered_at": 1000248.3999999999,
+    "score": 4,
+    "assessment": {
+     "strengths": "Clear example of cross-functional collaboration and metrics-driven approach.",
+     "gaps": "",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 5,
+    "action": "follow_up",
+    "competency": "c3",
+    "difficulty": 4,
+    "say": "That's really insightful. Can you provide specific examples of how the contributions from each team member were instrumental in the success of the feature?",
+    "anchor_quote": "The cross-functional collaboration was crucial; the engineering team's technical expertise helped us overcome some implementation hurdles, and the design team ensured the feature was user-friendly.",
+    "reason": "Needs more depth on specific contributions from the cross-functional team. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000248.3999999999,
+    "answer": "Certainly. During the development of the integration feature, the engineering team's technical expertise was crucial. They helped us set up the necessary endpoints and integrate them with our existing platform, ensuring smooth data flow between our system and third-party tools. On the design side, they created intuitive interfaces that made the integration process easy for users. For instance, they designed a wizard that guided users through the setup process step-by-step, reducing the learning curve. Additionally, our QA team conducted rigorous testing to ensure that the feature worked flawlessly across different scenarios. Their feedback helped us catch and resolve several bugs before the feature was rolled out to the wider user base. Overall, the cross-functional collaboration ensured that the feature was robust, user-friendly, and aligned with our users' needs, leading to a successful implementation.",
+    "answer_words": [],
+    "answer_seconds": 53.2,
+    "answered_at": 1000309.5999999999,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided detailed examples of cross-functional collaboration and the impact on user satisfaction.",
+     "gaps": "Candidate could have provided more specific metrics and data-driven insights to demonstrate strategic thinking.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 6,
+    "action": "new_topic",
+    "competency": "c4",
+    "difficulty": 4,
+    "say": "Can you describe a situation where you used data and your intuition to make a strategic decision that improved a product's performance?",
+    "anchor_quote": "",
+    "reason": "Need to explore the candidate's ability to identify key metrics and improve product performance. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000309.5999999999,
+    "answer": "Sure, at my previous role, we noticed that our collaboration tool was being used less frequently by teams with more than 10 members. Initially, we thought it might be due to the size of the teams, but data showed that even smaller teams were finding the tool useful. To investigate further, we conducted a survey and analyzed user sessions. We found that the issue was related to the complexity of managing tasks within the tool. The UI was too cluttered and didn't provide enough context for large teams. To address this, we decided to implement a feature that would allow users to create sub-teams within the main project. This would help break down tasks and make the tool more manageable. We tested this feature with a small group of users and the feedback was overwhelmingly positive. We then rolled it out to a larger group and saw a 30% increase in active users within large teams. This decision was based on a combination of data and user intuition, and it significantly improved the tool's performance.",
+    "answer_words": [],
+    "answer_seconds": 70.0,
+    "answered_at": 1000387.5999999999,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided a detailed example of using data and intuition to make a strategic decision that improved product performance.",
+     "gaps": "Candidate could elaborate more on the specific metrics used and the impact on the broader product ecosystem.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "difficulty 3->4 (score 4, previous 4)"
+    ]
+   },
+   {
+    "index": 7,
+    "action": "wrap_up",
+    "competency": "c4",
+    "difficulty": 4,
+    "say": "Thank you for sharing that detailed example. It clearly shows your ability to use both data and intuition to make strategic decisions that positively impact the product. Can you also tell me how this decision influenced the broader product ecosystem and any long-term benefits it brought?",
+    "anchor_quote": "we saw a 30% increase in active users within large teams. This decision was based on a combination of data and user intuition, and it significantly improved the tool's performance.",
+    "reason": "Candidate has demonstrated strong product sense through this example. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000387.5999999999,
+    "answer": "Absolutely. The decision to introduce sub-teams not only improved the task management experience for large teams but also enhanced the overall collaboration within the ecosystem. By making the tool more scalable, we allowed larger teams to effectively use our platform without overwhelming them. This, in turn, attracted more large teams to our product, which helped us grow our user base. Long-term, this feature reduced the churn rate among larger teams, as they found the tool more user-friendly and better suited to their needs. It also paved the way for future integrations and features that could further enhance the collaboration experience for all team sizes. Overall, the decision to implement sub-teams had a positive ripple effect across the product ecosystem, making it more versatile and user-friendly.",
+    "answer_words": [],
+    "answer_seconds": 50.0,
+    "answered_at": 1000445.5999999999,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a detailed example of using data and intuition to make a strategic decision, which led to significant improvements in user satisfaction and product performance.",
+     "gaps": "",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 8,
+    "action": "close",
+    "competency": "c4",
+    "difficulty": 4,
+    "say": "Thank you for your detailed responses. It was great to hear about your experience and how you've driven success in various aspects of product management. It was a pleasure speaking with you, and we appreciate your time today. Goodbye.",
+    "anchor_quote": "Can you describe a situation where you used data and your intuition to make a strategic decision that improved a product's performance?",
+    "reason": "The candidate's answer was clear, relevant, and demonstrated strategic thinking.",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000445.5999999999,
+    "answer": null,
+    "answer_words": [],
+    "answer_seconds": 0.0,
+    "answered_at": null,
+    "score": null,
+    "assessment": null,
+    "evaluation": null,
+    "corrections": []
+   }
+  ],
+  "difficulty": 4,
+  "started_at": 1000000.0,
+  "finished": true,
+  "events": [
+   {
+    "t": 1791319906.18,
+    "kind": "turn",
+    "turn": 0,
+    "provider": "ollama",
+    "ms": 137463.5,
+    "action": "open"
+   },
+   {
+    "t": 1791320002.253,
+    "kind": "turn",
+    "turn": 1,
+    "provider": "ollama",
+    "ms": 67320.0,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320111.554,
+    "kind": "turn",
+    "turn": 2,
+    "provider": "ollama",
+    "ms": 79103.3,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320265.379,
+    "kind": "turn",
+    "turn": 3,
+    "provider": "ollama",
+    "ms": 121470.1,
+    "action": "new_topic"
+   },
+   {
+    "t": 1791320386.446,
+    "kind": "turn",
+    "turn": 4,
+    "provider": "ollama",
+    "ms": 82589.3,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320509.35,
+    "kind": "turn",
+    "turn": 5,
+    "provider": "ollama",
+    "ms": 82212.7,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320703.397,
+    "kind": "correction",
+    "turn": 6,
+    "detail": "difficulty 3->4 (score 4, previous 4)"
+   },
+   {
+    "t": 1791320703.397,
+    "kind": "turn",
+    "turn": 6,
+    "provider": "ollama",
+    "ms": 150533.8,
+    "action": "new_topic"
+   },
+   {
+    "t": 1791320862.983,
+    "kind": "turn",
+    "turn": 7,
+    "provider": "ollama",
+    "ms": 107088.1,
+    "action": "wrap_up"
+   },
+   {
+    "t": 1791321021.625,
+    "kind": "turn",
+    "turn": 8,
+    "provider": "ollama",
+    "ms": 109094.4,
+    "action": "close"
+   }
+  ]
+ },
+ "attempts": [
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 131322.3,
+   "error": "",
+   "input_tokens": 628,
+   "output_tokens": 501
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 137463.4,
+   "error": "",
+   "input_tokens": 1619,
+   "output_tokens": 105
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 67320.0,
+   "error": "",
+   "input_tokens": 1833,
+   "output_tokens": 163
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 79103.3,
+   "error": "",
+   "input_tokens": 2035,
+   "output_tokens": 212
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 77120.9,
+   "error": "repeats an earlier question: \"That's excellent. Can you provide more details on the specific metrics you used \"",
+   "input_tokens": 2259,
+   "output_tokens": 172
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 44349.1,
+   "error": "",
+   "input_tokens": 2473,
+   "output_tokens": 129
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 82589.3,
+   "error": "",
+   "input_tokens": 2505,
+   "output_tokens": 168
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 82212.6,
+   "error": "",
+   "input_tokens": 2738,
+   "output_tokens": 145
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 93932.2,
+   "error": "repeats an earlier question: \"That's really insightful. Can you provide specific examples of how the contribut\"",
+   "input_tokens": 2981,
+   "output_tokens": 174
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 56601.4,
+   "error": "",
+   "input_tokens": 3273,
+   "output_tokens": 134
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 107088.0,
+   "error": "",
+   "input_tokens": 3261,
+   "output_tokens": 199
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 109094.4,
+   "error": "",
+   "input_tokens": 3570,
+   "output_tokens": 175
+  }
+ ],
+ "qualities": [
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average",
+  "average"
+ ]
+}

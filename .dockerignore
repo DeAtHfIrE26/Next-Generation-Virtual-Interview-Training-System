@@ -1,0 +1,11 @@
+.git
+**/node_modules
+**/.next
+**/__pycache__
+.venv
+eval/data
+eval/out
+legacy
+services/api/var
+apps/web/test-results
+apps/web/playwright-report

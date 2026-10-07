@@ -1,0 +1,908 @@
+{
+ "checks": {
+  "questions": 16,
+  "bank_overlap": 0,
+  "follow_ups": 10,
+  "follow_ups_referencing_answer": 10,
+  "difficulty_tracks_performance": true,
+  "difficulty_transitions": [
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   }
+  ],
+  "difficulty_corrections_by_code": 0,
+  "emergency_questions": 0,
+  "fresh_questions": 0,
+  "rejected_attempts": {
+   "repeats an earlier question": 4,
+   "close ends the interview, so it must not ask anything": 1
+  },
+  "emergency_blueprint": false,
+  "repeats": 0,
+  "closed_on_time": true,
+  "passed": true
+ },
+ "state": {
+  "session_id": "mock-01",
+  "params": {
+   "role": "Software Engineer",
+   "seniority": "junior",
+   "company": "Infosys",
+   "company_style": "Fundamentals, OOP, DBMS and a project walkthrough",
+   "job_description": "",
+   "resume_context": "B.Tech CSE 2025. Internship: built a Flask REST API for inventory. Projects: chat app with WebSockets, LeetCode 300 problems.",
+   "skills": [
+    "Data structures",
+    "SQL"
+   ],
+   "interview_type": "technical",
+   "round": "screening",
+   "difficulty": "auto",
+   "language": "en",
+   "duration_minutes": 12,
+   "persona": "maya"
+  },
+  "blueprint": {
+   "summary": "This screening interview will assess the candidate's foundational knowledge in data structures and SQL, as well as their ability to take ownership of projects and demonstrate measurable impact, aligning with the role's requirements.",
+   "competencies": [
+    {
+     "id": "c1",
+     "name": "Data Structures",
+     "why": "Critical for efficient coding and problem-solving, as highlighted in the job description.",
+     "weight": 0.3,
+     "minutes": 4.0,
+     "signals": [
+      "ability to explain data structures",
+      "examples of usage",
+      "efficiency in code"
+     ]
+    },
+    {
+     "id": "c2",
+     "name": "SQL",
+     "why": "Important for database management and integration, as shown in the candidate's projects.",
+     "weight": 0.25,
+     "minutes": 3.0,
+     "signals": [
+      "query optimization",
+      "complex query construction",
+      "schema design"
+     ]
+    },
+    {
+     "id": "c3",
+     "name": "Project Ownership and Impact",
+     "why": "Demonstrating how the candidate takes ownership of projects and delivers measurable impact, as seen in their internship.",
+     "weight": 0.25,
+     "minutes": 3.0,
+     "signals": [
+      "ownership of project components",
+      "measurable outcomes",
+      "techniques for continuous improvement"
+     ]
+    },
+    {
+     "id": "c4",
+     "name": "Problem-Solving and Code Efficiency",
+     "why": "Relevant for a junior software engineer role, leveraging the project experiences mentioned.",
+     "weight": 0.15,
+     "minutes": 2.0,
+     "signals": [
+      "approach to problem-solving",
+      "code optimization strategies",
+      "examples of efficient coding"
+     ]
+    }
+   ],
+   "opening": "Hi, welcome to our technical interview. Let's start with a brief discussion on data structures and their importance in software engineering.",
+   "style_notes": "The interview will be warm and encouraging but precise, focusing on fundamental concepts and their practical application. We will probe for depth of knowledge and the ability to solve problems efficiently.",
+   "start_difficulty": 3,
+   "emergency": false,
+   "provider": "ollama"
+  },
+  "turns": [
+   {
+    "index": 0,
+    "action": "open",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Hi there, I'm Maya. Let's start with data structures. Can you explain what a stack and a queue are and how they are typically used in software development?",
+    "anchor_quote": "",
+    "reason": "Starting with data structures as per the blueprint. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000000.0,
+    "answer": "Stack and queue, right. Stack, it's like a plate stack where you add and remove plates from the top. Queue, it's like a line where you join at the back and leave from the front. Used for like, stack for undo, queue for printing tasks.",
+    "answer_words": [],
+    "answer_seconds": 18.0,
+    "answered_at": 1000026.0,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided basic definitions and gave examples of usage.",
+     "gaps": "Lack of detail on differences and specific use cases. Could have mentioned more about efficiency and performance.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 1,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "That's a good start. Can you now compare a stack and a queue in terms of their characteristics and how these differences can impact their use in software development, especially in the context of the role you're applying for at Infosys?",
+    "anchor_quote": "Stack, it's like a plate stack where you add and remove plates from the top. Queue, it's like a line where you join at the back and leave from the front. Used for like, stack for undo, queue for printing tasks.",
+    "reason": "Need more depth on the differences and specific use cases of stacks and queues to evaluate their foundational knowledge better. Also, to check their understanding of efficiency and performance issues related to these data structures in real-world scenarios. This will help us determine if they can ha [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000026.0,
+    "answer": "Stack, it's LIFO, like plates. Queue, FIFO, line at the front. Stack, for undo things, queue, for tasks. Differences, stack faster for top, queue for order. Infosys, maybe for task order, stack for undo functions.",
+    "answer_words": [],
+    "answer_seconds": 14.0,
+    "answered_at": 1000048.0,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided basic definitions and usage examples, but lacks detail on characteristics and impact.",
+     "gaps": "Insufficient depth on stack and queue characteristics and their impact on specific use cases.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 2,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Got it. Can you elaborate on the characteristics of a stack and a queue, such as time complexity for common operations, and how these characteristics influence their use in software development?",
+    "anchor_quote": "Stack, it's LIFO, like plates. Queue, FIFO, line at the front.",
+    "reason": "Need to explore characteristics and impact further. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000048.0,
+    "answer": "Stack, LIFO, push and pop are fast, O(1). Queue, FIFO, enqueue and dequeue, also fast, O(1). For Infosys, maybe stack for undo, queue for task order, right?",
+    "answer_words": [],
+    "answer_seconds": 10.8,
+    "answered_at": 1000066.8,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided correct definitions and usage examples.",
+     "gaps": "Could elaborate more on time complexity and application in software development.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 3,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Can you provide an example of a scenario in your project or internship where you had to use a stack or a queue, and how understanding their characteristics, like time complexity, influenced your decision-making or solution design?",
+    "anchor_quote": "Stack, LIFO, push and pop are fast, O(1). Queue, FIFO, enqueue and dequeue, also fast, O(1).",
+    "reason": "Need to ensure depth of understanding on characteristics and application in software development context for role at Infosys, a company with a focus on software engineering fundamentals and efficiency in coding and problem solving. This will also help in ensuring the candidate has the foundational k [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000066.8,
+    "answer": "In my internship, I used a stack for the Flask REST API to handle request history. For time complexity, push and pop being O(1) was good for managing requests. It helped with implementing the undo feature, making the API more user-friendly.",
+    "answer_words": [],
+    "answer_seconds": 16.4,
+    "answered_at": 1000091.2000000001,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a basic understanding of stack and queue operations and their application in the internship.",
+     "gaps": "Could elaborate more on how time complexity influenced the decision-making process.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 4,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "That's a great example. Could you walk me through how understanding the time complexity of stack operations, such as push and pop being O(1), influenced your design choices or problem-solving approach in the project?",
+    "anchor_quote": "Stack, for the Flask REST API to handle request history. For time complexity, push and pop being O(1) was good for managing requests.",
+    "reason": "Need more depth on decision-making influenced by time complexity. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000091.2000000001,
+    "answer": "Sure, understanding that push and pop are O(1) helped in designing the API to handle requests efficiently. It made sure that adding or removing requests was quick, which was good for performance. So, I focused on using stack for managing request history, making it easy to implement the undo feature without slowing down the API.",
+    "answer_words": [],
+    "answer_seconds": 22.0,
+    "answered_at": 1000121.2000000001,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a clear example of using a stack in the Flask REST API and explained the impact of O(1) time complexity on performance.",
+     "gaps": "Could use more specific details on how stack operations influenced the overall API design.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 5,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "That's a good example. Could you elaborate on how the understanding of stack operations specifically influenced the design and optimization of the API, especially in terms of performance and user experience?",
+    "anchor_quote": "So, I focused on using stack for managing request history, making it easy to implement the undo feature without slowing down the API.",
+    "reason": "Expand on the specific impact of stack operations on the API design and performance optimization strategies used in the project. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000121.2000000001,
+    "answer": "Sure, understanding that push and pop operations are O(1) helped in optimizing the API's request handling. It made sure that adding or removing requests was quick, improving performance. For users, it meant faster response times and smoother interactions, especially when using the undo feature.",
+    "answer_words": [],
+    "answer_seconds": 17.6,
+    "answered_at": 1000146.8,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a relevant example and explained how understanding stack operations influenced the API's design and performance.",
+     "gaps": "Candidate could provide more specific details or numbers to quantify the impact.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 6,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Could you give a specific number or metric that demonstrates how using a stack improved the performance of your API?",
+    "anchor_quote": "It made sure that adding or removing requests was quick, improving performance.",
+    "reason": "Candidate gave a good example, need more specifics. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000146.8,
+    "answer": "Sure, using a stack helped reduce the response time for request handling by about 20% compared to using a simple list. It made the API more responsive and smoother for users.",
+    "answer_words": [],
+    "answer_seconds": 12.4,
+    "answered_at": 1000167.2000000001,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided a specific performance improvement metric, which is good.",
+     "gaps": "Could benefit from more details on the implementation and verification of the stack usage.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 7,
+    "action": "challenge",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "That's a great example. Could you walk me through the steps you took to implement the stack in your Flask API and how you verified that the 20% improvement in response time was indeed due to the stack implementation? Also, how did you ensure that the stack was the right choice for this particular use case?",
+    "anchor_quote": "using a stack helped reduce the response time for request handling by about 20% compared to using a simple list.",
+    "reason": "Candidate provided a specific metric, now challenge for more details on implementation and verification to strengthen the answer and meet the competency requirement of problem-solving and code efficiency in a specific context. Also, this will help us understand their ability to verify their claims a [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000167.2000000001,
+    "answer": "Sure, for the stack implementation, I first defined a class with push and pop methods. Then, in the API, I used this stack to manage request history. To verify the 20% improvement, I used a timer before and after adding and removing requests. The stack made these operations faster, leading to quicker response times. For the right choice, I compared it with a list and saw the stack was more efficient for undo functionality.",
+    "answer_words": [],
+    "answer_seconds": 29.6,
+    "answered_at": 1000204.8,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided a specific example and verified the improvement.",
+     "gaps": "Could have expanded on the verification process.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 8,
+    "action": "new_topic",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "Great example. Now, let's move on to SQL. Can you explain how you would optimize a query to improve the performance of a database in one of your projects?",
+    "anchor_quote": "Sure, for the stack implementation, I first defined a class with push and pop methods. Then, in the API, I used this stack to manage request history.",
+    "reason": "Transition to SQL to cover another competency. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000204.8,
+    "answer": "For the chat app, we had a lot of messages, and sometimes the queries were slow. I added indexes to the timestamp column to speed things up. Also, used LIMIT to control the number of messages returned. Think it helped a bit, but not sure by how much.",
+    "answer_words": [],
+    "answer_seconds": 19.2,
+    "answered_at": 1000232.0,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a general approach to optimizing SQL queries, but lacked specific metrics or steps to verify the effectiveness.",
+     "gaps": "Lacks specific examples and metrics to quantify the performance improvement.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 9,
+    "action": "follow_up",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "Can you provide more details on how you added the indexes and the LIMIT clause to the query? Also, did you measure the performance improvement, and if so, could you share any specific metrics or benchmarks you used?",
+    "anchor_quote": "I added indexes to the timestamp column to speed things up. Also, used LIMIT to control the number of messages returned.",
+    "reason": "Provide more concrete details to validate the claim of performance improvement and better understand the candidate's approach to SQL optimization in practical scenarios. This will also help cover the SQL competency more thoroughly within the remaining time frame while linking back to the project exp [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000232.0,
+    "answer": "Sure, for the chat app, I added indexes to the timestamp column to speed up the query when fetching recent messages. Also, used LIMIT to control how many messages were returned. I think it helped, but didn't measure it exactly. Maybe it was faster, but not sure by how much.",
+    "answer_words": [],
+    "answer_seconds": 20.0,
+    "answered_at": 1000260.0,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a specific example and explained the use of indexes and LIMIT clause.",
+     "gaps": "Candidate did not provide specific performance metrics or benchmarks.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 10,
+    "action": "follow_up",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "Can you provide specific performance metrics or benchmarks that demonstrate the improvement you mentioned? Also, how did you ensure that adding indexes and using LIMIT was the right choice for optimizing the query?",
+    "anchor_quote": "I think it helped, but didn't measure it exactly. Maybe it was faster, but not sure by how much.",
+    "reason": "Need more concrete evidence of performance improvement. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000260.0,
+    "answer": "Sure, for the chat app, I added indexes to the timestamp column and used LIMIT to control the number of messages. I noticed that the response time for fetching messages improved, but I didn't have exact metrics. I compared it with a query without indexes and LIMIT, and it felt faster. I think it was a good choice, but I didn't measure the exact improvement.",
+    "answer_words": [],
+    "answer_seconds": 26.0,
+    "answered_at": 1000294.0,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a clear example of using indexes and LIMIT to optimize queries.",
+     "gaps": "Candidate lacks specific performance metrics or benchmarks to quantify the improvement.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 11,
+    "action": "revisit",
+    "competency": "c3",
+    "difficulty": 3,
+    "say": "Can you share any specific performance metrics or benchmarks that demonstrate the improvement you mentioned with the chat app project?",
+    "anchor_quote": "Sure, for the chat app, I added indexes to the timestamp column and used LIMIT to control the number of messages.",
+    "reason": "Need more detail on the impact and verification of the changes made. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000294.0,
+    "answer": "Sure, I noticed that the response time for fetching messages improved, but I didn't measure it exactly. I compared it with a query without indexes and LIMIT and it felt faster. I think it was a good choice, but I didn't have exact metrics to show the improvement.",
+    "answer_words": [],
+    "answer_seconds": 19.2,
+    "answered_at": 1000321.2,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided an example of optimizing SQL queries, but lacked specific metrics or benchmarks.",
+     "gaps": "Candidate did not provide exact performance metrics or a detailed process for verification.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 12,
+    "action": "new_topic",
+    "competency": "c4",
+    "difficulty": 3,
+    "say": "Can you describe your approach to solving a problem that required efficient coding, and how you ensured your solution was optimized for performance?",
+    "anchor_quote": "",
+    "reason": "Explore problem-solving approach and code optimization strategies further. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000321.2,
+    "answer": "Sure, in the chat app project, I faced a problem where the server was slowing down due to handling too many WebSocket connections. I started by identifying the bottleneck, which was the processing of messages. I optimized the code by reducing unnecessary computations and using more efficient data structures like the stack for managing message history. I also made sure to use appropriate indexing and LIMIT in SQL queries to reduce database load. To ensure the solution was optimized, I tested the code with different loads and compared it with the previous version. It helped a lot, but I didn't have exact metrics to show the improvement.",
+    "answer_words": [],
+    "answer_seconds": 42.8,
+    "answered_at": 1000372.0,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a relevant example and explained the impact.",
+     "gaps": "Metrics to quantify the improvement could be more specific.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 13,
+    "action": "new_topic",
+    "competency": "c3",
+    "difficulty": 3,
+    "say": "Can you describe how you ensured your work on the chat app project was well-organized and contributed to the overall success of the project?",
+    "anchor_quote": "Can you describe how you ensured your work on the chat app project was well-organized and contributed to the overall success of the project?",
+    "reason": "To explore the candidate's project ownership and impact further. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000372.0,
+    "answer": "Sure, for the chat app project, I kept my code clean and modular, making it easier to manage. I used version control and created branches for different features, so it was easy to track changes. I also documented my code and tested it thoroughly, especially the WebSocket part. It helped in debugging and maintaining the app. Overall, it contributed to the project's success by keeping things organized and making it easier for the team to work together.",
+    "answer_words": [],
+    "answer_seconds": 30.8,
+    "answered_at": 1000410.8,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a good overview of their approach and mentioned version control, modularity, and documentation.",
+     "gaps": "No specific metrics or benchmarks were provided to quantify the impact.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 14,
+    "action": "follow_up",
+    "competency": "c3",
+    "difficulty": 3,
+    "say": "Can you give a specific example of a feature you worked on in the chat app project and how your efforts contributed to the overall success of the project?",
+    "anchor_quote": "Sure, for the chat app project, I kept my code clean and modular, making it easier to manage.",
+    "reason": "Candidate can provide specific examples of their contributions and impact. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000410.8,
+    "answer": "Sure, I worked on the real-time message sending feature using WebSockets. I made sure to handle messages efficiently so that the server didn't get overloaded. I kept the code simple and modular, which helped in debugging. This feature was crucial for the chat app, as it ensured messages were sent and received quickly. Overall, it contributed to the success by making the chat more responsive and user-friendly.",
+    "answer_words": [],
+    "answer_seconds": 26.8,
+    "answered_at": 1000445.6000000001,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a specific example of a feature they worked on in the chat app project, describing their approach and the impact on the project's success.",
+     "gaps": "Did not provide specific performance metrics for the improvements made.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 15,
+    "action": "close",
+    "competency": "c3",
+    "difficulty": 3,
+    "say": "Thank you for sharing your experience with us. Your detailed example of working on the real-time message sending feature in the chat app project and the steps you took to ensure it was efficient and user-friendly demonstrates your commitment to the project's success. Your contributions are highly valued.",
+    "anchor_quote": "Can you give a specific example of a feature you worked on in the chat app project and how your efforts contributed to the overall success of the project?",
+    "reason": "Candidate answered the question thoroughly, providing a clear example of their work and the impact it had.",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000445.6000000001,
+    "answer": null,
+    "answer_words": [],
+    "answer_seconds": 0.0,
+    "answered_at": null,
+    "score": null,
+    "assessment": null,
+    "evaluation": null,
+    "corrections": []
+   }
+  ],
+  "difficulty": 3,
+  "started_at": 1000000.0,
+  "finished": true,
+  "events": [
+   {
+    "t": 1791319759.439,
+    "kind": "turn",
+    "turn": 0,
+    "provider": "ollama",
+    "ms": 79441.7,
+    "action": "open"
+   },
+   {
+    "t": 1791319855.713,
+    "kind": "turn",
+    "turn": 1,
+    "provider": "ollama",
+    "ms": 80008.4,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791319916.671,
+    "kind": "turn",
+    "turn": 2,
+    "provider": "ollama",
+    "ms": 46652.9,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320009.906,
+    "kind": "turn",
+    "turn": 3,
+    "provider": "ollama",
+    "ms": 80116.0,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320078.495,
+    "kind": "turn",
+    "turn": 4,
+    "provider": "ollama",
+    "ms": 54849.7,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320158.109,
+    "kind": "turn",
+    "turn": 5,
+    "provider": "ollama",
+    "ms": 63435.7,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320227.332,
+    "kind": "turn",
+    "turn": 6,
+    "provider": "ollama",
+    "ms": 54255.7,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320347.402,
+    "kind": "turn",
+    "turn": 7,
+    "provider": "ollama",
+    "ms": 108675.4,
+    "action": "challenge"
+   },
+   {
+    "t": 1791320497.449,
+    "kind": "turn",
+    "turn": 8,
+    "provider": "ollama",
+    "ms": 129889.0,
+    "action": "new_topic"
+   },
+   {
+    "t": 1791320600.78,
+    "kind": "turn",
+    "turn": 9,
+    "provider": "ollama",
+    "ms": 85241.2,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320687.104,
+    "kind": "turn",
+    "turn": 10,
+    "provider": "ollama",
+    "ms": 69831.3,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320850.061,
+    "kind": "turn",
+    "turn": 11,
+    "provider": "ollama",
+    "ms": 143239.5,
+    "action": "revisit"
+   },
+   {
+    "t": 1791320981.662,
+    "kind": "turn",
+    "turn": 12,
+    "provider": "ollama",
+    "ms": 115265.8,
+    "action": "new_topic"
+   },
+   {
+    "t": 1791321139.417,
+    "kind": "turn",
+    "turn": 13,
+    "provider": "ollama",
+    "ms": 132674.6,
+    "action": "new_topic"
+   },
+   {
+    "t": 1791321372.529,
+    "kind": "turn",
+    "turn": 14,
+    "provider": "ollama",
+    "ms": 209292.4,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321711.726,
+    "kind": "turn",
+    "turn": 15,
+    "provider": "ollama",
+    "ms": 317921.6,
+    "action": "close"
+   }
+  ]
+ },
+ "attempts": [
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 99211.9,
+   "error": "",
+   "input_tokens": 645,
+   "output_tokens": 455
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 79441.7,
+   "error": "",
+   "input_tokens": 1591,
+   "output_tokens": 79
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 80008.4,
+   "error": "",
+   "input_tokens": 1708,
+   "output_tokens": 367
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 46652.9,
+   "error": "",
+   "input_tokens": 1886,
+   "output_tokens": 158
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 80115.9,
+   "error": "",
+   "input_tokens": 2033,
+   "output_tokens": 334
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 54849.7,
+   "error": "",
+   "input_tokens": 2199,
+   "output_tokens": 176
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 63435.7,
+   "error": "",
+   "input_tokens": 2379,
+   "output_tokens": 196
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 54255.7,
+   "error": "",
+   "input_tokens": 2534,
+   "output_tokens": 140
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 108675.3,
+   "error": "",
+   "input_tokens": 2644,
+   "output_tokens": 419
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 81198.5,
+   "error": "repeats an earlier question: \"That's a great example. Could you walk me through the steps you took to implemen\"",
+   "input_tokens": 2892,
+   "output_tokens": 234
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 48690.3,
+   "error": "",
+   "input_tokens": 3233,
+   "output_tokens": 156
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 85241.2,
+   "error": "",
+   "input_tokens": 3047,
+   "output_tokens": 253
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 69831.3,
+   "error": "",
+   "input_tokens": 3223,
+   "output_tokens": 156
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 95079.3,
+   "error": "repeats an earlier question: 'Can you provide specific performance metrics or benchmarks that demonstrate the '",
+   "input_tokens": 3402,
+   "output_tokens": 262
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 48160.1,
+   "error": "",
+   "input_tokens": 3740,
+   "output_tokens": 147
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 70019.7,
+   "error": "repeats an earlier question: 'Can you share any specific performance metrics or benchmarks that demonstrate th'",
+   "input_tokens": 3531,
+   "output_tokens": 142
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 45245.9,
+   "error": "",
+   "input_tokens": 3858,
+   "output_tokens": 129
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 81531.3,
+   "error": "repeats an earlier question: 'Can you share any specific performance metrics or benchmarks that demonstrate th'",
+   "input_tokens": 3730,
+   "output_tokens": 171
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 51143.2,
+   "error": "",
+   "input_tokens": 4055,
+   "output_tokens": 156
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 209292.4,
+   "error": "",
+   "input_tokens": 3903,
+   "output_tokens": 157
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 86899.4,
+   "error": "close ends the interview, so it must not ask anything: thank the candidate and say goodbye",
+   "input_tokens": 4075,
+   "output_tokens": 182
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 231022.1,
+   "error": "",
+   "input_tokens": 4093,
+   "output_tokens": 213
+  }
+ ],
+ "qualities": [
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak"
+ ]
+}

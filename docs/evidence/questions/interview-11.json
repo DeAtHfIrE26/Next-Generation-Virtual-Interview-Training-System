@@ -1,0 +1,924 @@
+{
+ "checks": {
+  "questions": 15,
+  "bank_overlap": 0,
+  "follow_ups": 10,
+  "follow_ups_referencing_answer": 10,
+  "difficulty_tracks_performance": true,
+  "difficulty_transitions": [
+   {
+    "score": 2,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 2,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 2,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 2,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 5
+   },
+   {
+    "score": 4,
+    "from": 5,
+    "to": 5
+   },
+   {
+    "score": 4,
+    "from": 5,
+    "to": 5
+   },
+   {
+    "score": 4,
+    "from": 5,
+    "to": 5
+   },
+   {
+    "score": 4,
+    "from": 5,
+    "to": 5
+   }
+  ],
+  "difficulty_corrections_by_code": 4,
+  "emergency_questions": 0,
+  "fresh_questions": 0,
+  "rejected_attempts": {
+   "say must ask the candidate a question": 2,
+   "repeats an earlier question": 2,
+   "ollama": 6
+  },
+  "emergency_blueprint": false,
+  "repeats": 0,
+  "closed_on_time": true,
+  "passed": true
+ },
+ "state": {
+  "session_id": "mock-11",
+  "params": {
+   "role": "Site Reliability Engineer",
+   "seniority": "senior",
+   "company": "Flipkart",
+   "company_style": "Incident deep dives and capacity planning for sale events",
+   "job_description": "",
+   "resume_context": "",
+   "skills": [
+    "Kubernetes",
+    "Observability"
+   ],
+   "interview_type": "mixed",
+   "round": "onsite",
+   "difficulty": "auto",
+   "language": "en",
+   "duration_minutes": 18,
+   "persona": "maya"
+  },
+  "blueprint": {
+   "summary": "This interview assesses the candidate's technical skills in Kubernetes and observability, as well as their ability to lead incident resolution and capacity planning, key competencies for a senior Site Reliability Engineer at Flipkart.",
+   "competencies": [
+    {
+     "id": "c1",
+     "name": "Kubernetes Expertise",
+     "why": "Kubernetes is crucial for managing containerized applications at scale, as highlighted in the job description.",
+     "weight": 0.4,
+     "minutes": 7.0,
+     "signals": [
+      "Demonstrates deep knowledge of Kubernetes features and best practices",
+      "Provides examples of successful Kubernetes implementations"
+     ]
+    },
+    {
+     "id": "c2",
+     "name": "Observability",
+     "why": "Effective observability is essential for monitoring and troubleshooting systems, as seen in the job description and candidate's resume.",
+     "weight": 0.3,
+     "minutes": 6.0,
+     "signals": [
+      "Shares detailed strategies for implementing observability",
+      "Shows experience in identifying and resolving issues using observability tools"
+     ]
+    },
+    {
+     "id": "c3",
+     "name": "Incident Leadership",
+     "why": "Incident resolution is a core responsibility, as noted in the job description, especially given the company's focus on incident deep dives.",
+     "weight": 0.2,
+     "minutes": 4.0,
+     "signals": [
+      "Discusses effective incident response strategies",
+      "Provides examples of leading successful incident resolution"
+     ]
+    }
+   ],
+   "opening": "Hello, thank you for joining us today. Let's start by discussing your experience with Kubernetes and how you've used it in previous roles.",
+   "style_notes": "The interview will be warm and encouraging, with a focus on probing for technical details and measurable impacts. Expect a mix of direct questions and examples.",
+   "start_difficulty": 3,
+   "emergency": false,
+   "provider": "ollama"
+  },
+  "turns": [
+   {
+    "index": 0,
+    "action": "open",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Hi there, thank you for coming in. I'm Maya, and I'll be your interviewer today. Let's start by discussing your experience with Kubernetes and how you've used it in previous roles. Can you share an example of a Kubernetes implementation you led?",
+    "anchor_quote": "",
+    "reason": "Starting the interview with the main technical competency. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000000.0,
+    "answer": "Sure, I worked on a project where we needed to scale our microservices. We used Kubernetes to manage the deployment and scaling of services. It helped a bit, but it was tricky setting everything up.",
+    "answer_words": [],
+    "answer_seconds": 14.0,
+    "answered_at": 1000022.0,
+    "score": 2,
+    "assessment": {
+     "strengths": "The candidate provided a generic example but mentioned scaling and Kubernetes usage.",
+     "gaps": "The answer lacks specific details, measurable impact, and Kubernetes features.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 1,
+    "action": "challenge",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "That's a good start. Can you give me more details on the Kubernetes setup you implemented? For instance, what features did you use, and what were the measurable outcomes of using Kubernetes in this project?",
+    "anchor_quote": "Sure, I worked on a project where we needed to scale our microservices. We used Kubernetes to manage the deployment and scaling of services. It helped a bit, but it was tricky setting everything up.",
+    "reason": "The candidate's answer is vague and lacks specifics. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000022.0,
+    "answer": "Um, I remember we used some basic features like deployment and service management. I think it helped with scaling, but I'm not sure about the exact metrics or outcomes. It was a while ago, so my details aren't super clear.",
+    "answer_words": [],
+    "answer_seconds": 16.0,
+    "answered_at": 1000046.0,
+    "score": 2,
+    "assessment": {
+     "strengths": "Candidate provided a general example but lacked specific details and measurable outcomes.",
+     "gaps": "Lack of precise information about Kubernetes features and performance metrics.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 2,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "I understand that it's been a while, but could you specify which Kubernetes features you used, such as namespaces, persistent volumes, or RBAC, and what measurable outcomes you achieved with these implementations? For example, did it improve your application's availability or reduce your deployment time?",
+    "anchor_quote": "Um, I remember we used some basic features like deployment and service management. I think it helped with scaling, but I'm not sure about the exact metrics or outcomes. It was a while ago, so my details aren't super clear.",
+    "reason": "Need to clarify and expand on the specific Kubernetes features and performance metrics used in the project to gauge their expertise better. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000046.0,
+    "answer": "Certainly, we used namespaces to separate our development and production environments, which helped with managing resources and avoiding conflicts. We also implemented RBAC to manage access to Kubernetes resources, which improved security. As for outcomes, I believe it led to a more organized deployment process and better team collaboration. While I don't have specific metrics like reduced deployment times or availability improvements, the overall structure was more efficient and scalable.",
+    "answer_words": [],
+    "answer_seconds": 28.0,
+    "answered_at": 1000082.0,
+    "score": 2,
+    "assessment": {
+     "strengths": "Candidate provided some specific Kubernetes features, but lacked measurable outcomes.",
+     "gaps": "No specific metrics or outcomes were mentioned.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 3,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "I see you mentioned the benefits of using namespaces and RBAC, which is great. Can you provide some specific metrics or outcomes that you achieved by implementing these features? For example, did it reduce the deployment time or improve the application's availability in any measurable way?",
+    "anchor_quote": "As for outcomes, I believe it led to a more organized deployment process and better team collaboration.",
+    "reason": "Candidate's previous response was vague about specific outcomes. Need to dig deeper here to get more concrete results and metrics. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000082.0,
+    "answer": "Certainly, while I don't have exact numbers, the namespaces and RBAC implementation definitely improved our deployment process. For namespaces, we noticed a clearer separation of concerns, which reduced the chances of conflicts and made it easier to manage resources. As for RBAC, we saw an improvement in security, but in terms of metrics, I can't provide specific deployment time reductions or availability improvements. However, the structured approach helped in maintaining better control and visibility over our Kubernetes cluster. The team found it easier to manage and scale services, which translated into a more robust and secure environment overall.",
+    "answer_words": [],
+    "answer_seconds": 39.2,
+    "answered_at": 1000129.2,
+    "score": 2,
+    "assessment": {
+     "strengths": "The candidate acknowledges the benefits of namespaces and RBAC, but lacks specific metrics or outcomes.",
+     "gaps": "No specific metrics or measurable outcomes are provided.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 4,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Could you give me an example of how you've used observability tools to monitor and troubleshoot your systems in the past? For instance, did you use specific tools like Prometheus or Grafana, and what outcomes or metrics did you achieve through these tools?",
+    "anchor_quote": "As for RBAC, we saw an improvement in security, but in terms of metrics, I can't provide specific deployment time reductions or availability improvements.",
+    "reason": "Need more specific metrics to fully assess Kubernetes expertise. Moving to observability now to balance competencies better and keep the candidate engaged. We can revisit Kubernetes later if needed, but for now, let's focus on observability strategies to see if the candidate can provide more concret [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000129.2,
+    "answer": "Sure, I worked on a project where we were dealing with high traffic microservices, and observability was crucial. We used Prometheus for monitoring our services and Grafana for visualization. We set up Prometheus to scrape metrics from our services and configured Grafana dashboards to provide real-time insights. For instance, we were able to reduce our incident response time by 30% when we noticed unusual metrics indicating a service slowdown. We also set up alerts for critical metrics like CPU and memory usage, which helped us proactively address issues before they became major problems. This setup allowed us to pinpoint the root cause of issues more quickly and made our systems more reliable and responsive.",
+    "answer_words": [],
+    "answer_seconds": 45.6,
+    "answered_at": 1000182.7999999999,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a clear example of using observability tools to reduce incident response time and set up alerts.",
+     "gaps": "Could benefit from more specific metrics and a deeper dive into the tools used.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 5,
+    "action": "follow_up",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "That's a great example! Could you elaborate on the specific metrics you set up with Prometheus and how they helped you monitor the services? Also, how did you configure the Grafana dashboards to provide real-time insights?",
+    "anchor_quote": "we set up Prometheus to scrape metrics from our services and configured Grafana dashboards to provide real-time insights.",
+    "reason": "Candidate provided a good example but needs more detail. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000182.7999999999,
+    "answer": "Certainly, with Prometheus, we configured a comprehensive set of metrics to monitor our microservices. We set up metrics for CPU usage, memory usage, request latency, and error rates. For instance, we created a metric called `http_request_duration_seconds` to track the latency of HTTP requests, and another metric called `error_count` to count the number of errors per service. In Grafana, we created dashboards for each microservice to display these metrics in real-time. We used panels to visualize the data, such as time series graphs for latency and error rates, and tables to show real-time metrics. This setup allowed us to quickly identify patterns and anomalies. For example, we noticed that during peak traffic times, the `http_request_duration_seconds` metric would spike, indicating potential performance issues. By correlating this with the `error_count` metric, we could quickly identify which service was causing the problems and take corrective action. We also set up alerts in Prometheus based on these metrics. For instance, if the `http_request_duration_seconds` exceeded a certain threshold, we would get an alert in our monitoring system, which would notify the relevant team members. This proactive approach helped us reduce the incident response time to just 15 minutes, as we could quickly pinpoint the issue and address it before it affected user experience.",
+    "answer_words": [],
+    "answer_seconds": 82.8,
+    "answered_at": 1000273.6,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a clear example of using observability tools and described their impact.",
+     "gaps": "Candidate could provide more specific metrics and concrete outcomes.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 6,
+    "action": "new_topic",
+    "competency": "c3",
+    "difficulty": 3,
+    "say": "That's excellent. Moving on to your experience with incident leadership, can you share an example of a time when you led a successful incident resolution?",
+    "anchor_quote": "Certainly, with Prometheus, we configured a comprehensive set of metrics to monitor our microservices.",
+    "reason": "Transition to incident leadership, a core competency for the role. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000273.6,
+    "answer": "Sure, I can share an incident that happened at my previous role. We were running a large e-commerce platform, and one day we experienced a sudden surge in traffic that overloaded one of our microservices. This caused a cascade effect, impacting downstream services and eventually leading to a degradation in user experience. I led a cross-functional incident response team to troubleshoot the issue. We used our observability tools, including Prometheus and Grafana, to pinpoint the root cause. The dashboards showed that the `http_request_duration_seconds` metric for one of our services was spiking, and the `error_count` metric was also increasing. We quickly identified that the issue was due to a misconfigured database connection pool. By scaling down the service and manually adjusting the connection pool settings, we were able to resolve the issue within 30 minutes. The team worked together to ensure that the service was stable, and we restored full service within an hour. To prevent this from happening again, we implemented a more robust monitoring and alerting system, including setting up threshold alerts for critical metrics. We also conducted a post-mortem meeting with the entire team to review the incident and improve our incident response processes. This experience taught us the importance of having clear communication channels and a well-defined incident response plan.",
+    "answer_words": [],
+    "answer_seconds": 85.2,
+    "answered_at": 1000366.7999999999,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a detailed scenario involving incident resolution, including the use of observability tools and a post-mortem review.",
+     "gaps": "Could benefit from more specific metrics and quantitative outcomes.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 7,
+    "action": "follow_up",
+    "competency": "c3",
+    "difficulty": 4,
+    "say": "That's very detailed. Can you provide some specific metrics or quantitative outcomes related to the incident resolution, such as the reduction in incident response time or the number of failed requests that were prevented?",
+    "anchor_quote": "we were able to resolve the issue within 30 minutes",
+    "reason": "The candidate has a strong example but lacks specific metrics. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000366.7999999999,
+    "answer": "Certainly, during the incident, we noticed that the initial response time was around 45 minutes, which was quite high. After we implemented our enhanced monitoring and alerting system, we were able to reduce the incident response time to 15 minutes. Specifically, this improvement was largely due to the real-time insights provided by Prometheus and Grafana, which allowed us to quickly identify the root cause. In terms of failed requests, we saw a significant drop. Before the incident, our error rate was around 5% during peak traffic times. After addressing the misconfiguration and implementing the new monitoring tools, the error rate dropped to 1%. This not only improved the user experience but also reduced our support tickets by about 70%. The proactive approach we took, with better monitoring and alerting, definitely paid off in terms of both response time and system reliability.",
+    "answer_words": [],
+    "answer_seconds": 56.4,
+    "answered_at": 1000431.2,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided specific metrics and outcomes for the incident resolution, demonstrating measurable impact.",
+     "gaps": "Could provide more details on the post-incident improvements and the impact on system reliability.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 8,
+    "action": "follow_up",
+    "competency": "c3",
+    "difficulty": 4,
+    "say": "Specifically, you mentioned that the real-time insights from Prometheus and Grafana helped you identify the root cause quickly. Could you elaborate on how the post-incident improvements were implemented and what impact these changes had on system reliability?",
+    "anchor_quote": "Specifically, this improvement was largely due to the real-time insights provided by Prometheus and Grafana, which allowed us to quickly identify the root cause.",
+    "reason": "Candidate provided strong example, need more details on post-incident improvements. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000431.2,
+    "answer": "Certainly, after the incident, we implemented several post-incident improvements to enhance our system reliability. First, we expanded our monitoring scope to include more granular metrics, such as individual database query times and API response times, which helped us better understand the root cause of issues. We also refined our alerting system to trigger more specific alerts based on critical metrics, reducing false positives and ensuring that only the most important issues were escalated to the right team members. In terms of tools, we integrated more advanced visualization features in Grafana, creating custom dashboards that provided real-time insights into each service's performance. This allowed us to correlate metrics across different services and identify dependencies more effectively. We also automated some of our response workflows, creating playbooks in Grafana that could be triggered based on alert conditions. For example, if a specific metric exceeded a threshold, the playbook would automatically scale the service or initiate manual scaling steps with predefined instructions. These changes had a significant impact on system reliability. The incident response time was further reduced to 10 minutes, and we saw a 20% decrease in overall system downtime. The number of failed requests dropped to 1%, as we could quickly address issues before they escalated. Moreover, the proactive approach to monitoring and alerting led to a 30% reduction in support tickets, as we were better equipped to handle and resolve incidents before they affected users. Overall, these post-incident improvements not only addressed the immediate issues but also built a more robust and resilient infrastructure, reducing the likelihood of similar incidents in the future.",
+    "answer_words": [],
+    "answer_seconds": 105.2,
+    "answered_at": 1000544.3999999999,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided detailed metrics and quantitative outcomes, showing a clear impact on system reliability.",
+     "gaps": "The answer was strong but could benefit from more specific examples of automated workflows and playbooks.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 9,
+    "action": "follow_up",
+    "competency": "c3",
+    "difficulty": 4,
+    "say": "That's very detailed. Could you walk me through the specific automated workflows or playbooks you implemented to address issues more efficiently after the incident?",
+    "anchor_quote": "we saw a 20% decrease in overall system downtime.",
+    "reason": "To explore further improvements and specific automated processes. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000544.3999999999,
+    "answer": "Absolutely, after the incident, we implemented several automated workflows and playbooks to address issues more efficiently. For instance, we created a playbook in Grafana that would automatically scale down the problematic service if the `http_request_duration_seconds` metric exceeded a certain threshold. This helped prevent the service from being overwhelmed and cascading the issue to downstream services. Additionally, we set up a playbook that would notify the database team to manually adjust the connection pool settings if the `error_count` metric spiked. This reduced the time needed to manually intervene and allowed us to scale the service more effectively. We also integrated a playbook that would automatically initiate a rollback if a deployment caused issues. This would revert the service to a previous working state and alert the deployment team to investigate. This saved us a lot of time by automating the rollback process, which previously required manual intervention and could take up to 15 minutes. Furthermore, we created a playbook for incident escalation, where if certain critical metrics remained high for a prolonged period, it would automatically escalate the issue to the senior team. This ensured that we didn't miss critical issues that required immediate attention. These playbooks significantly reduced our incident response time and improved our overall system reliability. For example, the automated scaling and rollback processes helped us to address issues in just 5 minutes, compared to the previous 15 minutes. This proactive approach not only improved our response time but also ensured that we could quickly revert to a stable state, minimizing the impact on users and reducing support tickets by 25%.",
+    "answer_words": [],
+    "answer_seconds": 105.2,
+    "answered_at": 1000657.5999999999,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided detailed examples of automation playbooks and their impact on incident response time and system reliability.",
+     "gaps": "A few more specifics on the exact playbooks and their automated steps would be helpful.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 10,
+    "action": "follow_up",
+    "competency": "c3",
+    "difficulty": 5,
+    "say": "That's very detailed. Could you provide more specifics on the exact automated workflows or playbooks you implemented, such as the exact steps or conditions that trigger these playbooks? This will help me understand the automation process in more detail.",
+    "anchor_quote": "after the incident, we implemented several automated workflows and playbooks to address issues more efficiently. For instance, we created a playbook in Grafana that would automatically scale down the problematic service if the",
+    "reason": "To ensure a comprehensive understanding of the candidate's incident response strategies. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000657.5999999999,
+    "answer": "Sure, I can provide more specifics on the automated workflows and playbooks we implemented. For instance, we created a playbook for automatic scaling that triggers when the `http_request_duration_seconds` metric exceeds 200 milliseconds for more than 5 consecutive minutes. This playbook automatically scales down the service by 20% to prevent further overload. Another playbook is for manually adjusting the connection pool settings, which triggers when the `error_count` metric hits over 100 errors per minute for more than 2 minutes. This playbook sends an alert to the database team to manually scale the pool size to 500 connections, preventing the service from failing. For rollbacks, we have a playbook that automatically undeploys the current version of the service and redeploys the previous stable version if the `error_count` metric remains above 50 errors per minute for 10 minutes. This ensures the service is quickly restored to a working state. Finally, we have an escalation playbook that triggers if the `http_request_duration_seconds` metric stays above 300 milliseconds for more than 15 minutes. This playbook automatically escalates the issue to the senior leadership team, ensuring critical issues are addressed promptly. These playbooks significantly streamlined our response process, reducing the incident response time and improving system reliability. For example, the automatic scaling playbook helped us reduce the service's failure rate by 15%, and the rollback playbook cut the time to restore service by 30%.",
+    "answer_words": [],
+    "answer_seconds": 90.8,
+    "answered_at": 1000756.3999999999,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided detailed automated workflows and playbooks, including specific conditions and metrics.",
+     "gaps": "No gaps identified.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote \"That's very detailed. Could you walk me through the specific automated workflows\")"
+    ]
+   },
+   {
+    "index": 11,
+    "action": "follow_up",
+    "competency": "c3",
+    "difficulty": 5,
+    "say": "That's very detailed. Could you walk me through the exact steps or conditions that trigger these playbooks in more detail? For example, what specific actions are performed when the `http_request_duration_seconds` metric exceeds 200 milliseconds, and how does the database team receive the alert to manually adjust the connection pool settings? This will help me understand the automation process in more detail?",
+    "anchor_quote": "we created a playbook for automatic scaling that triggers when the `http_request_duration_seconds` metric exceeds 200 milliseconds for more than 5 consecutive minutes",
+    "reason": "To get more specific details on the automation process. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000756.3999999999,
+    "answer": "Certainly, I can walk you through the exact steps or conditions that trigger these playbooks in more detail. For the `http_request_duration_seconds` metric exceeding 200 milliseconds for more than 5 consecutive minutes, the playbook triggers an alert in our monitoring system. This alert is configured to automatically scale the service down by 20%. The alert also sends an email and a Slack notification to the on-call team, which includes the operations and development teams. The notification includes a link to the Grafana dashboard showing the metrics, allowing the team to quickly identify the issue and take action. When the `error_count` metric exceeds 100 errors per minute for more than 2 minutes, the playbook sends a high-priority alert to the database team. This alert is configured to trigger the \"Adjust Connection Pool\" playbook. The alert includes a detailed message with the metric values and the Grafana dashboard URL. The database team receives an email and a Slack notification, which includes a step-by-step guide on how to manually adjust the connection pool settings to 500 connections. This helps prevent the service from failing due to connection pool exhaustion. For the rollback playbook, if the `error_count` metric remains above 50 errors per minute for 10 minutes, the playbook triggers an automatic rollback. This rollback undeploys the current version of the service and deploys the previous stable version. The alert also sends an email and a Slack notification to the deployment team, including the rollback steps and the Grafana dashboard URL. This ensures the service is restored to a working state quickly. Finally, the escalation playbook triggers when the `http_request_duration_seconds` metric stays above 300 milliseconds for more than 15 minutes. This playbook sends an alert to the senior leadership team, including the CTO and the head of engineering. The alert includes a detailed message with the metric values, the Grafana dashboard URL, and the current status of the incident response. The",
+    "answer_words": [],
+    "answer_seconds": 126.4,
+    "answered_at": 1000890.7999999999,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided detailed steps for automated workflows and playbooks, demonstrating thorough understanding and implementation.",
+     "gaps": "Candidate could provide more specific metrics or quantitative outcomes related to the playbooks' impact.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote 'Could you provide more specifics on the exact automated workflows or playbooks y')"
+    ]
+   },
+   {
+    "index": 12,
+    "action": "new_topic",
+    "competency": "c2",
+    "difficulty": 5,
+    "say": "Can you share a specific example of how you've used observability tools like Prometheus and Grafana to monitor and troubleshoot your systems in the past? What specific metrics did you set up, and how did they help you identify and resolve issues?",
+    "anchor_quote": "",
+    "reason": "Explore candidate's experience with implementing observability tools in more depth. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000890.7999999999,
+    "answer": "Certainly, I can give you a specific example. At my previous role, we were running a large e-commerce platform, and we experienced a sudden surge in traffic that overloaded one of our microservices. To monitor and troubleshoot this issue, we used Prometheus for collecting and storing metrics and Grafana for visualization. We set up several key metrics, including `http_request_duration_seconds` to track the latency of HTTP requests, `error_count` to monitor the number of errors per service, and `database_connection_pool_size` to check the state of our database connection pool. These metrics helped us pinpoint the root cause of the issue. For instance, the `http_request_duration_seconds` metric spiked during the surge in traffic, indicating a potential performance bottleneck. By correlating this with the `error_count` metric, we found that the number of errors also increased, suggesting that the service was becoming unstable under the load. In Grafana, we created dashboards to visualize these metrics in real-time. The `http_request_duration_seconds` dashboard showed spikes in request latency, while the `error_count` dashboard highlighted increasing error rates. We used these insights to quickly identify that the problem was due to a misconfigured database connection pool. To resolve the issue, we scaled down the service and manually adjusted the connection pool settings. We expanded the pool size to handle the increased traffic and improved the service's stability. This proactive approach helped us reduce the incident response time to just 30 minutes, compared to the previous 45 minutes. The real-time insights from Prometheus and Grafana allowed us to quickly identify the root cause and take corrective action. We also set up alerts based on these metrics, which helped us proactively address issues before they became major problems. Overall, this setup significantly improved our system's reliability and reduced the impact of future incidents.",
+    "answer_words": [],
+    "answer_seconds": 115.6,
+    "answered_at": 1001014.3999999999,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a detailed example of using observability tools to monitor and troubleshoot a system issue, including specific metrics and the impact on system reliability.",
+     "gaps": "",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "difficulty 4->5 (score 4, previous 5)"
+    ]
+   },
+   {
+    "index": 13,
+    "action": "wrap_up",
+    "competency": "c2",
+    "difficulty": 5,
+    "say": "Can you confirm how these improvements impacted system reliability? Specifically, what metrics showed a reduction in the failure rate or an improvement in response time, and how did these changes contribute to overall system stability?",
+    "anchor_quote": "For instance, the `http_request_duration_seconds` metric spiked during the surge in traffic, indicating a potential performance bottleneck.",
+    "reason": "Closing the interview with a strong example of observability usage and its impact on system reliability and incident resolution time. No need to repeat questions already asked, and time is nearly up. This question will provide a final insight into the candidate's technical skills and experience with [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1001014.3999999999,
+    "answer": "Certainly, the improvements we implemented had a significant impact on system reliability. Specifically, the real-time insights from Prometheus and Grafana helped us identify and address issues more proactively. Here are some key metrics that showed an improvement: 1. **Incident Response Time**: We reduced the incident response time from 45 minutes to 30 minutes. This was due to the automated workflows and improved alerting system, which allowed us to quickly scale the service and manually adjust the connection pool settings. 2. **Error Rate**: The `error_count` metric dropped from 5% during peak traffic times to 1%. This reduction in error rate indicated a more stable system and better handling of high traffic periods. 3. **System Downtime**: The overall system downtime decreased by 20%. This was a direct result of the enhanced monitoring and automation, which allowed us to address issues faster and more effectively. 4. **Support Tickets**: The number of support tickets related to incidents was reduced by 30%. This showed that our proactive approach to monitoring and alerting led to fewer issues reaching the support team, improving user experience and reducing the workload on the support team. 5. **Service Stability**: The `http_request_duration_seconds` metric, which spiked during the initial incident, stabilized over time. This indicated that our improvements in resource management and scaling were effective in maintaining service performance under high traffic conditions. These metrics collectively contributed to overall system stability, ensuring that our e-commerce platform could handle peak traffic more reliably and with fewer service disruptions.",
+    "answer_words": [],
+    "answer_seconds": 98.0,
+    "answered_at": 1001120.3999999999,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided detailed examples of how they used observability tools to monitor and troubleshoot systems, and how these improvements impacted system reliability.",
+     "gaps": "The candidate could have provided more specific metrics and quantitative outcomes.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 14,
+    "action": "close",
+    "competency": "c2",
+    "difficulty": 5,
+    "say": "Thank you for sharing all that detail. It's clear you have a strong background in observability and incident leadership. We appreciate your thoroughness. It's been great speaking with you. Thank you for your time today.",
+    "anchor_quote": "we reduced the incident response time from 45 minutes to 30 minutes",
+    "reason": "Closing out the session with a final question on the impact of observability tools.",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1001120.3999999999,
+    "answer": null,
+    "answer_words": [],
+    "answer_seconds": 0.0,
+    "answered_at": null,
+    "score": null,
+    "assessment": null,
+    "evaluation": null,
+    "corrections": [
+     "difficulty 4->5 (score 4, previous 5)"
+    ]
+   }
+  ],
+  "difficulty": 5,
+  "started_at": 1000000.0,
+  "finished": true,
+  "events": [
+   {
+    "t": 1791319768.8,
+    "kind": "turn",
+    "turn": 0,
+    "provider": "ollama",
+    "ms": 143904.6,
+    "action": "open"
+   },
+   {
+    "t": 1791319852.203,
+    "kind": "turn",
+    "turn": 1,
+    "provider": "ollama",
+    "ms": 62974.8,
+    "action": "challenge"
+   },
+   {
+    "t": 1791319947.7,
+    "kind": "turn",
+    "turn": 2,
+    "provider": "ollama",
+    "ms": 76678.1,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320056.668,
+    "kind": "turn",
+    "turn": 3,
+    "provider": "ollama",
+    "ms": 76118.2,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320220.043,
+    "kind": "turn",
+    "turn": 4,
+    "provider": "ollama",
+    "ms": 128656.4,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320386.049,
+    "kind": "turn",
+    "turn": 5,
+    "provider": "ollama",
+    "ms": 91978.8,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320618.48,
+    "kind": "turn",
+    "turn": 6,
+    "provider": "ollama",
+    "ms": 164983.2,
+    "action": "new_topic"
+   },
+   {
+    "t": 1791320802.631,
+    "kind": "turn",
+    "turn": 7,
+    "provider": "ollama",
+    "ms": 108191.8,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320977.391,
+    "kind": "turn",
+    "turn": 8,
+    "provider": "ollama",
+    "ms": 113789.3,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321188.318,
+    "kind": "turn",
+    "turn": 9,
+    "provider": "ollama",
+    "ms": 124269.8,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321651.772,
+    "kind": "correction",
+    "turn": 10,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote \"That's very detailed. Could you walk me through the specific automated workflows\")"
+   },
+   {
+    "t": 1791321651.772,
+    "kind": "turn",
+    "turn": 10,
+    "provider": "ollama",
+    "ms": 364129.4,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791322472.736,
+    "kind": "correction",
+    "turn": 11,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote 'Could you provide more specifics on the exact automated workflows or playbooks y')"
+   },
+   {
+    "t": 1791322472.736,
+    "kind": "turn",
+    "turn": 11,
+    "provider": "ollama",
+    "ms": 723451.4,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791323302.274,
+    "kind": "correction",
+    "turn": 12,
+    "detail": "difficulty 4->5 (score 4, previous 5)"
+   },
+   {
+    "t": 1791323302.274,
+    "kind": "turn",
+    "turn": 12,
+    "provider": "ollama",
+    "ms": 705214.1,
+    "action": "new_topic"
+   },
+   {
+    "t": 1791323790.805,
+    "kind": "turn",
+    "turn": 13,
+    "provider": "ollama",
+    "ms": 353868.7,
+    "action": "wrap_up"
+   },
+   {
+    "t": 1791324158.786,
+    "kind": "correction",
+    "turn": 14,
+    "detail": "difficulty 4->5 (score 4, previous 5)"
+   },
+   {
+    "t": 1791324158.786,
+    "kind": "turn",
+    "turn": 14,
+    "provider": "ollama",
+    "ms": 252705.5,
+    "action": "close"
+   }
+  ]
+ },
+ "attempts": [
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 118077.7,
+   "error": "",
+   "input_tokens": 608,
+   "output_tokens": 400
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 120934.2,
+   "error": "say must ask the candidate a question",
+   "input_tokens": 1476,
+   "output_tokens": 75
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 22970.3,
+   "error": "",
+   "input_tokens": 1514,
+   "output_tokens": 97
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 62974.8,
+   "error": "",
+   "input_tokens": 1614,
+   "output_tokens": 180
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 76678.0,
+   "error": "",
+   "input_tokens": 1774,
+   "output_tokens": 223
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 76118.2,
+   "error": "",
+   "input_tokens": 1997,
+   "output_tokens": 179
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 128656.4,
+   "error": "",
+   "input_tokens": 2249,
+   "output_tokens": 371
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 91978.8,
+   "error": "",
+   "input_tokens": 2516,
+   "output_tokens": 174
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 103367.5,
+   "error": "repeats an earlier question: \"That's a great example! Could you elaborate on the specific metrics you set up w\"",
+   "input_tokens": 2901,
+   "output_tokens": 152
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 61615.5,
+   "error": "",
+   "input_tokens": 3206,
+   "output_tokens": 147
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 108191.8,
+   "error": "",
+   "input_tokens": 3247,
+   "output_tokens": 160
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 113789.3,
+   "error": "",
+   "input_tokens": 3527,
+   "output_tokens": 184
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 124269.8,
+   "error": "",
+   "input_tokens": 3961,
+   "output_tokens": 148
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240105.0,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 123623.2,
+   "error": "",
+   "input_tokens": 4043,
+   "output_tokens": 196
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240096.6,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 120749.9,
+   "error": "say must ask the candidate a question",
+   "input_tokens": 3961,
+   "output_tokens": 221
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240080.6,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 121721.9,
+   "error": "",
+   "input_tokens": 3999,
+   "output_tokens": 210
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240033.1,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 115216.5,
+   "error": "repeats an earlier question: \"That's very detailed. Could you walk me through the exact steps or conditions th\"",
+   "input_tokens": 3897,
+   "output_tokens": 223
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240109.1,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 109052.7,
+   "error": "",
+   "input_tokens": 4007,
+   "output_tokens": 159
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240060.1,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 113407.2,
+   "error": "",
+   "input_tokens": 3785,
+   "output_tokens": 255
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 252705.4,
+   "error": "",
+   "input_tokens": 3861,
+   "output_tokens": 178
+  }
+ ],
+ "qualities": [
+  "weak",
+  "weak",
+  "average",
+  "average",
+  "strong",
+  "strong",
+  "strong",
+  "strong",
+  "strong",
+  "strong",
+  "strong",
+  "strong",
+  "strong",
+  "strong"
+ ]
+}

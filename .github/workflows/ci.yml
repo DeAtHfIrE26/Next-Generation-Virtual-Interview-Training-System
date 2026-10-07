@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "claude/**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+# A newer push supersedes a running check of the same branch.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    env:
+      MODELS_DIR: ${{ github.workspace }}/.models
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.11"
+      - run: python3 tools/secret_scan.py
+      - run: uv sync --all-packages
+      - name: Cache local speech models (pinned, checksum-verified)
+        uses: actions/cache@v4
+        with:
+          path: .models
+          key: speech-models-${{ hashFiles('packages/core/src/interview_core/realtime/assets.py') }}
+      - name: Download local speech models
+        run: uv run python -m interview_core.realtime.assets download
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run pytest
+      - run: python3 -m compileall -q legacy
+      - name: Evaluation (smoke on synthetic data + any configured suites)
+        run: uv run python -m eval_harness run --suite all --report eval/out/EVAL_REPORT.md
+      - name: Regression gate against stored baseline
+        run: uv run python -m eval_harness gate
+
+  web:
+    runs-on: ubuntu-latest
+    env:
+      MODELS_DIR: ${{ github.workspace }}/.models
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.11"
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: uv sync --all-packages
+        working-directory: .
+      - name: Cache local speech models (pinned, checksum-verified)
+        uses: actions/cache@v4
+        with:
+          path: .models
+          key: speech-models-${{ hashFiles('packages/core/src/interview_core/realtime/assets.py') }}
+      - name: Download local speech models
+        run: uv run python -m interview_core.realtime.assets download
+        working-directory: .
+      - run: npx playwright install --with-deps chromium
+      # Real speech pipeline (sherpa-onnx STT, Kokoro TTS) with no LLM configured: questions are the
+      # flagged backup questions, which the test checks are badged. The real-LLM run is e2e.yml.
+      - run: npx playwright test --project=chromium
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-chromium
+          path: |
+            apps/web/playwright-report/
+            apps/web/test-results/
+          if-no-files-found: ignore

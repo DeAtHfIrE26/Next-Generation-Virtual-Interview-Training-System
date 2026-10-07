@@ -1,0 +1,956 @@
+{
+ "checks": {
+  "questions": 17,
+  "bank_overlap": 0,
+  "follow_ups": 12,
+  "follow_ups_referencing_answer": 12,
+  "difficulty_tracks_performance": true,
+  "difficulty_transitions": [
+   {
+    "score": 4,
+    "from": 3,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 3,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   }
+  ],
+  "difficulty_corrections_by_code": 4,
+  "emergency_questions": 0,
+  "fresh_questions": 0,
+  "rejected_attempts": {
+   "anchor_quote must be copied verbatim from the candidate's la": 1,
+   "repeats an earlier question": 2
+  },
+  "emergency_blueprint": false,
+  "repeats": 0,
+  "closed_on_time": true,
+  "passed": true
+ },
+ "state": {
+  "session_id": "mock-08",
+  "params": {
+   "role": "Frontend Engineer",
+   "seniority": "mid",
+   "company": "Vercel",
+   "company_style": "Practical React depth and performance",
+   "job_description": "Build accessible, performant React and TypeScript interfaces; design systems; web vitals; collaborate with designers.",
+   "resume_context": "",
+   "skills": [
+    "React",
+    "Accessibility"
+   ],
+   "interview_type": "technical",
+   "round": "technical",
+   "difficulty": "auto",
+   "language": "en",
+   "duration_minutes": 15,
+   "persona": "maya"
+  },
+  "blueprint": {
+   "summary": "This interview assesses the candidate's expertise in React and accessibility, while also evaluating their ability to deliver measurable impact in frontend engineering.",
+   "competencies": [
+    {
+     "id": "c1",
+     "name": "React Proficiency",
+     "why": "The role requires expertise in React, a core technology for Vercel's frontend development.",
+     "weight": 0.4,
+     "minutes": 6.0,
+     "signals": [
+      "Strong understanding of React hooks and state management",
+      "Experience with performance optimization techniques"
+     ]
+    },
+    {
+     "id": "c2",
+     "name": "Accessibility",
+     "why": "The job description emphasizes the importance of building accessible interfaces, a crucial aspect of user experience.",
+     "weight": 0.3,
+     "minutes": 4.0,
+     "signals": [
+      "Familiarity with WCAG guidelines",
+      "Experience implementing accessibility features in real projects"
+     ]
+    },
+    {
+     "id": "c3",
+     "name": "Performance Optimization",
+     "why": "Vercel focuses on performance; candidates should demonstrate their ability to optimize React applications for speed and efficiency.",
+     "weight": 0.2,
+     "minutes": 3.0,
+     "signals": [
+      "Experience with tools like Lighthouse",
+      "Knowledge of lazy loading and code splitting"
+     ]
+    },
+    {
+     "id": "c4",
+     "name": "Collaboration and Design Systems",
+     "why": "The role involves working with designers and creating design systems, highlighting the importance of communication and teamwork.",
+     "weight": 0.1,
+     "minutes": 2.0,
+     "signals": [
+      "Experience collaborating with design teams",
+      "Knowledge of design systems and their implementation"
+     ]
+    }
+   ],
+   "opening": "Hello, thank you for joining us. Let's start by discussing your experience with React and how you've applied it in previous projects.",
+   "style_notes": "The interview will be precise and focused on technical depth, with an encouraging tone to keep the candidate at ease. We will delve into specific examples and ask for measurable outcomes to assess the candidate's skills.",
+   "start_difficulty": 3,
+   "emergency": false,
+   "provider": "ollama"
+  },
+  "turns": [
+   {
+    "index": 0,
+    "action": "open",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Hi there, thanks for joining us. I'm Maya. Can you tell me about your experience with React and how you've used it in a previous project?",
+    "anchor_quote": "",
+    "reason": "Start with React proficiency based on job description. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000000.0,
+    "answer": "Sure, Maya. In my previous role at Acme Corp, I worked on a project that involved building a robust dashboard for managing user accounts. I chose React for this project because of its component-based architecture and its ability to manage complex UIs efficiently. I led a team of three developers and we implemented React along with Redux for state management. We faced a challenge with performance issues in the initial build, so we optimized our code by using code splitting and lazy loading. This not only improved the app's performance but also reduced the initial load time by approximately 30%. One key project was integrating React with a WebSocket library to create real-time notifications. We had to handle asynchronous data flow and ensure the UI updates seamlessly. I wrote custom hooks and used React Context to manage the global state, which streamlined the process and reduced the complexity of our application. This project was a great learning experience and helped me understand the full potential of React in handling complex, real-time applications.",
+    "answer_words": [],
+    "answer_seconds": 68.8,
+    "answered_at": 1000076.8,
+    "score": 4,
+    "assessment": {
+     "strengths": "Provided a detailed example with specific outcomes, demonstrated leadership and technical skills.",
+     "gaps": "Could have mentioned more about accessibility or design systems.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 1,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "That’s great to hear about your experience with React, especially the performance optimization. Could you walk me through the process you used to implement code splitting and lazy loading in that project? How did you determine which components needed to be split?",
+    "anchor_quote": "We faced a challenge with performance issues in the initial build, so we optimized our code by using code splitting and lazy loading.",
+    "reason": "Explores performance optimization in more depth. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000076.8,
+    "answer": "Sure, Maya. We faced some performance issues, so we decided to use code splitting and lazy loading. We split the components based on their usage. Not all components were needed on every page, so we kept them separate. For lazy loading, we used React's built-in `React.lazy` and `Suspense` for the critical path components. It helped a lot with the initial load time, but I'm not sure how much the 30% reduction came from there exactly. It was a mix of optimizations, really.",
+    "answer_words": [],
+    "answer_seconds": 32.8,
+    "answered_at": 1000117.6000000001,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided a specific example of performance optimization using code splitting and lazy loading, though the exact impact is not quantified.",
+     "gaps": "Lacks detailed explanation of how the optimization was measured and validated.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 2,
+    "action": "challenge",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "I see, and you mentioned it was a mix of optimizations. Could you quantify the impact of code splitting and lazy loading? How did you verify that these changes led to a 30% reduction in initial load time?",
+    "anchor_quote": "It was a mix of optimizations, really.",
+    "reason": "Need more details on the quantifiable impact of the optimizations. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000117.6000000001,
+    "answer": "Absolutely, Maya. We tracked the initial load times using Lighthouse in our browser's DevTools. Before implementing code splitting and lazy loading, the initial load time was around 1.2 seconds. After we made the changes, the load time dropped to approximately 0.86 seconds. This is a reduction of 0.34 seconds, which translates to a 30% decrease. We also saw an improvement in the perceived performance and a smoother user experience. To ensure these changes were effective, we set up automated tests using Jest and ran them every time we made a change. This helped us maintain the performance improvements and catch any regressions early.",
+    "answer_words": [],
+    "answer_seconds": 41.2,
+    "answered_at": 1000166.8,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided specific details about the impact of code splitting and lazy loading, and how they verified these changes using Lighthouse and automated tests.",
+     "gaps": "Candidate could have provided a bit more detail on the process of determining which components to split.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 3,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "That's great to hear. Could you elaborate on how you determined which components needed to be split for code splitting?",
+    "anchor_quote": "We tracked the initial load times using Lighthouse in our browser's DevTools.",
+    "reason": "Candidate provided quantitative data, let's explore more about the process. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000166.8,
+    "answer": "Sure, Maya. We looked at which components were used more frequently and which ones were only needed on specific pages. We split those components that were only used in one or two places to keep the initial bundle size smaller. This way, users who didn't need those components didn't have to wait for them to load.",
+    "answer_words": [],
+    "answer_seconds": 22.4,
+    "answered_at": 1000197.2000000001,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided a clear explanation of the process and demonstrated the ability to measure the impact of optimizations.",
+     "gaps": "Candidate could have specified the tools or methods used to determine components for splitting.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 4,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "That's a good approach. Could you elaborate on how you determined which components were used more frequently? Did you use any specific tools or methods for that?",
+    "anchor_quote": "We looked at which components were used more frequently and which ones were only needed on specific pages.",
+    "reason": "Candidate mentioned a specific approach but could elaborate further. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000197.2000000001,
+    "answer": "Yes, we used a combination of tools to determine component usage. We leveraged React's built-in profiling tools and the Chrome DevTools to analyze which components were being rendered the most. Additionally, we used the `react-perf` library, which provides detailed profiling data. Based on these tools, we identified the most frequently used components and prioritized code splitting for them. We also looked at the number of times each component was imported into other components, which helped us understand their usage. For example, the `UserCard` component was used across multiple pages, so it was a prime candidate for code splitting. After making the changes, we validated the impact using Lighthouse to ensure the performance metrics improved as expected.",
+    "answer_words": [],
+    "answer_seconds": 46.4,
+    "answered_at": 1000251.6000000001,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided specific tools and methods for determining component usage, and validated the impact with Lighthouse.",
+     "gaps": "Candidate could elaborate more on the tools used and the process of prioritizing components.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 5,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "That's great. Could you elaborate on the specific tools you used for profiling and determining component usage? Did you face any challenges in prioritizing components for code splitting?",
+    "anchor_quote": "Yes, we used a combination of tools to determine component usage.",
+    "reason": "Candidate provided a good overview, but can elaborate further. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000251.6000000001,
+    "answer": "Yes, we used React's built-in profiling tools and Chrome DevTools for profiling. We also relied on `react-perf` for more detailed profiling data. Sometimes it was hard to decide which components to prioritize, but we focused on the ones used most frequently and those that caused the most noticeable delay.",
+    "answer_words": [],
+    "answer_seconds": 19.6,
+    "answered_at": 1000279.2000000001,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a clear explanation of the tools and methods used for profiling and determining component usage.",
+     "gaps": "Candidate did not quantify the impact of specific tools or provide more detailed challenges faced.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 6,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "Could you provide more detail on the specific challenges you faced when prioritizing components for code splitting, and how you overcame them?",
+    "anchor_quote": "Yes, we used React's built-in profiling tools and Chrome DevTools for profiling. We also relied on `react-perf` for more detailed profiling data.",
+    "reason": "Candidate needs to provide more detail on the tools used and the challenges faced. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000279.2000000001,
+    "answer": "Certainly, Maya. One of the main challenges we faced was identifying which components were used most frequently, especially those that didn't have clear usage patterns. To overcome this, we used React's built-in profiling tools and Chrome DevTools to get a clear view of which components were being rendered the most. We also used `react-perf` for more granular insights. Another challenge was ensuring that code splitting wouldn't affect the user experience. To address this, we prioritized components that were used across multiple pages and had a significant impact on the initial load time. We also made sure to test the application thoroughly before and after implementing code splitting to ensure there were no unexpected side effects. Additionally, we had to balance the complexity of the code changes with the performance gains. We opted for a conservative approach, splitting only components that were clearly underutilized or caused significant delays. This allowed us to make incremental improvements without overcomplicating the codebase. Overall, the key was to use profiling tools effectively and prioritize components based on their usage and impact on the overall performance.",
+    "answer_words": [],
+    "answer_seconds": 72.0,
+    "answered_at": 1000359.2000000001,
+    "score": 4,
+    "assessment": {
+     "strengths": "Provided detailed insights into the challenges and methods used for code splitting, including the use of profiling tools and prioritization based on component usage.",
+     "gaps": "Could benefit from more specific examples of tools and a deeper dive into the trade-offs made.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 7,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "That's helpful. Could you give me an example of a specific tool or method you used to determine the usage patterns of the components?",
+    "anchor_quote": "Certainly, Maya. One of the main challenges we faced was identifying which components were used most frequently, especially those that didn't have clear usage patterns. To overcome this, we used React's built-in profiling tools and Chrome DevTools to get a clear view of which components were being r",
+    "reason": "To explore more specific tools and methods used for profiling and component usage. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000359.2000000001,
+    "answer": "Sure, Maya. We used React's built-in profiling tools and Chrome DevTools to track which components were being rendered the most. We also utilized the `react-perf` library for more detailed profiling data. This helped us identify the components that were used frequently and prioritize them for code splitting.",
+    "answer_words": [],
+    "answer_seconds": 18.8,
+    "answered_at": 1000386.0000000001,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided a detailed explanation of the tools and methods used for profiling and determining component usage.",
+     "gaps": "Candidate could provide more specific details on the challenges faced and how they were overcome.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 8,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "That's great. Could you give me an example of a specific situation where you used `react-perf` to determine the usage patterns of the components?",
+    "anchor_quote": "Sure, Maya. We used React's built-in profiling tools and Chrome DevTools to track which components were being rendered the most. We also utilized the react-perf library for more detailed profiling data. This helped us identify the components that were used frequently and prioritize them for code spl",
+    "reason": "Build on the candidate's detailed explanation of tools used. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000386.0000000001,
+    "answer": "Certainly, Maya. In our project, we used `react-perf` to get detailed profiling data on component usage. For instance, we noticed that the `UserCard` component was being rendered more frequently than expected, even though it was only used on a couple of pages. By analyzing the data provided by `react-perf`, we identified that it was being included in multiple smaller components, leading to unnecessary re-renders. This insight helped us make informed decisions about where to apply code splitting. We split the `UserCard` component into smaller, more modular pieces and used `React.lazy` and `Suspense` to load them on demand. This approach reduced the initial bundle size and improved the overall performance of the application. We found that `react-perf` provided us with a clear, data-driven way to optimize the component tree and ensure that the changes we made were effective.",
+    "answer_words": [],
+    "answer_seconds": 54.8,
+    "answered_at": 1000448.8000000002,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided detailed information on the use of `react-perf` and specific examples of how it was used to optimize component usage.",
+     "gaps": "Candidate could have offered more quantitative data on the specific impact of `react-perf`.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 9,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "Could you walk me through a specific example of how you used `react-perf` to optimize the `UserCard` component? What kind of data did you collect, and how did that data influence your decision-making process?",
+    "anchor_quote": "Certainly, Maya. In our project, we used `react-perf` to get detailed profiling data on component usage.",
+    "reason": "Candidate provided a clear example, so I will delve deeper into the specifics. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000448.8000000002,
+    "answer": "Sure, Maya. We used `react-perf` to profile the `UserCard` component. It showed us that this component was being rendered more often than we expected, even though it was only used on a couple of pages. We noticed that it was included in multiple smaller components, which led to unnecessary re-renders. Based on this data, we decided to split the `UserCard` into smaller, more modular pieces. This helped us reduce the initial bundle size and improve the performance. The data from `react-perf` was really useful for making these decisions.",
+    "answer_words": [],
+    "answer_seconds": 35.2,
+    "answered_at": 1000492.0000000001,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided specific examples of using `react-perf` to identify usage patterns and make informed decisions.",
+     "gaps": "Candidate could provide more detail on the exact data collected and how it influenced the decision-making process.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 10,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "Could you provide more detail on the exact data collected by `react-perf` and how that data influenced your decision to split the `UserCard` component into smaller pieces?",
+    "anchor_quote": "We used `react-perf` to profile the `UserCard` component. It showed us that this component was being rendered more often than we expected, even though it was only used on a couple of pages.",
+    "reason": "Exploring the exact data and decision-making process used for optimization. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000492.0000000001,
+    "answer": "Certainly, Maya. `react-perf` provided us with detailed timing data for each component render, including how many times each component was rendered and the time it took for each render. We noticed that the `UserCard` component was being rendered more frequently than expected, even though it was only used on a couple of pages. This led us to investigate further and we found that it was included in multiple smaller components, which caused it to be re-rendered more often than necessary. Specifically, `react-perf` showed us that the `UserCard` component was being re-rendered up to 10 times in some cases, which was causing a significant delay in the initial load time. This data helped us identify that splitting the `UserCard` into smaller, more modular pieces would reduce the number of unnecessary re-renders and improve performance. We then split the `UserCard` into smaller components like `Avatar`, `Name`, and `Info`, and used `React.lazy` and `Suspense` to load them on demand. This approach reduced the initial bundle size and improved the overall performance of the application. The data from `react-perf` was crucial in making these optimizations, as it provided us with a clear understanding of where the bottlenecks were and allowed us to make informed decisions about which components to split.",
+    "answer_words": [],
+    "answer_seconds": 82.4,
+    "answered_at": 1000582.4000000001,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a detailed explanation of how `react-perf` data influenced their decision-making process for component splitting. They also quantified the impact of their optimizations.",
+     "gaps": "Could benefit from more specific examples of tools and methods used for profiling.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 11,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 4,
+    "say": "That's very detailed. Could you elaborate on the specific tools and methods you used to profile the `UserCard` component? Did you face any challenges in using these tools?",
+    "anchor_quote": "component was rendered and the time it took for each render. We noticed that the `UserCard` component was being rendered more frequently than expected, even though it was only used on a couple of pages. This led us",
+    "reason": "Deepening the understanding of the tools and methods used for profiling. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000582.4000000001,
+    "answer": "Sure, Maya. We used React's built-in profiling tools and Chrome DevTools to track the `UserCard` component. We also used `react-perf` for more detailed profiling data. The main challenge was figuring out exactly which components were being re-rendered more than needed. We had to use the profiling tools to identify the patterns and then make changes based on that data. It wasn't always easy, but it helped us optimize the component and improve performance.",
+    "answer_words": [],
+    "answer_seconds": 29.2,
+    "answered_at": 1000619.6000000001,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate provided detailed insights into using `react-perf` for profiling and optimized the `UserCard` component effectively.",
+     "gaps": "Candidate could provide more specific details on the exact data collected by `react-perf` and its impact on decision-making.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote 'react-perf showed us that the `UserCard` component was being re-rendered more fr')"
+    ]
+   },
+   {
+    "index": 12,
+    "action": "new_topic",
+    "competency": "c2",
+    "difficulty": 4,
+    "say": "Great, thank you for that detailed explanation. Moving on to accessibility, how familiar are you with the Web Content Accessibility Guidelines (WCAG)? Could you share an example of a project where you implemented accessibility features?",
+    "anchor_quote": "",
+    "reason": "Transition to accessibility, a key competency. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000619.6000000001,
+    "answer": "Absolutely, Maya. I'm quite familiar with the Web Content Accessibility Guidelines (WCAG). In my previous role, we had a project where we needed to ensure the dashboard for managing user accounts was accessible. We closely followed WCAG 2.1, specifically focusing on the AA level of standards. For example, one of the key features we implemented was ensuring keyboard navigation was supported. We added `tabindex` attributes to interactive elements and ensured that focus styles were clearly visible. We also made sure that all form elements had proper labels and were associated with their respective controls using `aria-label` and `aria-labelledby`. We used a tool called Accessibility Insights, which helped us test the application and identify issues. For instance, we found that some interactive elements were not properly announced by screen readers, so we added `role` attributes where necessary. We also ensured that all text was readable and contrast ratios were above the minimum required by WCAG. One specific challenge we faced was ensuring that our charts and graphs were accessible to users with visual impairments. We used ARIA landmarks and roles to provide additional context, and we made sure that all data was also available in a textual format through tooltips and ARIA attributes. Overall, following these guidelines not only improved the usability of our application for all users but also helped us comply with legal requirements and best practices.",
+    "answer_words": [],
+    "answer_seconds": 91.2,
+    "answered_at": 1000718.8,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a detailed example of implementing accessibility features, including tools and challenges faced.",
+     "gaps": "The answer could have included more specific tools or metrics to measure the impact of accessibility improvements.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "difficulty 2->4 (score 4, previous 4)"
+    ]
+   },
+   {
+    "index": 13,
+    "action": "follow_up",
+    "competency": "c2",
+    "difficulty": 4,
+    "say": "That's great. Could you elaborate on the specific tools and methods you used to implement these accessibility features? Did you face any particular challenges?",
+    "anchor_quote": "and `aria-labelledby`. We used a tool called Accessibility Insights, which helped us test the application and identify issues",
+    "reason": "Expanding on the tools and specific techniques used for accessibility. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000718.8,
+    "answer": "Sure, Maya. We used a tool called Accessibility Insights to test and identify issues. It helped us ensure that our dashboard met the WCAG 2.1 AA standards. One challenge was making sure that our charts and graphs were accessible. We added ARIA landmarks and roles to provide additional context. Another challenge was ensuring that all text was readable and had the right contrast ratios. We used color contrast checkers to make sure we met the requirements. Overall, the process was a bit time-consuming, but it was worth it to make the application accessible for everyone.",
+    "answer_words": [],
+    "answer_seconds": 38.0,
+    "answered_at": 1000764.8,
+    "score": 4,
+    "assessment": {
+     "strengths": "Candidate demonstrated a good understanding of accessibility guidelines and provided a specific example of implementing accessibility features.",
+     "gaps": "Candidate could provide more specific details about the tools and methods used, but overall the answer was strong.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote 'We used Accessibility Insights, which helped us test the application and identif')"
+    ]
+   },
+   {
+    "index": 14,
+    "action": "new_topic",
+    "competency": "c3",
+    "difficulty": 4,
+    "say": "Great, thank you for that detailed explanation. Let's move on to performance optimization. Vercel focuses on performance, so it's crucial for candidates to demonstrate their ability to optimize React applications for speed and efficiency. Could you tell me about your experience with tools like Lighthouse and how you've used them in your projects?",
+    "anchor_quote": "",
+    "reason": "Transition to performance optimization, a key area for the role. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000764.8,
+    "answer": "Certainly, Maya. I have extensive experience with Lighthouse, which we used in our project to manage user accounts. Lighthouse helped us identify performance bottlenecks and provided actionable insights. For instance, we ran Lighthouse audits to check for critical CSS, which allowed us to optimize the initial load time by ensuring only the necessary styles were loaded upfront. We also used Lighthouse to test for server-side rendering (SSR) and lazy loading, which we implemented to improve the overall performance of the dashboard. One specific challenge we faced was reducing the number of HTTP requests. Using Lighthouse, we identified that there were too many external scripts and stylesheets, so we optimized the bundle size by removing unused dependencies and inlining critical styles. This resulted in a significant reduction in the number of HTTP requests and improved the initial load time. Another tool we used was WebPageTest, which we integrated with Lighthouse to get more detailed performance metrics. We set up automated tests to run these tools every time we made a change, ensuring that our performance optimizations were consistently applied. We also used the insights from these tools to make incremental changes, such as optimizing images and minifying JavaScript and CSS files. Overall, using Lighthouse and other performance tools helped us achieve a 30% reduction in initial load time and significantly improved the user experience.",
+    "answer_words": [],
+    "answer_seconds": 89.2,
+    "answered_at": 1000862.0,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a detailed explanation of using `react-perf` to optimize the `UserCard` component, including specific data and tools used.",
+     "gaps": "Could have elaborated more on the challenges faced during the process.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "difficulty 3->4 (score 4, previous 4)"
+    ]
+   },
+   {
+    "index": 15,
+    "action": "wrap_up",
+    "competency": "c3",
+    "difficulty": 4,
+    "say": "That's excellent. Could you describe a specific performance optimization you made using Lighthouse or another tool that had a significant impact on the application's performance?",
+    "anchor_quote": "We used the insights from these tools to make incremental changes, such as optimizing images and minifying JavaScript and CSS files.",
+    "reason": "Final question to cover performance optimization and ensure all competencies are addressed. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000862.0,
+    "answer": "Sure, Maya. We used Lighthouse to identify that our initial load time was too high. We noticed that there were too many HTTP requests, so we optimized the bundle size by removing unused dependencies and inlining critical styles. This reduced the number of requests and improved the load time. We saw a noticeable difference after making these changes.",
+    "answer_words": [],
+    "answer_seconds": 23.2,
+    "answered_at": 1000893.2,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a detailed example of using `react-perf` to optimize the `UserCard` component, showing a clear understanding of tool usage and decision-making.",
+     "gaps": "The candidate could have provided more specific data from `react-perf` to quantify the impact of the optimizations.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 16,
+    "action": "close",
+    "competency": "c3",
+    "difficulty": 4,
+    "say": "Thank you for your detailed responses. It's clear you have a strong background in React performance optimization. We really appreciate your insights. Goodbye.",
+    "anchor_quote": "We noticed that there were too many HTTP requests, so we optimized the bundle size by removing unused dependencies and inlining critical styles.",
+    "reason": "Time is almost up and the candidate has covered key areas well.",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000893.2,
+    "answer": null,
+    "answer_words": [],
+    "answer_seconds": 0.0,
+    "answered_at": null,
+    "score": null,
+    "assessment": null,
+    "evaluation": null,
+    "corrections": []
+   }
+  ],
+  "difficulty": 4,
+  "started_at": 1000000.0,
+  "finished": true,
+  "events": [
+   {
+    "t": 1791319817.753,
+    "kind": "turn",
+    "turn": 0,
+    "provider": "ollama",
+    "ms": 129749.8,
+    "action": "open"
+   },
+   {
+    "t": 1791319936.385,
+    "kind": "turn",
+    "turn": 1,
+    "provider": "ollama",
+    "ms": 74317.2,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320049.432,
+    "kind": "turn",
+    "turn": 2,
+    "provider": "ollama",
+    "ms": 72686.7,
+    "action": "challenge"
+   },
+   {
+    "t": 1791320187.136,
+    "kind": "turn",
+    "turn": 3,
+    "provider": "ollama",
+    "ms": 82211.7,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320304.276,
+    "kind": "turn",
+    "turn": 4,
+    "provider": "ollama",
+    "ms": 77122.8,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320441.361,
+    "kind": "turn",
+    "turn": 5,
+    "provider": "ollama",
+    "ms": 86437.3,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320562.728,
+    "kind": "turn",
+    "turn": 6,
+    "provider": "ollama",
+    "ms": 86457.9,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320740.519,
+    "kind": "turn",
+    "turn": 7,
+    "provider": "ollama",
+    "ms": 113632.4,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320879.088,
+    "kind": "turn",
+    "turn": 8,
+    "provider": "ollama",
+    "ms": 97972.7,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321051.843,
+    "kind": "turn",
+    "turn": 9,
+    "provider": "ollama",
+    "ms": 110668.1,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321215.562,
+    "kind": "turn",
+    "turn": 10,
+    "provider": "ollama",
+    "ms": 113334.2,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321432.804,
+    "kind": "correction",
+    "turn": 11,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote 'react-perf showed us that the `UserCard` component was being re-rendered more fr')"
+   },
+   {
+    "t": 1791321432.804,
+    "kind": "turn",
+    "turn": 11,
+    "provider": "ollama",
+    "ms": 131305.9,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321688.26,
+    "kind": "correction",
+    "turn": 12,
+    "detail": "difficulty 2->4 (score 4, previous 4)"
+   },
+   {
+    "t": 1791321688.26,
+    "kind": "turn",
+    "turn": 12,
+    "provider": "ollama",
+    "ms": 195360.5,
+    "action": "new_topic"
+   },
+   {
+    "t": 1791321924.709,
+    "kind": "correction",
+    "turn": 13,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote 'We used Accessibility Insights, which helped us test the application and identif')"
+   },
+   {
+    "t": 1791321924.709,
+    "kind": "turn",
+    "turn": 13,
+    "provider": "ollama",
+    "ms": 139331.0,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791322201.006,
+    "kind": "correction",
+    "turn": 14,
+    "detail": "difficulty 3->4 (score 4, previous 4)"
+   },
+   {
+    "t": 1791322201.006,
+    "kind": "turn",
+    "turn": 14,
+    "provider": "ollama",
+    "ms": 211169.5,
+    "action": "new_topic"
+   },
+   {
+    "t": 1791322463.13,
+    "kind": "turn",
+    "turn": 15,
+    "provider": "ollama",
+    "ms": 159228.6,
+    "action": "wrap_up"
+   },
+   {
+    "t": 1791322670.521,
+    "kind": "turn",
+    "turn": 16,
+    "provider": "ollama",
+    "ms": 148447.2,
+    "action": "close"
+   }
+  ]
+ },
+ "attempts": [
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 127050.8,
+   "error": "",
+   "input_tokens": 621,
+   "output_tokens": 424
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 129749.8,
+   "error": "",
+   "input_tokens": 1571,
+   "output_tokens": 77
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 74317.2,
+   "error": "",
+   "input_tokens": 1823,
+   "output_tokens": 169
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 72686.7,
+   "error": "",
+   "input_tokens": 2054,
+   "output_tokens": 165
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 82211.6,
+   "error": "",
+   "input_tokens": 2308,
+   "output_tokens": 160
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 77122.8,
+   "error": "",
+   "input_tokens": 2449,
+   "output_tokens": 157
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 86437.2,
+   "error": "",
+   "input_tokens": 2686,
+   "output_tokens": 155
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 86457.9,
+   "error": "",
+   "input_tokens": 2844,
+   "output_tokens": 170
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 113632.4,
+   "error": "",
+   "input_tokens": 3141,
+   "output_tokens": 224
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 97972.7,
+   "error": "",
+   "input_tokens": 3285,
+   "output_tokens": 196
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 110668.0,
+   "error": "",
+   "input_tokens": 3558,
+   "output_tokens": 191
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 113334.1,
+   "error": "",
+   "input_tokens": 3797,
+   "output_tokens": 194
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 131305.9,
+   "error": "",
+   "input_tokens": 4168,
+   "output_tokens": 192
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 119139.3,
+   "error": "anchor_quote must be copied verbatim from the candidate's last answer; repeats an earlier question: 'Could you provide more detail on the exact data collected by `react-perf` and ho'",
+   "input_tokens": 4364,
+   "output_tokens": 181
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 76221.0,
+   "error": "",
+   "input_tokens": 4733,
+   "output_tokens": 160
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 139331.0,
+   "error": "",
+   "input_tokens": 4750,
+   "output_tokens": 153
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 127793.3,
+   "error": "repeats an earlier question: \"That's great. Could you elaborate on the specific tools and methods you used to \"",
+   "input_tokens": 4949,
+   "output_tokens": 166
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 83376.0,
+   "error": "",
+   "input_tokens": 5304,
+   "output_tokens": 178
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 159228.6,
+   "error": "",
+   "input_tokens": 5392,
+   "output_tokens": 173
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 148447.1,
+   "error": "",
+   "input_tokens": 5565,
+   "output_tokens": 185
+  }
+ ],
+ "qualities": [
+  "strong",
+  "weak",
+  "strong",
+  "weak",
+  "strong",
+  "weak",
+  "strong",
+  "weak",
+  "strong",
+  "weak",
+  "strong",
+  "weak",
+  "strong",
+  "weak",
+  "strong",
+  "weak"
+ ]
+}

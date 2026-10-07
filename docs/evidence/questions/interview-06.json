@@ -1,0 +1,1062 @@
+{
+ "checks": {
+  "questions": 16,
+  "bank_overlap": 0,
+  "follow_ups": 9,
+  "follow_ups_referencing_answer": 9,
+  "difficulty_tracks_performance": true,
+  "difficulty_transitions": [
+   {
+    "score": 1,
+    "from": 3,
+    "to": 2
+   },
+   {
+    "score": 1,
+    "from": 2,
+    "to": 1
+   },
+   {
+    "score": 1,
+    "from": 1,
+    "to": 1
+   },
+   {
+    "score": 3,
+    "from": 1,
+    "to": 2
+   },
+   {
+    "score": 3,
+    "from": 2,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 3,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 4,
+    "from": 3,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   },
+   {
+    "score": 4,
+    "from": 4,
+    "to": 4
+   }
+  ],
+  "difficulty_corrections_by_code": 5,
+  "emergency_questions": 0,
+  "fresh_questions": 0,
+  "rejected_attempts": {
+   "say must ask the candidate a question": 1,
+   "follow_up must ask about what the candidate just said (the a": 1,
+   "to return to an earlier answer use action revisit": 1,
+   "ollama": 11,
+   "repeats an earlier question": 4,
+   "reply is not valid JSON (Unterminated string starting at)": 1
+  },
+  "emergency_blueprint": false,
+  "repeats": 0,
+  "closed_on_time": true,
+  "passed": true
+ },
+ "state": {
+  "session_id": "mock-06",
+  "params": {
+   "role": "Management Consultant",
+   "seniority": "junior",
+   "company": "McKinsey",
+   "company_style": "Interviewer-led case interview with a market-sizing component",
+   "job_description": "",
+   "resume_context": "",
+   "skills": [],
+   "interview_type": "case",
+   "round": "onsite",
+   "difficulty": "auto",
+   "language": "en",
+   "duration_minutes": 20,
+   "persona": "maya"
+  },
+  "blueprint": {
+   "summary": "This interview assesses the candidate's ability to analyze and solve complex business problems, as well as their potential for leadership and impact in a junior role at McKinsey.",
+   "competencies": [
+    {
+     "id": "c1",
+     "name": "Analytical Skills",
+     "why": "McKinsey requires strong analytical skills to break down complex problems and develop solutions.",
+     "weight": 0.3,
+     "minutes": 6.0,
+     "signals": [
+      "ability to clearly articulate assumptions",
+      "use of structured frameworks"
+     ]
+    },
+    {
+     "id": "c2",
+     "name": "Impact and Ownership",
+     "why": "Demonstrating a history of making a significant impact and taking ownership of projects is crucial for growth at McKinsey.",
+     "weight": 0.3,
+     "minutes": 6.0,
+     "signals": [
+      "specific examples of impactful work",
+      "drive and commitment"
+     ]
+    },
+    {
+     "id": "c3",
+     "name": "Communication and Presentation",
+     "why": "Effective communication and presentation are essential to convey findings and recommendations in a clear and concise manner.",
+     "weight": 0.2,
+     "minutes": 4.0,
+     "signals": [
+      "ability to explain complex concepts simply",
+      "confidence in presenting ideas"
+     ]
+    },
+    {
+     "id": "c4",
+     "name": "Problem Solving",
+     "why": "McKinsey requires candidates to approach problems systematically and propose feasible solutions.",
+     "weight": 0.1,
+     "minutes": 2.0,
+     "signals": [
+      "structured problem-solving approach",
+      "creativity in solution development"
+     ]
+    }
+   ],
+   "opening": "Welcome to McKinsey. Let's start with a brief market-sizing problem to get you comfortable with the case interview format.",
+   "style_notes": "The interview will be structured and precise, with an emphasis on your analytical and problem-solving skills. You will be expected to demonstrate ownership and make a significant impact in your responses.",
+   "start_difficulty": 3,
+   "emergency": false,
+   "provider": "ollama"
+  },
+  "turns": [
+   {
+    "index": 0,
+    "action": "open",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Hi there, welcome to McKinsey. I'm Maya. Let's start with a brief market-sizing problem to get you comfortable with the case interview format. How big do you think the global smartphone market was in 2019, in terms of units sold?",
+    "anchor_quote": "",
+    "reason": "Start with the market sizing problem to assess analytical skills. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000000.0,
+    "answer": "I'm not really sure. Maybe a few billion? I don't have the exact number or anything.",
+    "answer_words": [],
+    "answer_seconds": 6.4,
+    "answered_at": 1000014.4,
+    "score": 1,
+    "assessment": {
+     "strengths": "The candidate acknowledged uncertainty and provided a rough estimate.",
+     "gaps": "Lack of specific numbers or a structured approach.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 1,
+    "action": "revisit",
+    "competency": "c1",
+    "difficulty": 2,
+    "say": "That's okay, no need to have the exact number. Just to clarify, what range or ballpark figure did you have in mind when you said a few billion?",
+    "anchor_quote": "I'm not really sure",
+    "reason": "To encourage more specific and structured thinking. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000014.4,
+    "answer": "Somewhere between 1.5 to 2 billion, I guess. Not sure, just a rough estimate.",
+    "answer_words": [],
+    "answer_seconds": 5.6,
+    "answered_at": 1000028.0,
+    "score": 1,
+    "assessment": {
+     "strengths": "The candidate provided a rough estimate, showing they can make educated guesses.",
+     "gaps": "Lack of specific numbers or structured approach",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": [
+     "difficulty 3->2 (score 1, previous 3)"
+    ]
+   },
+   {
+    "index": 2,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 1,
+    "say": "That's a good starting point. Can you tell me how you might go about refining this estimate? For instance, what factors might influence the size of the smartphone market?",
+    "anchor_quote": "Somewhere between 1.5 to 2 billion, I guess.",
+    "reason": "Need to establish a structured approach. [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000028.0,
+    "answer": "Sure, to refine the estimate, I'd start by breaking down the market into different segments like geography, price range, brand, and target audience. For geography, I'd consider the number of countries with significant smartphone markets and their population sizes. On the price side, I'd look at the distribution of high, mid, and low-end smartphones. Brand diversification would also be a factor, as some regions might favor certain brands. Lastly, I'd consider the age and tech-savvy demographics, as younger and more tech-oriented populations tend to have higher smartphone adoption rates.",
+    "answer_words": [],
+    "answer_seconds": 35.6,
+    "answered_at": 1000071.6,
+    "score": 1,
+    "assessment": {
+     "strengths": "Candidate identified different segments to break down the market, which is a good approach.",
+     "gaps": "Candidate struggles with providing specific numbers or quantitative breakdowns.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": [
+     "difficulty 2->1 (score 1, previous 2)"
+    ]
+   },
+   {
+    "index": 3,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 1,
+    "say": "Got it. Let's focus on one of these segments. Suppose we want to estimate the smartphone market size in one specific region, for example, the United States. How would you start breaking down this market, and what specific numbers or data points might you need to consider?",
+    "anchor_quote": "Sure, to refine the estimate, I'd start by breaking down the market into different segments like geography, price range, brand, and target audience.",
+    "reason": "Candidate showed some analytical thinking but needs more specificity and numbers to improve score. Let's drill into one segment for more detail and follow up on the estimate range provided earlier to ensure accuracy and ownership of the process. This will give us a more structured problem-solving ap [candidate quality: average]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000071.6,
+    "answer": "To start breaking down the U.S. smartphone market, I'd first look at the total U.S. population and divide it by age groups to understand the potential customer base. Then, I'd consider factors like income levels, as higher income brackets tend to buy more smartphones. I'd also check the market share of different brands in the U.S. to see which ones dominate. Additionally, I'd look at tech adoption rates and smartphone penetration rates from recent market reports. Finally, I'd consider seasonal trends, as some quarters might see higher sales due to holidays or new model releases. All these factors would help me get a more accurate estimate of the U.S. smartphone market size.",
+    "answer_words": [],
+    "answer_seconds": 44.8,
+    "answered_at": 1000124.4,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a structured approach and considered multiple factors, which is a good start.",
+     "gaps": "Candidate could refine the factors and provide more specific data points or estimates.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "difficulty 2->1 (score 1, previous 1)"
+    ]
+   },
+   {
+    "index": 4,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 2,
+    "say": "That's a great approach. Can you give me an estimate for the U.S. population by age groups? And how might you obtain this data?",
+    "anchor_quote": "To start breaking down the U.S. smartphone market, I'd first look at the total U.S. population and divide it by age groups to understand the potential customer base.",
+    "reason": "Candidate's response is specific and structured, but could benefit from more data points and refinement. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000124.4,
+    "answer": "Sure, I can give you an estimate. According to recent data, the U.S. population is around 333 million. Here’s a rough breakdown by age groups: - 0-14 years: 20% - 15-24 years: 15% - 25-44 years: 30% - 45-64 years: 25% - 65+ years: 10% To get this data, I would refer to the U.S. Census Bureau's reports, which provide detailed demographic information. This data is usually updated every few years and can be accessed online. For the most recent estimates, I would look at the latest census data or use their API if they offer one. This would give me a clear picture of the age distribution, which is crucial for understanding potential smartphone adoption rates across different age groups.",
+    "answer_words": [],
+    "answer_seconds": 48.4,
+    "answered_at": 1000180.8,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a detailed breakdown of the U.S. population by age groups and explained where to obtain the data.",
+     "gaps": "The estimate was not refined to a specific number, and the method of obtaining the data was not elaborated.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 5,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "That's a great breakdown. Can you walk me through how you would refine this estimate further to arrive at a specific number? Also, how would you verify the data you mentioned, such as the U.S. Census Bureau reports?",
+    "anchor_quote": "Sure, I can give you an estimate. According to recent data, the U.S. population is around 333 million. Here’s a rough breakdown by age groups: - 0-14 years: 20% - 15-24 years: 15% - 25-44 years: 30% - 45-64 years: 25% - 65+ years: 10% To get this data, I would refer to the U.S. Census Bureau's repor",
+    "reason": "Need to quantify the estimate and discuss data sources in more detail. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000180.8,
+    "answer": "Absolutely. After obtaining the U.S. population breakdown by age, I would then focus on smartphone penetration rates within each age group. For instance, younger age groups typically have higher smartphone ownership, so I would use data from market research firms like Statista or Gartner to find the smartphone penetration rates for each segment. Let's say Statista reports a 95% penetration rate for the 15-24 age group, 90% for 25-44, 75% for 45-64, and 50% for 65+. Next, I would calculate the number of potential smartphone users in each age group by multiplying the population by the penetration rate. For example, for the 15-24 age group, it would be 333 million * 15% * 95% = approximately 47 million potential smartphone users. Repeating this for each group and summing up would give me a total estimated number of smartphone users in the U.S. To verify the data, I would cross-check with multiple sources such as industry reports, tech news outlets, and recent market studies. Additionally, I’d look at historical sales data from companies like Apple and Samsung to see if the estimates align with their reported units sold. I’d also consider the latest smartphone release cycles and any economic factors that might have influenced sales, like the economic climate or new technology releases. This multi-source verification would help ensure the accuracy of the estimate.",
+    "answer_words": [],
+    "answer_seconds": 89.2,
+    "answered_at": 1000278.0,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a detailed breakdown and a structured approach to estimate the smartphone market size, including specific data sources and calculations.",
+     "gaps": "Candidate could benefit from more specific examples of how to verify the data and ensure accuracy.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote 'Sure, I can give you an estimate. According to recent data, the U.S. population ')"
+    ]
+   },
+   {
+    "index": 6,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "That's a thorough approach. Can you give me an example of how you would cross-check the data or verify the accuracy of the penetration rates you mentioned for different age groups?",
+    "anchor_quote": "To verify the data, I would cross-check with multiple sources such as industry reports, tech news outlets, and recent market studies. Additionally, I’d look at historical sales data from companies like Apple and Samsung to see if the estimates align with their reported units sold.",
+    "reason": "Candidate provided a solid approach but needs more detail on verification. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000278.0,
+    "answer": "Sure, to verify the penetration rates, I would start by cross-referencing with multiple sources. For instance, I would look at reports from market research firms like Gartner and IDC, which frequently publish detailed analyses of the U.S. smartphone market. Additionally, I would check reports from tech news outlets like TechCrunch and The Verge, which often highlight trends and insights into smartphone adoption. I would also review market studies from companies like Apple and Samsung, as they provide insights into their sales data and customer demographics, which can give an idea of the overall market size and penetration rates. To further validate, I might use data from the U.S. Census Bureau's Consumer Expenditure Survey, which provides information on consumer spending patterns, including on electronics. By cross-referencing these various sources, I could get a more comprehensive and accurate picture of the smartphone market size and penetration rates for different age groups. For example, if Gartner reports 95% penetration for the 15-24 age group and the Census Bureau's data shows a high level of tech adoption in that age range, it would strengthen the accuracy of the estimate.",
+    "answer_words": [],
+    "answer_seconds": 74.0,
+    "answered_at": 1000360.0,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate provided a detailed and structured approach with a clear plan to break down the market and verify the data.",
+     "gaps": "Candidate could have elaborated more on the potential sources of error in the estimates and how to mitigate them.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 7,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "That's a thorough approach. Can you give me an example of how you would account for potential errors or biases in your estimates and how you would mitigate them?",
+    "anchor_quote": "Sure, to verify the penetration rates, I would start by cross-referencing with multiple sources.",
+    "reason": "Candidate demonstrated a good understanding of the market-sizing process, now need to dig deeper into their analytical skills. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000360.0,
+    "answer": "Certainly. To account for potential errors or biases in my estimates, I would take several steps to mitigate them. First, I would ensure the data sources are reliable and up-to-date. For instance, I would cross-reference data from multiple sources, such as the U.S. Census Bureau, Statista, and industry reports from tech firms. This redundancy helps to reduce the impact of any single data point being incorrect. Second, I would consider various scenarios and sensitivities. For example, if I have a range for smartphone penetration rates, I would run sensitivity analyses to see how changes in these rates affect the overall market size. This helps to understand the robustness of the estimate. Third, I would factor in seasonal variations. Sales can fluctuate based on factors like holiday seasons, new model releases, or economic conditions. By including these seasonal trends, I can better account for variability in the data. Fourth, I would conduct qualitative checks. Interviewing industry experts or consulting with market analysts can provide additional insights that might not be available in data reports. This qualitative input can help fill gaps in quantitative data. Finally, I would document all assumptions and methodologies. This transparency ensures that any biases or potential errors are clearly identified and can be addressed in the future. By following these steps, I can produce a more accurate and reliable estimate of the U.S. smartphone market size.",
+    "answer_words": [],
+    "answer_seconds": 91.6,
+    "answered_at": 1000459.6,
+    "score": 3,
+    "assessment": {
+     "strengths": "Candidate demonstrated a structured approach and considered multiple data sources for verification.",
+     "gaps": "Could provide more specific examples of how to mitigate errors and biases in the estimate.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 8,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "That's a thorough approach. Can you give me a specific example of how you would handle a potential error or bias in your estimate and what steps you would take to mitigate it?",
+    "anchor_quote": "Certainly. To account for potential errors or biases in my estimates, I would take several steps to mitigate them.",
+    "reason": "Following up on the candidate's approach to error mitigation. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000459.6,
+    "answer": "Sure, let's say I calculated the smartphone market size in the U.S. using the penetration rates from Gartner, which reported a 90% penetration rate for the 25-44 age group. However, I later find a discrepancy where a tech news outlet like The Verge reports a 95% penetration rate for the same age group. To address this potential error, I would take the following steps: 1. **Cross-Verify Data**: I would cross-verify the data from the tech news outlet with other sources like IDC or market reports from tech firms such as Apple and Samsung. If multiple sources consistently show a 95% penetration rate, I would adjust my estimate accordingly. 2. **Run Sensitivity Analysis**: I would run a sensitivity analysis to see how a 5% increase in the penetration rate affects the overall market size. For example, if the population in the 25-44 age group is 80 million, a 5% increase would add 4 million more potential smartphone users. This helps understand the impact of the error on the overall estimate. 3. **Qualitative Input**: I would consult with industry experts or market analysts to get their perspective on the discrepancy. They might provide insights into recent trends, new technologies, or specific market conditions that could explain the difference. 4. **Document Assumptions**: I would document the sources and methodologies used, including the identified discrepancies and the steps taken to verify and adjust the estimate. This transparency helps ensure that any potential errors are accounted for and can be addressed in the future. By taking these steps, I can mitigate the potential error and ensure the accuracy of my estimate.",
+    "answer_words": [],
+    "answer_seconds": 106.4,
+    "answered_at": 1000574.0,
+    "score": 3,
+    "assessment": {
+     "strengths": "The candidate provided a detailed and structured approach to verifying data and handling potential errors.",
+     "gaps": "There were no specific examples of impactful work or personal ownership mentioned.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 9,
+    "action": "revisit",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "That's a thorough approach. Could you provide a specific example of a project or task where you demonstrated significant impact or took ownership, and how that contributed to positive outcomes?",
+    "anchor_quote": "That's a thorough approach. Can you give me an example of how you would account for potential errors or biases in your estimates and how you would mitigate them?",
+    "reason": "To explore specific examples of impactful work and drive/commitment more directly. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000574.0,
+    "answer": "Certainly. In my previous role at a consulting firm, I was part of a team tasked with improving the supply chain efficiency of a mid-sized manufacturing company. I took the lead in conducting a thorough analysis of their supply chain processes, identifying bottlenecks and areas for improvement. Specifically, I focused on the inventory management system, which was causing significant delays and excess costs. I spearheaded a project to implement a new, more efficient inventory management software, which reduced the lead time for inventory replenishment by 30%. This improvement not only streamlined the workflow but also led to a 15% decrease in holding costs. Additionally, I worked closely with the IT department to ensure a smooth transition, which helped maintain production continuity without any disruptions. The implementation of the new software resulted in a significant boost in overall operational efficiency, contributing to a 10% increase in the company's gross margins. My proactive approach and focus on data-driven solutions not only enhanced the company's supply chain but also improved stakeholder satisfaction. This project demonstrated my ability to take ownership, drive change, and deliver tangible results, which positively impacted the company's bottom line.",
+    "answer_words": [],
+    "answer_seconds": 76.0,
+    "answered_at": 1000658.0,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a detailed and structured approach to handling potential errors and biases in estimates, which shows a strong sense of accountability and thoroughness.",
+     "gaps": "The response could benefit from more specific numbers or examples to illustrate the steps taken to mitigate errors.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 10,
+    "action": "follow_up",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "That's a great example, thank you. Could you provide more details on the project, such as the specific actions you took, the challenges you faced, and the measurable outcomes you achieved?",
+    "anchor_quote": "This project demonstrated my ability to take ownership",
+    "reason": "To assess the candidate's ability to take ownership and deliver tangible results in a real-world scenario. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000658.0,
+    "answer": "Certainly. In the supply chain improvement project, I started by conducting a comprehensive analysis using both primary and secondary data. I gathered data from various departments, including manufacturing, procurement, and logistics, to understand the current processes and identify bottlenecks. I found that the existing inventory management system was outdated and inefficient, leading to frequent stockouts and overstock situations. To address this, I led a team to research and select a new, more efficient inventory management software. We evaluated several options and chose the one that best fit the company's needs, considering factors like cost, scalability, and integration capabilities. One of the main challenges was the resistance from the IT department, as they were concerned about the potential disruptions and data migration issues. To overcome this, I organized a series of workshops and training sessions to ensure a smooth transition. I also set up a pilot project in one of the manufacturing units to test the new system before full-scale implementation. The measurable outcomes were quite significant. The new system reduced the lead time for inventory replenishment by 30%, from 45 days to 31 days. This improvement not only streamlined the workflow but also led to a 15% decrease in holding costs. Moreover, the decrease in stockouts and overstock situations resulted in a 10% increase in overall operational efficiency. On the financial side, the project contributed to a 5% increase in gross margins, which translated to an additional \\$1.2 million in profit over the first year. By taking a proactive and data-driven approach, I was able to drive positive change and deliver measurable results that had a direct impact on the company's bottom line and operational efficiency.",
+    "answer_words": [],
+    "answer_seconds": 110.4,
+    "answered_at": 1000776.4,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a detailed and specific example of a project with clear measurable outcomes.",
+     "gaps": "",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote \"That's a thorough approach. Could you provide a specific example of a project or\")"
+    ]
+   },
+   {
+    "index": 11,
+    "action": "revisit",
+    "competency": "c3",
+    "difficulty": 4,
+    "say": "That's a great example. Could you elaborate on how you communicated the findings and recommendations to stakeholders? How did you ensure that complex concepts were explained in a clear and concise manner?",
+    "anchor_quote": "That's a great example, thank you. Could you provide more details on the project, such as the specific actions you took, the challenges you faced, and the measurable outcomes you achieved?",
+    "reason": "To explore the candidate's ability to explain complex concepts simply and their confidence in presenting ideas. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000776.4,
+    "answer": "Certainly. When communicating the findings and recommendations to stakeholders, I ensured that the information was clear and actionable. I started by creating a detailed report that included visual aids like charts and graphs to make the data more digestible. For example, I used a bar chart to show the reduction in lead time and an area chart to illustrate the decrease in holding costs. I also included a summary of the key findings and recommendations at the beginning of the report to give a quick overview. During meetings, I focused on explaining the data-driven insights and the rationale behind the recommendations. I used simple language and analogies to make complex concepts more relatable. For instance, I compared the new inventory management system to a more efficient traffic flow to explain how it would reduce delays and improve overall efficiency. To ensure understanding, I encouraged questions and provided additional explanations when needed. I also prepared a Q&A session at the end of the meetings to address any concerns or clarifications. Additionally, I followed up with a brief email summary of the key points discussed and the next steps, which helped keep everyone on the same page. By using clear visual aids, simple language, and open dialogues, I ensured that the stakeholders could easily grasp the information and their role in implementing the recommendations. This approach helped in gaining buy-in and ensuring that the project's outcomes were successfully executed.",
+    "answer_words": [],
+    "answer_seconds": 94.8,
+    "answered_at": 1000879.2000000001,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a detailed example of handling potential errors and bias, demonstrating a structured approach.",
+     "gaps": "",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 12,
+    "action": "new_topic",
+    "competency": "c4",
+    "difficulty": 4,
+    "say": "Could you describe your step-by-step process for approaching a complex problem in supply chain management, and how you would creatively develop solutions to address it?",
+    "anchor_quote": "Could you describe your step-by-step process for approaching a complex problem in supply chain management, and how you would creatively develop solutions to address it?",
+    "reason": "This will explore the candidate's structured problem-solving approach and creativity in addressing supply chain issues. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000879.2000000001,
+    "answer": "Certainly. When approaching a complex problem in supply chain management, I follow a structured step-by-step process to ensure a thorough and effective solution. Here’s how I would handle it: 1. **Define the Problem**: I start by thoroughly understanding the issue at hand. For example, if the problem is excessive inventory holding costs, I would gather data on current inventory levels, lead times, and associated costs to define the scope and impact. 2. **Data Collection and Analysis**: Next, I collect relevant data from various sources, including internal systems, market reports, and industry benchmarks. This data helps me identify trends and patterns that could be causing the issue. For instance, I might look at historical sales data, supplier lead times, and inventory turnover rates. 3. **Root Cause Analysis**: Using techniques like the 5 Whys or Fishbone Diagram, I delve into the root causes of the problem. This helps me understand the underlying issues, such as inaccurate demand forecasting or ineffective communication between departments. 4. **Brainstorming Solutions**: I then brainstorm potential solutions with cross-functional teams. This could include implementing advanced analytics tools, optimizing procurement strategies, or enhancing inventory management practices. For example, we might explore using AI-driven demand forecasting tools to reduce overstock situations. 5. **Solution Evaluation**: I evaluate each potential solution based on factors like cost, feasibility, and impact. I use tools like SWOT analysis or Cost-Benefit Analysis to compare the pros and cons. For instance, if we're considering a new inventory management software, I would assess its cost, integration challenges, and potential ROI. 6. **Implementation Plan**: Once a solution is selected, I create a detailed implementation plan. This includes timelines, roles and responsibilities, and contingency strategies. For example, I would map out a phased rollout to minimize disruptions and ensure smooth integration. 7. **Pilot Testing**: Before full-scale implementation, I run a pilot project in a controlled environment. This helps identify any unforeseen issues and",
+    "answer_words": [],
+    "answer_seconds": 125.2,
+    "answered_at": 1001012.4,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a detailed, structured approach to problem-solving in supply chain management, which is very relevant to the role. They emphasized the importance of data, root cause analysis, and pilot testing.",
+     "gaps": "The candidate could benefit from providing more specific examples or numbers to illustrate their points.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 13,
+    "action": "follow_up",
+    "competency": "c4",
+    "difficulty": 4,
+    "say": "Could you give me an example of a time when you had to develop a creative solution to a challenging supply chain issue, and how you approached it step-by-step? For instance, how did you handle a situation where traditional methods weren't yielding the desired results, and what creative strategies did you employ to address the problem?",
+    "anchor_quote": "When approaching a complex problem in supply chain management, I follow a structured step-by-step process to ensure a thorough and effective solution.",
+    "reason": "Expanding on the problem-solving process with specific examples will help gauge the candidate's practical experience and creativity in developing solutions under pressure. This aligns well with the target competency of problem-solving and will provide additional insight into their ability to handle  [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1001012.4,
+    "answer": "Sure, I can share an example from my past experience. One time, we faced a significant issue with stockouts and overstock situations due to inaccurate demand forecasting. Traditional methods weren't yielding the desired results, so we had to get creative. Here’s how we approached it step-by-step: 1. **Define the Problem**: We first identified the root cause by analyzing historical sales data, seasonal trends, and external market factors. We found that the current forecasting model was too simplistic and didn't account for unexpected events like sudden market shifts or economic downturns. 2. **Data Collection and Analysis**: We collected additional data sources, including social media trends, economic indicators, and competitor sales data. This helped us gain a more comprehensive understanding of the market dynamics. 3. **Root Cause Analysis**: Using the 5 Whys technique, we found that the issue stemmed from the lack of real-time data integration and the inability to factor in external factors. We also realized that the traditional Excel-based model was too rigid and didn't adapt well to changing conditions. 4. **Brainstorming Solutions**: We brainstormed ideas with cross-functional teams, including sales, marketing, and IT. We considered implementing machine learning algorithms to improve accuracy. One of the more creative ideas was to use IoT sensors to monitor real-time inventory levels and adjust forecasts dynamically. 5. **Solution Evaluation**: We evaluated the feasibility of using machine learning versus IoT sensors. We decided on a hybrid approach, combining historical data with real-time sensor data to create a more dynamic and accurate forecasting model. 6. **Implementation Plan**: We created a phased implementation plan. In the first phase, we set up a pilot project with IoT sensors in key locations. In the second phase, we integrated the machine learning model into the existing system. We also trained the team on the new tools and processes. 7. **Pilot Testing**: We ran a pilot for three months, closely monitoring the results. The real-time data provided significant insights, allowing us",
+    "answer_words": [],
+    "answer_seconds": 128.4,
+    "answered_at": 1001148.8,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a detailed and structured approach to solving a complex supply chain issue, including data collection, root cause analysis, and creative solutions.",
+     "gaps": "",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 14,
+    "action": "wrap_up",
+    "competency": "c4",
+    "difficulty": 4,
+    "say": "Could you walk me through how you ensured that the stakeholders understood the complex concepts and were confident in the recommendations you made?",
+    "anchor_quote": "Certainly, one time we faced a significant issue with stockouts and overstock situations due to inaccurate demand forecasting.",
+    "reason": "Closing the interview with a relevant example. [candidate quality: strong]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1001148.8,
+    "answer": "Certainly. When ensuring stakeholders understood complex concepts and were confident in the recommendations, I followed these steps: 1. **Simplify the Data**: I used simple language and visual aids like charts, graphs, and infographics to explain the data. For example, I used line graphs to show trends and bar charts to compare different scenarios. 2. **Use Analogies and Metaphors**: To make complex concepts more relatable, I often used analogies. For instance, I compared the inventory management system to a traffic flow to explain how it would reduce delays and improve efficiency. 3. **Engage in Active Listening**: I made sure to listen carefully to stakeholders' concerns and questions. This helped me tailor my explanations and address any misunderstandings directly. 4. **Provide Context and Relevance**: I always linked the recommendations to the stakeholders' goals and roles. For example, I explained how the new system would directly benefit their department and align with their objectives. 5. **Facilitate Q&A Sessions**: I held Q&A sessions during meetings to ensure everyone had a chance to ask questions and clarify any doubts. This helped build confidence and ensure everyone was on the same page. 6. **Follow Up with Summaries**: After meetings, I sent brief summaries of the key points discussed and the next steps. This helped stakeholders retain the information and stay engaged. 7. **Encourage Feedback**: I encouraged stakeholders to provide feedback and suggestions, which not only improved the recommendations but also made the stakeholders feel more involved and invested. By following these steps, I ensured that the stakeholders not only understood the complex concepts but also felt confident in the recommendations. This approach helped in gaining buy-in and ensuring successful implementation.",
+    "answer_words": [],
+    "answer_seconds": 109.6,
+    "answered_at": 1001266.4,
+    "score": 4,
+    "assessment": {
+     "strengths": "The candidate provided a detailed and structured approach to ensuring stakeholders understood complex concepts and were confident in the recommendations. They used various communication strategies and highlighted the importance of active listening and clear explanations.",
+     "gaps": "While the candidate's response was strong, it could be more specific about the measurable outcomes and the impact on the stakeholders.",
+     "vague": false
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 15,
+    "action": "close",
+    "competency": "c3",
+    "difficulty": 4,
+    "say": "Thank you for your thorough responses today. It was great to hear about your approach to communication and presentation. Let's conclude the interview here. Have a great day!",
+    "anchor_quote": "I used simple language and visual aids like charts, graphs, and infographics to explain the data.",
+    "reason": "Final question to wrap up the interview.",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1001266.4,
+    "answer": null,
+    "answer_words": [],
+    "answer_seconds": 0.0,
+    "answered_at": null,
+    "score": null,
+    "assessment": null,
+    "evaluation": null,
+    "corrections": []
+   }
+  ],
+  "difficulty": 4,
+  "started_at": 1000000.0,
+  "finished": true,
+  "events": [
+   {
+    "t": 1791319818.007,
+    "kind": "turn",
+    "turn": 0,
+    "provider": "ollama",
+    "ms": 157414.3,
+    "action": "open"
+   },
+   {
+    "t": 1791319925.127,
+    "kind": "correction",
+    "turn": 1,
+    "detail": "difficulty 3->2 (score 1, previous 3)"
+   },
+   {
+    "t": 1791319925.127,
+    "kind": "turn",
+    "turn": 1,
+    "provider": "ollama",
+    "ms": 88995.8,
+    "action": "revisit"
+   },
+   {
+    "t": 1791319998.788,
+    "kind": "correction",
+    "turn": 2,
+    "detail": "difficulty 2->1 (score 1, previous 2)"
+   },
+   {
+    "t": 1791319998.788,
+    "kind": "turn",
+    "turn": 2,
+    "provider": "ollama",
+    "ms": 60283.9,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320148.697,
+    "kind": "correction",
+    "turn": 3,
+    "detail": "difficulty 2->1 (score 1, previous 1)"
+   },
+   {
+    "t": 1791320148.697,
+    "kind": "turn",
+    "turn": 3,
+    "provider": "ollama",
+    "ms": 115580.2,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320283.385,
+    "kind": "turn",
+    "turn": 4,
+    "provider": "ollama",
+    "ms": 92867.7,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320487.926,
+    "kind": "correction",
+    "turn": 5,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote 'Sure, I can give you an estimate. According to recent data, the U.S. population ')"
+   },
+   {
+    "t": 1791320487.926,
+    "kind": "turn",
+    "turn": 5,
+    "provider": "ollama",
+    "ms": 118406.7,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320690.817,
+    "kind": "turn",
+    "turn": 6,
+    "provider": "ollama",
+    "ms": 124743.9,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791320885.926,
+    "kind": "turn",
+    "turn": 7,
+    "provider": "ollama",
+    "ms": 117656.3,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321089.017,
+    "kind": "turn",
+    "turn": 8,
+    "provider": "ollama",
+    "ms": 124111.9,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321897.918,
+    "kind": "turn",
+    "turn": 9,
+    "provider": "ollama",
+    "ms": 710451.5,
+    "action": "revisit"
+   },
+   {
+    "t": 1791322396.253,
+    "kind": "correction",
+    "turn": 10,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote \"That's a thorough approach. Could you provide a specific example of a project or\")"
+   },
+   {
+    "t": 1791322396.253,
+    "kind": "turn",
+    "turn": 10,
+    "provider": "ollama",
+    "ms": 412828.1,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791323311.827,
+    "kind": "turn",
+    "turn": 11,
+    "provider": "ollama",
+    "ms": 815419.4,
+    "action": "revisit"
+   },
+   {
+    "t": 1791324168.551,
+    "kind": "turn",
+    "turn": 12,
+    "provider": "ollama",
+    "ms": 760567.7,
+    "action": "new_topic"
+   },
+   {
+    "t": 1791324691.315,
+    "kind": "turn",
+    "turn": 13,
+    "provider": "ollama",
+    "ms": 406105.6,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791325574.458,
+    "kind": "turn",
+    "turn": 14,
+    "provider": "ollama",
+    "ms": 749218.0,
+    "action": "wrap_up"
+   },
+   {
+    "t": 1791326369.366,
+    "kind": "turn",
+    "turn": 15,
+    "provider": "ollama",
+    "ms": 673056.4,
+    "action": "close"
+   }
+  ]
+ },
+ "attempts": [
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 130902.0,
+   "error": "",
+   "input_tokens": 606,
+   "output_tokens": 435
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 133989.1,
+   "error": "say must ask the candidate a question",
+   "input_tokens": 1534,
+   "output_tokens": 72
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 23425.0,
+   "error": "",
+   "input_tokens": 1572,
+   "output_tokens": 101
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 57453.0,
+   "error": "follow_up must ask about what the candidate just said (the anchor_quote); to return to an earlier answer use action revisit",
+   "input_tokens": 1656,
+   "output_tokens": 144
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 31542.4,
+   "error": "",
+   "input_tokens": 1729,
+   "output_tokens": 130
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 60283.9,
+   "error": "",
+   "input_tokens": 1775,
+   "output_tokens": 142
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 115580.1,
+   "error": "",
+   "input_tokens": 1990,
+   "output_tokens": 360
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 92867.7,
+   "error": "",
+   "input_tokens": 2268,
+   "output_tokens": 176
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 118406.6,
+   "error": "",
+   "input_tokens": 2544,
+   "output_tokens": 269
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 124743.8,
+   "error": "",
+   "input_tokens": 2973,
+   "output_tokens": 203
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 117656.3,
+   "error": "",
+   "input_tokens": 3307,
+   "output_tokens": 179
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 124111.8,
+   "error": "",
+   "input_tokens": 3676,
+   "output_tokens": 161
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240090.9,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 67605.3,
+   "error": "repeats an earlier question: \"That's a thorough approach. Can you give me a specific example of how you would \"",
+   "input_tokens": 4046,
+   "output_tokens": 218
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240108.7,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 161843.2,
+   "error": "",
+   "input_tokens": 4045,
+   "output_tokens": 176
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240106.9,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 172319.8,
+   "error": "",
+   "input_tokens": 4077,
+   "output_tokens": 210
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240106.0,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 173956.8,
+   "error": "repeats an earlier question: \"That's a great example, thank you. Could you provide more details on the project\"",
+   "input_tokens": 4059,
+   "output_tokens": 227
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240105.1,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 160448.6,
+   "error": "",
+   "input_tokens": 4033,
+   "output_tokens": 176
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240108.4,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 143745.3,
+   "error": "repeats an earlier question: \"That's a great example. Could you elaborate on how you communicated the findings\"",
+   "input_tokens": 4052,
+   "output_tokens": 214
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240091.2,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 135820.0,
+   "error": "",
+   "input_tokens": 4055,
+   "output_tokens": 162
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240063.6,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 165640.7,
+   "error": "",
+   "input_tokens": 3920,
+   "output_tokens": 362
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240115.3,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 168154.8,
+   "error": "repeats an earlier question: 'Could you give me an example of a time when you had to develop a creative soluti'",
+   "input_tokens": 4093,
+   "output_tokens": 315
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240075.2,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 100070.0,
+   "error": "",
+   "input_tokens": 3743,
+   "output_tokens": 146
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 312453.1,
+   "error": "reply is not valid JSON (Unterminated string starting at)",
+   "input_tokens": 3843,
+   "output_tokens": 900
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240058.2,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 120143.7,
+   "error": "",
+   "input_tokens": 3869,
+   "output_tokens": 184
+  }
+ ],
+ "qualities": [
+  "weak",
+  "weak",
+  "average",
+  "average",
+  "strong",
+  "strong",
+  "strong",
+  "strong",
+  "strong",
+  "strong",
+  "strong",
+  "strong",
+  "strong",
+  "strong",
+  "strong"
+ ]
+}

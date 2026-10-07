@@ -1,0 +1,15 @@
+# Vercel Python deployment of the API (project root directory: deploy/vercel-api).
+# The packages are installed from this repository at a pinned commit, so this folder stays tiny.
+# To deploy newer code, bump the commit in both URLs.
+[project]
+name = "interview-coach-api-vercel"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "interview-core @ git+https://github.com/DeAtHfIrE26/Next-Generation-Virtual-Interview-Training-System@901f65756218abed627488ab57078271041ac504#subdirectory=packages/core",
+    "interview-api @ git+https://github.com/DeAtHfIrE26/Next-Generation-Virtual-Interview-Training-System@901f65756218abed627488ab57078271041ac504#subdirectory=services/api",
+    "psycopg[binary]>=3.1",
+]
+
+[tool.vercel]
+entrypoint = "index:app"

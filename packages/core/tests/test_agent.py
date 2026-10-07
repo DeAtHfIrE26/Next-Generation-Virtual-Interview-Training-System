@@ -1,0 +1,695 @@
+"""Interviewer agent: validation, repair, provider fail-over, difficulty rules, timing, persistence.
+
+The LLM here is a scripted test double (test code only). Real-LLM behaviour is proven by
+eval/agent_mock_interviews.py, which writes transcripts to docs/evidence/questions/.
+"""
+
+import json
+
+import pytest
+from interview_core.agent.interviewer import (
+    Answer,
+    InterviewerAgent,
+    answer_clauses,
+    enforce_difficulty,
+    ground_by_topic,
+    ground_quote,
+    llm_timeout_s,
+    parse_reply,
+    quote_matches,
+    repair_turn_hint,
+    repair_turn_schema,
+    turn_schema,
+)
+from interview_core.agent.llm import Usage
+from interview_core.agent.state import AgentState, InterviewParams, Turn
+from interview_core.nlp.providers.base import PermanentLLMError, TransientLLMError
+
+BLUEPRINT = {
+    "summary": "Assesses backend depth and ownership.",
+    "competencies": [
+        {
+            "id": "c1",
+            "name": "API design",
+            "why": "JD asks for REST APIs",
+            "weight": 0.4,
+            "minutes": 6,
+            "signals": ["versioning"],
+        },
+        {
+            "id": "c2",
+            "name": "Databases",
+            "why": "resume: Postgres",
+            "weight": 0.3,
+            "minutes": 5,
+            "signals": [],
+        },
+        {"id": "c3", "name": "Ownership", "why": "senior role", "weight": 0.3, "minutes": 5, "signals": []},
+    ],
+    "opening": "Greet, then ask about a recent API.",
+    "style_notes": "Direct.",
+    "start_difficulty": 3,
+}
+
+
+def reply(action, comp="c1", diff=3, say="Tell me about an API you designed recently?", quote="", last=None):
+    plan = {
+        "last_answer": last,
+        "action": action,
+        "competency": comp,
+        "difficulty": diff,
+        "anchor_quote": quote,
+        "reason": "r",
+    }
+    return f"<plan>{json.dumps(plan)}</plan>\n<say>{say}</say>"
+
+
+class Scripted:
+    """Yields scripted replies (or raises scripted exceptions) in order."""
+
+    def __init__(self, name, script):
+        self.name, self.model, self.script, self.calls = name, "test-model", list(script), []
+        self.last_usage = Usage(10, 5)
+
+    def stream(self, system, messages, *, max_tokens=1200, timeout_s=30.0, effort="low"):
+        self.calls.append({"system": system, "messages": messages, "effort": effort})
+        item = self.script.pop(0)
+        if isinstance(item, Exception):
+            raise item
+        yield from (item[i : i + 7] for i in range(0, len(item), 7))  # stream in small chunks
+
+
+def state(**kw):
+    kw = {"role": "Backend Engineer", "duration_minutes": 20, "skills": ["Postgres"], **kw}
+    return AgentState.new("s1", InterviewParams(**kw))
+
+
+def test_full_interview_flow_follow_up_difficulty_and_close():
+    llm = Scripted(
+        "primary",
+        [
+            json.dumps(BLUEPRINT),
+            reply("open", say="Hi, I'm Maya. Tell me about an API you designed recently?"),
+            reply(
+                "follow_up",
+                diff=4,
+                say="You said you added cursor pagination. Why cursors rather than offsets?",
+                quote="added cursor pagination",
+                last={"score": 4, "strengths": "specific", "gaps": "", "vague": False},
+            ),
+            reply(
+                "new_topic",
+                comp="c2",
+                diff=3,
+                say="How would you find and fix a slow Postgres query?",
+                last={"score": 2, "strengths": "", "gaps": "no trade-offs", "vague": True},
+            ),
+        ],
+    )
+    ag = InterviewerAgent([llm])
+    st = state()
+    t0 = ag.next_turn(st, now=1000.0)
+    assert st.blueprint and [c.id for c in st.blueprint.competencies] == ["c1", "c2", "c3"]
+    assert t0.action == "open" and not t0.emergency and t0.provider == "primary"
+    t1 = ag.next_turn(
+        st, Answer("We added cursor pagination and versioned the endpoints.", seconds=30), now=1060.0
+    )
+    assert t1.action == "follow_up" and t1.anchor_quote == "added cursor pagination"
+    assert st.turns[0].score == 4 and t1.difficulty == 4
+    # the candidate's answer reached the model inside untrusted-input tags
+    last_msgs = llm.calls[-1]["messages"]
+    assert any("<candidate_input>" in m["content"] and "cursor pagination" in m["content"] for m in last_msgs)
+    t2 = ag.next_turn(st, Answer("I'd add an index I guess.", seconds=8), now=1100.0)
+    assert t2.difficulty == 3  # weak answer (score 2): difficulty did not rise
+    assert st.coverage()["c1"]["scores"] == [4, 2]
+
+
+def test_invalid_anchor_quote_is_repaired_once():
+    llm = Scripted(
+        "primary",
+        [
+            json.dumps(BLUEPRINT),
+            reply("open"),
+            reply(
+                "follow_up",
+                say="You mentioned Kafka. Why Kafka?",
+                quote="we used Kafka",
+                last={"score": 3, "strengths": "", "gaps": "", "vague": False},
+            ),
+            reply(
+                "follow_up",
+                say="You said the cache was stale. How did you notice?",
+                quote="the cache was stale",
+                last={"score": 3, "strengths": "", "gaps": "", "vague": False},
+            ),
+        ],
+    )
+    ag = InterviewerAgent([llm])
+    st = state()
+    ag.next_turn(st, now=0.5)
+    t = ag.next_turn(st, Answer("Honestly the cache was stale for hours.", seconds=10), now=30)
+    assert t.anchor_quote == "the cache was stale" and not t.emergency
+    assert "verbatim" in llm.calls[-1]["messages"][-1]["content"]  # repair prompt showed the error
+
+
+def test_duplicate_question_rejected():
+    q = "Tell me about an API you designed recently?"
+    llm = Scripted(
+        "p",
+        [
+            json.dumps(BLUEPRINT),
+            reply("open", say=q),
+            reply(
+                "new_topic",
+                comp="c2",
+                say="So tell me about an API that you designed recently?",
+                last={"score": 3, "strengths": "", "gaps": "", "vague": False},
+            ),
+            reply(
+                "new_topic",
+                comp="c2",
+                say="How do you choose indexes in Postgres?",
+                last={"score": 3, "strengths": "", "gaps": "", "vague": False},
+            ),
+        ],
+    )
+    ag = InterviewerAgent([llm])
+    st = state()
+    ag.next_turn(st, now=1)
+    t = ag.next_turn(st, Answer("answer", seconds=5), now=20)
+    assert t.say.startswith("How do you choose indexes")
+
+
+def test_transient_retry_then_fallback_provider_then_emergency():
+    primary = Scripted(
+        "primary", [json.dumps(BLUEPRINT), TransientLLMError("timeout"), TransientLLMError("timeout")]
+    )
+    backup = Scripted("backup", [reply("open", say="Hello, tell me about yourself?")])
+    ag = InterviewerAgent([primary, backup])
+    st = state()
+    t = ag.next_turn(st, now=1)
+    assert t.provider == "backup" and not t.emergency
+    assert [a.ok for a in ag.attempts] == [True, False, False, True]
+
+    dead = Scripted("dead", [PermanentLLMError("401"), PermanentLLMError("401")])
+    ag2 = InterviewerAgent([dead])
+    st2 = state()
+    t2 = ag2.next_turn(st2, now=1)
+    assert st2.blueprint.emergency and t2.emergency and t2.provider == "emergency"
+    assert {e["kind"] for e in st2.events} >= {"emergency_blueprint", "emergency_question"}
+
+
+def test_wrap_up_and_close_are_forced_by_time():
+    short = {**BLUEPRINT, "competencies": [{**c, "minutes": 1} for c in BLUEPRINT["competencies"]]}
+    llm = Scripted(
+        "p",
+        [
+            json.dumps(short),
+            reply("open"),
+            reply(
+                "wrap_up",
+                comp="c3",
+                say="We're nearly out of time. Do you have any questions for me?",
+                last={"score": 3, "strengths": "", "gaps": "", "vague": False},
+            ),
+            reply(
+                "close",
+                comp="c3",
+                say="Thank you for your time today. Goodbye.",
+                last={"score": 3, "strengths": "", "gaps": "", "vague": False},
+            ),
+        ],
+    )
+    ag = InterviewerAgent([llm])
+    st = state(duration_minutes=5)
+    ag.next_turn(st, now=0.0 + 1)
+    t = ag.next_turn(st, Answer("answer", seconds=200), now=1 + 250)  # 50 s left
+    assert t.action == "wrap_up" and "nearly up" in llm.calls[-1]["messages"][-1]["content"]
+    t2 = ag.next_turn(st, Answer("No questions.", seconds=3), now=1 + 260)
+    assert t2.action == "close" and st.finished
+    assert ag.next_turn(st, None, now=300) is None
+
+
+@pytest.mark.parametrize(
+    "prev,wanted,score,requested,expected",
+    [
+        (3, 5, 5, "auto", 4),  # at most one step
+        (3, 3, 5, "auto", 4),  # a 5 raises
+        (3, 2, 4, "auto", 3),  # a 4 never lowers
+        (3, 4, 2, "auto", 3),  # a 2 never raises
+        (3, 3, 1, "auto", 2),  # a 1 lowers
+        (1, 1, 1, "auto", 1),  # floor
+        (5, 5, 5, "auto", 5),  # ceiling
+        (3, 4, None, "auto", 4),  # opening: free within one step
+        (4, 5, 5, "2", 3),  # fixed requested difficulty: within one of it
+    ],
+)
+def test_difficulty_rules(prev, wanted, score, requested, expected):
+    assert enforce_difficulty(prev, wanted, score, requested) == expected
+
+
+def test_quote_matching_tolerates_asr_punctuation():
+    ans = "So, um, we added cursor-based pagination and versioned it."
+    assert quote_matches("added cursor based pagination", ans)
+    assert not quote_matches("we migrated to Kafka", ans)
+
+
+def test_state_round_trips_through_json():
+    llm = Scripted("p", [json.dumps(BLUEPRINT), reply("open")])
+    st = state(company="Acme", interview_type="technical")
+    InterviewerAgent([llm]).next_turn(st, now=5)
+    st2 = AgentState.from_dict(json.loads(json.dumps(st.to_dict())))
+    assert st2.blueprint.competencies[1].name == "Databases" and st2.turns[0].say == st.turns[0].say
+    assert st2.params.company == "Acme"
+
+
+def test_params_validation():
+    with pytest.raises(ValueError):
+        InterviewParams(role="x", interview_type="poetry")
+    p = InterviewParams(role="SWE", duration_minutes=500, skills=[" Go ", ""])
+    assert p.duration_minutes == 60 and p.skills == ["Go"]
+
+
+class SchemaScripted(Scripted):
+    """A provider with grammar-constrained JSON output (like Ollama or Gemini)."""
+
+    supports_schema = True
+
+    def stream(self, system, messages, *, max_tokens=1200, timeout_s=30.0, effort="low", schema=None):
+        self.calls.append({"system": system, "messages": messages, "effort": effort, "schema": schema})
+        yield self.script.pop(0)
+
+
+def test_schema_providers_get_a_json_schema_and_json_replies_are_accepted():
+    turn = {
+        "action": "open",
+        "competency": "c1",
+        "difficulty": 3,
+        "anchor_quote": "",
+        "reason": "r",
+        "say": "Hi, I'm Maya. Which API did you design most recently?",
+    }
+    llm = SchemaScripted("ollama", [json.dumps(BLUEPRINT), json.dumps(turn)])
+    agent = InterviewerAgent([llm])
+    st = state()
+    t = agent.next_turn(st, now=1000.0)
+    assert t is not None and not t.emergency and t.action == "open"
+    assert llm.calls[0]["schema"]["required"][1] == "competencies"
+    s = llm.calls[1]["schema"]
+    assert s["properties"]["action"]["enum"] == ["open"]  # forced action is enforced by the grammar
+    assert s["properties"]["competency"]["enum"] == ["c1", "c2", "c3"]
+    assert "last_answer" not in s["properties"]  # nothing to assess before the first answer
+    assert '"say" field' in llm.calls[1]["system"]
+
+
+def test_turn_schema_requires_assessment_after_an_answer():
+    s = turn_schema(["c1", "c2"], None, True)
+    assert "open" not in s["properties"]["action"]["enum"]
+    assert "last_answer" in s["required"] and s["additionalProperties"] is False
+
+
+def test_parse_reply_accepts_both_formats():
+    plan, say, errs = parse_reply('{"action": "close", "say": "Thanks,  goodbye."}')
+    assert errs == [] and plan == {"action": "close"} and say == "Thanks, goodbye."
+    plan, say, errs = parse_reply('<plan>{"action": "close"}</plan><say>Bye.</say>')
+    assert errs == [] and say == "Bye."
+    assert parse_reply("{not json")[2]
+
+
+def test_loose_quote_is_grounded_to_the_candidates_real_words():
+    answer = "So I rewrote the nightly batch job in Go and it went from six hours down to forty minutes."
+    real = ground_quote("rewrote the nightly job in Golang, six hours to forty minutes", answer)
+    assert real is not None and real in answer and "nightly" in real
+    assert ground_quote("we migrated to Kubernetes last spring", answer) is None
+
+
+def test_grounded_follow_up_stores_verbatim_anchor_and_logs_correction():
+    answer = "I led the move from cron scripts to Airflow and cut failed runs by sixty percent."
+    llm = Scripted(
+        "p",
+        [
+            json.dumps(BLUEPRINT),
+            reply("open", say="Hi, I'm Maya. What data pipeline work have you owned?"),
+            reply(
+                "follow_up",
+                quote="moved from cron to Airflow and cut failures by sixty percent",
+                last={"score": 3, "strengths": "", "gaps": "", "vague": False},
+                say="How did you measure that sixty percent drop in failures?",
+            ),
+        ],
+    )
+    agent = InterviewerAgent([llm])
+    st = state()
+    agent.next_turn(st, now=1000.0)
+    t = agent.next_turn(st, Answer(answer), now=1060.0)
+    assert t is not None and not t.emergency and t.action == "follow_up"
+    assert t.anchor_quote in answer
+    assert any("grounded" in c for c in t.corrections)
+
+
+def test_from_dict_does_not_mutate_its_input():
+    st = state()
+    st.blueprint = InterviewerAgent([Scripted("p", [json.dumps(BLUEPRINT)])]).plan(st)
+    d = json.loads(json.dumps(st.to_dict()))
+    AgentState.from_dict(d)
+    assert AgentState.from_dict(d).blueprint.competencies[0].id == "c1"
+
+
+def test_repair_schema_narrows_anchor_to_real_clauses_and_moves_on_after_repeats():
+    answer = "I profiled the nightly job, added a composite index, and the run dropped to forty minutes."
+    clauses = answer_clauses(answer)
+    assert clauses and all(c in answer for c in clauses)
+    s = repair_turn_schema(["anchor_quote must be copied verbatim"], ["c1", "c2"], None, answer, "c1")
+    assert set(s["properties"]["anchor_quote"]["enum"]) - {""} == set(clauses)
+    s = repair_turn_schema(["repeats an earlier question: 'x'"], ["c1", "c2", "c3"], None, answer, "c1")
+    assert s["properties"]["action"]["enum"] == ["new_topic", "revisit"]
+    assert s["properties"]["competency"]["enum"] == ["c2", "c3"]
+    # timing-forced actions are never overridden
+    s = repair_turn_schema(["repeats an earlier question: 'x'"], ["c1", "c2"], "wrap_up", answer, "c1")
+    assert s["properties"]["action"]["enum"] == ["wrap_up"]
+
+
+def test_schema_provider_repair_uses_narrowed_grammar():
+    answer = "I led the move from cron scripts to Airflow and cut failed runs by sixty percent."
+    opening = {
+        "action": "open",
+        "competency": "c1",
+        "difficulty": 3,
+        "anchor_quote": "",
+        "reason": "r",
+        "say": "Hi, I'm Maya. What data pipeline work have you owned?",
+    }
+    bad = {
+        "last_answer": {"score": 3, "strengths": "", "gaps": "", "vague": False},
+        "action": "follow_up",
+        "competency": "c1",
+        "difficulty": 3,
+        "anchor_quote": "migrated everything to Kubernetes",
+        "reason": "r",
+        "say": "How did you measure the drop in failures?",
+    }
+    good = {**bad, "anchor_quote": "cut failed runs by sixty percent"}
+    llm = SchemaScripted(
+        "ollama", [json.dumps(BLUEPRINT), json.dumps(opening), json.dumps(bad), json.dumps(good)]
+    )
+    agent = InterviewerAgent([llm])
+    st = state()
+    agent.next_turn(st, now=1000.0)
+    t = agent.next_turn(st, Answer(answer), now=1060.0)
+    assert t is not None and not t.emergency and t.anchor_quote == "cut failed runs by sixty percent"
+    assert "enum" in llm.calls[3]["schema"]["properties"]["anchor_quote"]
+
+
+def test_repair_hint_names_a_new_competency_and_fixes_missing_questions():
+    st = state()
+    st.blueprint = InterviewerAgent([Scripted("p", [json.dumps(BLUEPRINT)])]).plan(st)
+    h = repair_turn_hint(["repeats an earlier question: 'x'"], st, "c1")
+    assert "c2" in h or "c3" in h
+    assert "c1 (" not in h
+    assert "'?'" in repair_turn_hint(["say must ask the candidate a question"], st, "c1")
+    assert repair_turn_hint(["difficulty must be an integer 1-5"], st, "c1") == ""
+
+
+def test_paraphrased_quote_is_grounded_to_the_clause_the_question_is_about():
+    answer = (
+        "We rebuilt the billing export last spring. The nightly batch job took forty minutes, "
+        "so we partitioned the invoices table by month and the job now finishes in six minutes."
+    )
+    # the model paraphrased: no verbatim span, but the question is clearly about the partitioning
+    got = ground_by_topic(
+        "we split the invoice table into monthly partitions",
+        "Why did you partition invoices by month rather than by customer?",
+        answer,
+    )
+    assert got is not None and got in answer and "partitioned the invoices table by month" in got
+    # a question unrelated to anything the candidate said is still rejected
+    assert ground_by_topic("we used Kafka", "Why Kafka over RabbitMQ?", answer) is None
+
+
+def test_transient_error_during_a_repair_still_gets_its_retry():
+    llm = Scripted(
+        "primary",
+        [
+            json.dumps(BLUEPRINT),
+            reply("open"),
+            reply(
+                "follow_up",
+                say="You mentioned Kafka. Why Kafka?",
+                quote="we used Kafka",
+                last={"score": 3, "strengths": "", "gaps": "", "vague": False},
+            ),
+            TransientLLMError("ReadTimeout"),  # the repair attempt times out once
+            reply(
+                "follow_up",
+                say="You said the cache was stale. How did you notice?",
+                quote="the cache was stale",
+                last={"score": 3, "strengths": "", "gaps": "", "vague": False},
+            ),
+        ],
+    )
+    ag = InterviewerAgent([llm])
+    st = state()
+    ag.next_turn(st, now=0.5)
+    t = ag.next_turn(st, Answer("Honestly the cache was stale for hours.", seconds=10), now=30)
+    assert not t.emergency and t.anchor_quote == "the cache was stale"
+
+
+def test_llm_timeout_defaults(monkeypatch):
+    monkeypatch.delenv("LLM_TIMEOUT_S", raising=False)
+    assert llm_timeout_s([Scripted("anthropic", [])]) == 30.0
+    assert llm_timeout_s([Scripted("ollama", [])]) == 240.0
+    monkeypatch.setenv("LLM_TIMEOUT_S", "90")
+    assert llm_timeout_s([Scripted("ollama", [])]) == 90.0
+
+
+def test_repeat_repair_lists_asked_questions_and_pins_the_named_competency():
+    from interview_core.agent.state import Turn
+
+    st = state()
+    st.blueprint = InterviewerAgent([Scripted("p", [json.dumps(BLUEPRINT)])]).plan(st)
+    st.turns.append(Turn(0, "open", "c1", 3, "Tell me about an API you designed recently?"))
+    h = repair_turn_hint(["repeats an earlier question: 'x'"], st, "c1")
+    assert "Tell me about an API you designed recently?" in h  # the model sees what it already asked
+    s = repair_turn_schema(["repeats an earlier question: 'x'"], ["c1", "c2", "c3"], None, "a", "c1", "c3")
+    assert s["properties"]["competency"]["enum"] == ["c3"]  # grammar agrees with the hint
+
+
+def test_follow_up_must_be_about_the_answer_it_quotes():
+    """Found by agent-evidence case 9: a follow-up quoted the latest answer but asked about one from
+    two turns earlier. It is now rejected (or must be marked revisit)."""
+    llm = Scripted(
+        "primary",
+        [
+            json.dumps(BLUEPRINT),
+            reply("open"),
+            reply(
+                "follow_up",
+                say="Could you walk me through how you rolled out the mentorship program?",
+                quote="the cache was stale for hours",
+                last={"score": 3, "strengths": "", "gaps": "", "vague": False},
+            ),
+            reply(
+                "follow_up",
+                say="You said the cache was stale for hours. How did you notice it?",
+                quote="the cache was stale for hours",
+                last={"score": 3, "strengths": "", "gaps": "", "vague": False},
+            ),
+        ],
+    )
+    ag = InterviewerAgent([llm])
+    st = state()
+    ag.next_turn(st, now=0.5)
+    t = ag.next_turn(st, Answer("Honestly the cache was stale for hours.", seconds=10), now=30)
+    assert t.say.startswith("You said the cache was stale") and not t.emergency
+    assert "revisit" in llm.calls[-1]["messages"][-1]["content"]
+
+
+def test_off_topic_follow_up_repair_lets_the_model_move_on():
+    """Agent-evidence case 19: two repairs in a row kept 'follow_up' about an earlier answer. The
+    repair grammar now offers revisit/new_topic instead."""
+    errs = [
+        "follow_up must ask about what the candidate just said (the anchor_quote); to return to an earlier answer use action revisit"
+    ]
+    s = repair_turn_schema(errs, ["c1", "c2"], None, "an answer", "c1")
+    assert s["properties"]["action"]["enum"] == ["revisit", "new_topic"]
+
+
+def test_backup_questions_never_repeat_each_other():
+    """Agent-evidence case 4: two backup questions on the same competency were word-for-word equal."""
+    from interview_core.agent.interviewer import emergency_turn, is_repeat
+
+    st = state()
+    st.blueprint = InterviewerAgent([Scripted("p", [json.dumps(BLUEPRINT)])]).plan(st)
+    for i in range(4):
+        t = emergency_turn(st, None, now=float(i))
+        assert not any(is_repeat(t.say, prev.say) for prev in st.turns)
+        st.turns.append(t)
+
+
+def test_long_interviews_plan_enough_competencies():
+    """Agent-evidence case 4: a 25-minute interview planned 3 competencies and ran out of fresh
+    questions. Longer interviews must plan more."""
+    four = {
+        **BLUEPRINT,
+        "competencies": [
+            *BLUEPRINT["competencies"],
+            {"id": "c4", "name": "Testing", "why": "JD", "weight": 0.1, "minutes": 4, "signals": []},
+        ],
+    }
+    llm = Scripted("p", [json.dumps(BLUEPRINT), json.dumps(four)])
+    st = state(duration_minutes=25)
+    bp = InterviewerAgent([llm]).plan(st)
+    assert len(bp.competencies) == 4 and not bp.emergency
+    assert "at least 4 competencies" in llm.calls[-1]["messages"][-1]["content"]
+
+
+def test_over_long_blueprint_minutes_are_scaled_without_a_repair_call():
+    """Real-LLM E2E: a 10-minute interview planned 16 minutes, and the repair round-trip cost minutes
+    on a CPU model. Minutes are a budget, so they are scaled to fit instead."""
+    llm = Scripted("p", [json.dumps(BLUEPRINT)])  # 6 + 5 + 5 = 16 minutes
+    bp = InterviewerAgent([llm]).plan(state(duration_minutes=10))
+    assert len(llm.calls) == 1 and not bp.emergency
+    assert [c.minutes for c in bp.competencies] == [4.0, 3.0, 3.0]
+    assert sum(c.minutes for c in bp.competencies) <= 10
+
+
+def test_repeated_questions_get_a_focused_fresh_question_before_any_emergency():
+    """Agent-evidence cases 10, 11, 16: in long sessions a 7B model kept re-asking earlier questions
+    through every repair. A short focused call now writes one new question on the least-covered
+    competency; the flagged emergency question stays the last resort."""
+    first = "Tell me about an API you designed recently?"
+    again = reply(
+        "new_topic", comp="c2", say=first, last={"score": 3, "strengths": "", "gaps": "", "vague": False}
+    )
+    llm = Scripted(
+        "primary",
+        [
+            json.dumps(BLUEPRINT),
+            reply("open", say=first),
+            again,
+            again,
+            again,  # the turn and both repairs repeat the opening question
+            "How do you decide on an index strategy when Postgres write latency starts to climb?",
+        ],
+    )
+    ag = InterviewerAgent([llm])
+    st = state()
+    ag.next_turn(st, now=0.5)
+    t = ag.next_turn(st, Answer("I built a billing API with versioned endpoints.", seconds=20), now=40)
+    assert not t.emergency and t.provider == "primary"
+    assert t.action == "new_topic" and t.competency == "c2"  # least covered, highest weight
+    assert t.say.startswith("How do you decide on an index strategy")
+    assert any("fresh-question" in c for c in t.corrections)
+    assert "fresh_question" in {e["kind"] for e in st.events}
+    fresh_prompt = llm.calls[-1]["messages"][-1]["content"]
+    assert "Databases" in fresh_prompt and first[:40] in fresh_prompt
+
+
+def test_fresh_question_is_skipped_when_the_provider_is_down_and_still_rejects_repeats():
+    first = "Tell me about an API you designed recently?"
+    llm = Scripted(
+        "p",
+        [
+            json.dumps(BLUEPRINT),
+            reply("open", say=first),
+            *[reply("new_topic", comp="c2", say=first)] * 3,
+            first,
+            first,
+            first,
+        ],
+    )
+    ag = InterviewerAgent([llm])
+    st = state()
+    ag.next_turn(st, now=0.5)
+    t = ag.next_turn(st, Answer("I built a billing API.", seconds=20), now=40)
+    assert t.emergency and t.provider == "emergency"  # the focused call repeated too
+    assert not llm.script
+
+    dead = Scripted("dead", [json.dumps(BLUEPRINT), PermanentLLMError("401")])
+    st2 = state()
+    t2 = InterviewerAgent([dead]).next_turn(st2, now=1)
+    assert t2.emergency and not dead.script  # no extra call against a provider that is down
+
+
+def test_fresh_angle_skips_angles_already_asked_about():
+    from interview_core.agent.interviewer import fresh_angle
+
+    st = state()
+    st.blueprint = InterviewerAgent([Scripted("p", [json.dumps(BLUEPRINT)])]).plan(st)
+    c1 = st.blueprint.by_id("c1")
+    assert fresh_angle(st, c1) == "versioning"
+    st.turns.append(Turn(0, "open", "c1", 3, "How do you handle versioning of a public API?"))
+    assert fresh_angle(st, c1) == "a mistake or failure and what was learned from it"
+
+
+def test_the_closing_line_never_asks_a_question():
+    """Agent-evidence case 3: the close ended with "Is there anything else you would like to add?",
+    but the interview ends after close, so the candidate could never answer."""
+    short = {**BLUEPRINT, "competencies": [{**c, "minutes": 1} for c in BLUEPRINT["competencies"]]}
+    read = {"score": 3, "strengths": "", "gaps": "", "vague": False}
+    llm = Scripted(
+        "p",
+        [
+            json.dumps(short),
+            reply("open"),
+            reply("wrap_up", comp="c3", say="We're nearly out of time. Any questions for me?", last=read),
+            reply("close", comp="c3", say="Thanks! Is there anything else you would like to add?", last=read),
+            reply(
+                "close", comp="c3", say="Thank you for your time today, and good luck. Goodbye.", last=read
+            ),
+        ],
+    )
+    ag = InterviewerAgent([llm])
+    st = state(duration_minutes=5)
+    ag.next_turn(st, now=1)
+    ag.next_turn(st, Answer("answer", seconds=200), now=251)
+    t = ag.next_turn(st, Answer("No questions.", seconds=3), now=261)
+    assert t.action == "close" and "?" not in t.say and not t.emergency
+    assert "must not ask anything" in llm.calls[-1]["messages"][-1]["content"]
+
+
+def test_the_interviewer_never_names_the_candidate():
+    """Agent evidence: 11 of 13 openings said "Hi Maya" (Maya is the interviewer's own persona), and
+    the real-LLM E2E spoke "Hi [Candidate's Name]". Both are rejected and repaired."""
+    from interview_core.agent.interviewer import address_errors
+
+    assert address_errors("Hi Maya, welcome! Tell me about a project?", "Maya")
+    assert address_errors("Hi [Candidate's Name], welcome. Tell me about a project?", "Maya")
+    assert not address_errors(
+        "Hi, I'm Maya, and I'll be interviewing you today. Tell me about a project?", "Maya"
+    )
+    assert not address_errors("Hello and welcome. Tell me about a recent project?", "Maya")
+
+    llm = Scripted(
+        "p",
+        [
+            json.dumps(BLUEPRINT),
+            reply("open", say="Hi Maya, welcome. Tell me about an API you designed recently?"),
+            reply("open", say="Hi, I'm Maya. Tell me about an API you designed recently?"),
+        ],
+    )
+    t = InterviewerAgent([llm]).next_turn(state(), now=1)
+    assert t.say.startswith("Hi, I'm Maya") and not t.emergency
+    assert "your own name" in llm.calls[-1]["messages"][-1]["content"]
+
+
+def test_the_interviewers_own_title_is_not_planned_as_the_candidates_role():
+    """Agent evidence on c14704c: the persona brief "You are Maya, Engineering Manager" leaked into a
+    nurse's and a teacher's blueprint ("a mid-level Engineering Manager role at Delhi Public School")."""
+    from interview_core.agent.interviewer import own_title_errors
+
+    nurse = InterviewParams(role="Registered Nurse", persona="maya")
+    assert own_title_errors("Leads a ward like a mid-level engineering manager.", nurse)
+    assert not own_title_errors("Clinical judgement on a surgical ward.", nurse)
+    # When the candidate really is interviewing for the persona's title, it is not a leak.
+    assert not own_title_errors("Engineering Manager scope", InterviewParams(role="Engineering Manager"))
+
+    leaked = {**BLUEPRINT, "summary": "Assesses a mid-level Engineering Manager role at the hospital."}
+    llm = Scripted("p", [json.dumps(leaked), json.dumps(BLUEPRINT)])
+    st = state(role="Registered Nurse", skills=[], persona="maya")
+    bp = InterviewerAgent([llm]).plan(st)
+    assert bp.summary == BLUEPRINT["summary"] and len(llm.calls) == 2
+    assert "your own job title" in llm.calls[-1]["messages"][-1]["content"]
+    assert "not for your job" in llm.calls[0]["system"] or "not for your job" in json.dumps(
+        llm.calls[0]["messages"]
+    )

@@ -1,0 +1,94 @@
+# One command, everything local:   docker compose up --build
+#   web  http://localhost:3000   (the app)
+#   api  http://localhost:8000   (REST + realtime WebSocket)
+# First start downloads the pinned, checksum-verified speech models (about 1.3 GB) into a volume.
+#
+# LLM: set LLM_PROVIDER (+ key) in .env for Anthropic/Gemini, or run a free local model with
+#   docker compose --profile local-llm up --build
+# Without an LLM the interviewer still runs, but every question is a flagged backup question.
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: interview
+      POSTGRES_PASSWORD: interview
+      POSTGRES_DB: interview
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U interview"]
+      interval: 5s
+      retries: 10
+
+  models:
+    build: { context: ., dockerfile: services/api/Dockerfile }
+    image: interview-api:local
+    command: ["python", "-m", "interview_core.realtime.assets", "download"]
+    volumes: [models:/models]
+    restart: "no"
+
+  api:
+    image: interview-api:local
+    build: { context: ., dockerfile: services/api/Dockerfile }
+    # Values come from .env (read automatically by compose for ${...}); none are required.
+    environment:
+      APP_ENV: development
+      DATABASE_URL: postgresql+psycopg://interview:interview@db:5432/interview
+      APP_BASE_URL: http://localhost:3000
+      PUBLIC_API_URL: http://localhost:8000
+      MODELS_DIR: /models
+      LLM_PROVIDER: ${LLM_PROVIDER:-none}
+      OPENAI_COMPAT_BASE_URL: ${OPENAI_COMPAT_BASE_URL:-http://ollama:11434/v1}
+      OPENAI_COMPAT_MODEL: ${OPENAI_COMPAT_MODEL:-qwen2.5:7b-instruct}
+      LLM_MODEL: ${LLM_MODEL:-}
+      LLM_FALLBACK_PROVIDER: ${LLM_FALLBACK_PROVIDER:-}
+      LLM_FALLBACK_MODEL: ${LLM_FALLBACK_MODEL:-}
+      LLM_TIMEOUT_S: ${LLM_TIMEOUT_S:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      STT_PROVIDER: ${STT_PROVIDER:-sherpa}
+      TTS_PROVIDER: ${TTS_PROVIDER:-kokoro}
+      DEEPGRAM_API_KEY: ${DEEPGRAM_API_KEY:-}
+      ELEVENLABS_API_KEY: ${ELEVENLABS_API_KEY:-}
+      ELEVENLABS_VOICE_ID: ${ELEVENLABS_VOICE_ID:-}
+      TEMPLATE_KEK_BASE64: ${TEMPLATE_KEK_BASE64:-}
+      REALTIME_SECRET: ${REALTIME_SECRET:-}
+    volumes: [models:/models:ro]
+    depends_on:
+      db: { condition: service_healthy }
+      models: { condition: service_completed_successfully }
+    ports: ["8000:8000"]
+
+  web:
+    build: { context: apps/web }
+    environment:
+      API_BASE_URL: http://api:8000
+      PUBLIC_API_URL: http://localhost:8000
+    depends_on: [api]
+    ports: ["3000:3000"]
+
+  # Free local LLM (Apache-2.0 Qwen2.5-7B-Instruct). Use with LLM_PROVIDER=ollama.
+  ollama:
+    profiles: [local-llm]
+    image: ollama/ollama:latest
+    volumes: [ollama:/root/.ollama]
+    environment:
+      OLLAMA_CONTEXT_LENGTH: "8192"
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 5s
+      retries: 30
+
+  ollama-pull:
+    profiles: [local-llm]
+    image: ollama/ollama:latest
+    entrypoint: ["ollama", "pull", "qwen2.5:7b-instruct"]
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    depends_on:
+      ollama: { condition: service_healthy }
+    restart: "no"
+
+volumes:
+  pgdata:
+  models:
+  ollama:

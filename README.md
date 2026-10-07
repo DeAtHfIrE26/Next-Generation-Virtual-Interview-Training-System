@@ -1,667 +1,153 @@
-<!-- PROJECT BANNER -->
-<div align="center">
-  <h1>
-    <div>
-      <img src="VirtualCoach.gif" alt="AI Interview Coach" width="300px">
-    </div>
-    <span style="background: linear-gradient(to right, #802BB1, #1CD8D2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">AI-POWERED INTERVIEW COACH</span>
-  </h1>
-  
-  <p align="center">
-    <strong>🚀 Next-Generation Virtual Interview Training System 🚀</strong>
-  </p>
-  
-  <!-- BADGES -->
-  <p>
-    <img src="https://img.shields.io/badge/Python-3.8+-blue.svg?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
-    <img src="https://img.shields.io/badge/Computer%20Vision-OpenCV-brightgreen.svg?style=for-the-badge&logo=opencv&logoColor=white" alt="OpenCV" />
-    <img src="https://img.shields.io/badge/AI-Speech%20Recognition-red.svg?style=for-the-badge&logo=tensorflow&logoColor=white" alt="AI" />
-    <img src="https://img.shields.io/badge/ML-Face%20Analysis-orange.svg?style=for-the-badge&logo=pytorch&logoColor=white" alt="ML" />
-    <img src="https://img.shields.io/badge/NLP-Mistral%20AI-yellow.svg?style=for-the-badge&logo=huggingface&logoColor=white" alt="NLP" />
-  </p>
+# AI Interview Coach
 
-  <a href="#demo">View Demo</a>
-  ·
-  <a href="#key-features">Features</a>
-  ·
-  <a href="#installation">Installation</a>
-  ·
-  <a href="#usage">Usage</a>
-  ·
-  <a href="#performance-reports">Reports</a>
-  ·
-  <a href="#roadmap">Roadmap</a>
-</div>
+**Practise the interview before the interview.** An adaptive AI interviewer asks questions tailored to your role, seniority and resume, listens to your spoken answers, and gives feedback you can check: every score points to the words you said.
 
-<!-- ANIMATED BANNER (Rendered on GitHub) -->
-<p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com/?lines=Prepare+For+Your+Dream+Job;Real-time+AI+Feedback;Comprehensive+Performance+Analysis;Build+Interview+Confidence&font=Fira%20Code&center=true&width=800&height=50&duration=3000&pause=1000" alt="Typing SVG">
-</p>
+Patent pending (Indian application 202541122226). For candidates practising their own interviews, not for hiring decisions.
 
-<br>
+<!-- Real recordings from CI; see docs/evidence/e2e/README.md for how each was produced. -->
+| Interview room (real LLM, spoken answers, barge-in) | Report (LLM rubric, quotes from the answer) |
+|---|---|
+| ![Interview room](docs/evidence/e2e/real-llm/03-barge-in.png) | ![Report](docs/evidence/e2e/real-llm/05-report.png) |
 
-<!-- PROJECT OVERVIEW -->
-## 🔍 Overview
+Video: [`docs/evidence/e2e/real-llm/e2e-full-video-4x.webm`](docs/evidence/e2e/real-llm/e2e-full-video-4x.webm). This is a 4× time-lapse of a complete spoken interview with an open-weights 7B model running on a CPU-only CI machine.
 
-<table>
-<tr>
-<td>
+## What it does
 
-The AI Interview Coach is a cutting-edge solution that revolutionizes interview preparation by providing an immersive, AI-driven simulation environment. It combines computer vision, speech recognition, natural language processing, and behavioral analysis to create a comprehensive interview training system.
+- **A live, spoken interview.**
+  - You talk; it listens. Captions appear while you speak.
+  - The interviewer answers in a natural neural voice, through a 3D avatar whose lips follow the audio.
+  - You can interrupt it mid-sentence.
+  - It runs in Chrome, Edge, Firefox, Safari and on mobile, and every one of those is tested in CI.
+- **An interviewer, not a question bank.**
+  - An LLM plans the interview from your role, seniority, company style, resume, job description and the skills to probe.
+  - It then writes every question live.
+  - Follow-ups quote what you just said. Difficulty moves with your answers. Questions never repeat.
+  - If no model is available, the interviewer asks clearly badged backup questions, never silently.
+- **Feedback you can check.**
+  - Relevance, structure (STAR), depth, communication and technical accuracy are scored by an LLM rubric.
+  - Every judgement quotes your own words, and the quotes are machine-verified.
+  - Pace, pauses, filler words and eye contact are measured, not guessed.
+  - Scores are labelled **experimental** until validated against human raters.
+- **Multimodal checks** (patented mechanisms):
+  - face verification with a randomised liveness challenge
+  - voice verification from prompted phrases
+  - **lip-sync verification**: does the candidate's mouth movement match the speech over time?
+  - gaze tracking
+  - phone and second-person detection
+  - coding challenges with hidden tests
+- **Privacy by design:**
+  - camera analysis runs in the browser
+  - speech recognition and synthesis run on your own server (no cloud speech service needed)
+  - biometrics are stored only as encrypted templates
+  - resume contact details are removed before any AI processing
+  - one-click export and deletion
+  - no emotion or personality inference, ever
+- **Business-ready:** subscriptions (Stripe, Razorpay), plan limits and per-session cost caps, B2B seats, an admin dashboard, observability, and infrastructure as code.
 
-🌟 **Key Differentiators:**
-- Real-time facial and voice analysis during mock interviews
-- Dynamic question generation based on resume and job position
-- Advanced behavioral assessment with personalized feedback
-- Comprehensive performance reports with actionable insights
-- Technical interview capabilities with integrated code editor
+## Sample interviews
 
-This system bridges the gap between traditional interview preparation and actual interview performance by providing objective metrics and tailored feedback.
+Three of the 20 real-LLM mock interviews in [`docs/evidence/questions/`](docs/evidence/questions/), excerpted (the first three questions and the answers between them). The interviewer is an open-weights 7B model (Qwen2.5-7B-Instruct); the candidate is simulated by the same model from a profile. No question comes from a bank: each follow-up quotes and asks about the answer before it.
 
-</td>
-<td width="50%">
-  <img src="https://user-images.githubusercontent.com/74038190/212750147-854a394f-fee9-4080-9770-78a4b7ece53f.gif" width="100%">
-</td>
-</tr>
-</table>
+**Frontend Engineer (mid) at Vercel**: technical interview, 15 min, simulated candidate whose answers go up and down in quality. [Full transcript](docs/evidence/questions/interview-08.md)
 
-### 🎯 **Key Highlights**
+> **Interviewer** (open): Hi there, thanks for joining us. I'm Maya. Can you tell me about your experience with React and how you've used it in a previous project?
+>
+> **Candidate**: Sure, Maya. In my previous role at Acme Corp, I worked on a project that involved building a robust dashboard for managing user accounts. I chose React for this project because of its component-based architecture and its ability to manage complex UIs …
+>
+> **Interviewer** (follow_up): That’s great to hear about your experience with React, especially the performance optimization. Could you walk me through the process you used to implement code splitting and lazy loading in that project? How did you determine which components needed to be split?
+>
+> **Candidate**: Sure, Maya. We faced some performance issues, so we decided to use code splitting and lazy loading. We split the components based on their usage. Not all components were needed on every page, so we kept them separate. For lazy loading, we used React's …
+>
+> **Interviewer** (challenge): I see, and you mentioned it was a mix of optimizations. Could you quantify the impact of code splitting and lazy loading? How did you verify that these changes led to a 30% reduction in initial load time?
+>
+> **Candidate**: Absolutely, Maya. We tracked the initial load times using Lighthouse in our browser's DevTools. Before implementing code splitting and lazy loading, the initial load time was around 1.2 seconds. After we made the changes, the load time dropped to …
 
-| Feature | Description | Technology |
-|---------|-------------|------------|
-| 🎭 **Real-time Face Recognition** | Advanced biometric authentication using InsightFace | `InsightFace` + `OpenCV` |
-| 🎙️ **Voice Authentication** | Multi-layered voice verification with lip-sync detection | `Resemblyzer` + `MediaPipe` |
-| 🤖 **AI-Powered Interviews** | Dynamic question generation using state-of-the-art LLMs | `Mistral-7B` + `HuggingFace` |
-| 👁️ **Eye Tracking & Engagement** | Real-time gaze detection and engagement monitoring | `MediaPipe Face Mesh` |
-| 📱 **Anti-Cheating System** | Phone detection and multi-face monitoring | `YOLO v8` + `Computer Vision` |
-| 💻 **Interactive Code Challenges** | Multi-language code execution and evaluation | `Judge0 API` + `SQLite` |
+**Product Manager (mid) at Atlassian**: behavioral interview, 15 min, simulated average candidate. [Full transcript](docs/evidence/questions/interview-03.md)
 
-<!-- DEMO SECTION -->
-## 🎥 Demo <a name="demo"></a>
+> **Interviewer** (open): Hi, thank you for joining us today. Let's start with a few questions to understand your experience with owning a product feature and your approach to customer engagement. Can you tell me about a time when you were responsible for owning a product feature, what was the feature, and what was your initial goal?
+>
+> **Candidate**: Sure, I can share that experience. At my previous role, I was part of the team that owned the project management features in our collaboration tool. My initial goal was to enhance the task tracking functionality to make it more intuitive for our users. We …
+>
+> **Interviewer** (follow_up): That's great to hear. Can you elaborate on the specific actions you took to streamline the workflow and how you ensured that the 25% increase in user satisfaction was achieved?
+>
+> **Candidate**: Sure, to streamline the workflow, we first conducted a user feedback session to understand pain points. We then reorganized the task layout to group similar tasks together and added clear labels. We also introduced a drag-and-drop feature to make moving tasks …
+>
+> **Interviewer** (follow_up): That's excellent. Can you provide more details on the specific metrics you used to measure the success of the improvements? Were there any trade-offs or challenges you faced during this process?
+>
+> **Candidate**: Absolutely. We focused on a few key metrics: task completion time, user engagement, and the number of support tickets related to task management. We saw a 20% reduction in task completion time and a 30% increase in user engagement. Regarding challenges, we …
 
-<div align="center">
-  <p><i>Watch the system in action:</i></p>
-  
-  <!-- Replace with your actual demo link -->
-  <a href="https://github.com/DeAtHfIrE26/Next-Generation-Virtual-Interview-Training-System/tree/main">
-    <img src="https://img.shields.io/badge/View%20Demo-Watch%20Video-red?style=for-the-badge&logo=youtube" alt="Demo">
-  </a>
-</div>
+**Registered Nurse (mid) at Apollo Hospitals**: mixed interview, 12 min, simulated average candidate. [Full transcript](docs/evidence/questions/interview-07.md)
 
-<!-- FEATURES -->
-## ✨ Key Features <a name="key-features"></a>
+> **Interviewer** (open): Can you tell me about a time when you provided exceptional patient care?
+>
+> **Candidate**: Sure. One time, a patient was experiencing severe anxiety and was having trouble breathing. I noticed she was struggling to catch her breath, so I immediately offered her reassurance and guided her through some breathing exercises. I also called the nurse on …
+>
+> **Interviewer** (follow_up): That's a great example. Could you tell me more about the patient's condition before you intervened? What specific symptoms were you observing, and how did the patient's condition change after you provided those breathing exercises?
+>
+> **Candidate**: Absolutely. Before I intervened, the patient was visibly very anxious and was having difficulty catching her breath. Her skin was pale, and she was hyperventilating. After I guided her through some breathing exercises and provided an oxygen mask, her …
+>
+> **Interviewer** (follow_up): That sounds like a challenging situation. Could you describe more about what the patient's breathing looked like before and after the breathing exercises? Also, did the patient mention any specific reasons for her anxiety, and how did you address those?
+>
+> **Candidate**: Before the breathing exercises, the patient was really struggling to breathe. She was gulping for air, and her chest was moving rapidly. After a few minutes of guided breathing exercises, her breathing slowed down, and she seemed to be more composed. She …
 
-<div align="center">
-  <table>
-    <tr>
-      <td align="center" width="33%">
-        <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Desktop%20Computer.png" width="100" alt="Interview Simulation"><br>
-        <b>AI Interview Simulation</b>
-        <p>Dynamic interviewing with adaptive questions based on resume and performance</p>
-      </td>
-      <td align="center" width="33%">
-        <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Camera%20with%20Flash.png" width="100" alt="Engagement Tracking"><br>
-        <b>Real-time Analysis</b>
-        <p>Monitors eye contact, facial expressions, and voice intonation</p>
-      </td>
-      <td align="center" width="33%">
-        <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Bar%20Chart.png" width="100" alt="Performance Reports"><br>
-        <b>Detailed Reports</b>
-        <p>Comprehensive performance assessment with visual metrics</p>
-      </td>
-    </tr>
-    <tr>
-      <td align="center">
-        <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Mobile%20Phone.png" width="100" alt="Distraction Detection"><br>
-        <b>Distraction Detection</b>
-        <p>Identifies phones, secondary persons, and attention lapses</p>
-      </td>
-      <td align="center">
-        <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Laptop.png" width="100" alt="Technical Interviews"><br>
-        <b>Technical Challenges</b>
-        <p>Integrated code editor with real-time assessment</p>
-      </td>
-      <td align="center">
-        <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Memo.png" width="100" alt="Personalized Feedback"><br>
-        <b>Personalized Coaching</b>
-        <p>Tailored recommendations based on performance metrics</p>
-      </td>
-    </tr>
-  </table>
-</div>
-
-<!-- ANIMATION SECTION -->
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/74038190/213910845-af37a709-8995-40d6-be59-724526e3c3d7.gif" width="900">
-</p>
-
-## 🧠 Advanced Technology Stack
-
-<table>
-<tr>
-<td>
-
-### AI & Machine Learning
-- **Computer Vision:** OpenCV & Deep Neural Networks for facial analysis
-- **Speech Processing:** SpeechRecognition & PyAnnote.Audio for voice analysis
-- **Natural Language:** Transformers & Mistral AI for question generation
-- **Biometric Analysis:** Face verification & eye tracking algorithms
-
-### Performance Analytics
-- **Behavioral Metrics:** Real-time engagement scoring and attention tracking
-- **Technical Assessment:** Code execution and evaluation system
-- **Report Generation:** Dynamic PDF reports with data visualization
-- **Skill Mapping:** Radar charts and competency matrices
-
-</td>
-<td width="40%">
-
-```python
-# Real-time engagement scoring example
-def measure_engagement(
-    eye_contact_score,
-    face_direction_score,
-    voice_confidence_score,
-    distraction_events
-):
-    base_score = (
-        0.4 * eye_contact_score +
-        0.3 * face_direction_score +
-        0.3 * voice_confidence_score
-    )
-    penalty = 0.1 * distraction_events
-    return max(0, min(base_score - penalty, 1.0))
-```
-
-</td>
-</tr>
-</table>
-
-### 🎨 **Frontend & UI**
-[![Tkinter](https://img.shields.io/badge/Tkinter-306998?style=for-the-badge&logo=python&logoColor=white)](https://docs.python.org/3/library/tkinter.html)
-[![PIL](https://img.shields.io/badge/Pillow-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://pillow.readthedocs.io/)
-[![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)](https://opencv.org)
-
-### 🧠 **AI & Machine Learning**
-[![HuggingFace](https://img.shields.io/badge/🤗_Hugging_Face-FFD21E?style=for-the-badge)](https://huggingface.co)
-[![Transformers](https://img.shields.io/badge/Transformers-FF6F00?style=for-the-badge&logo=huggingface&logoColor=white)](https://huggingface.co/transformers/)
-[![InsightFace](https://img.shields.io/badge/InsightFace-FF4B4B?style=for-the-badge)](https://insightface.ai/)
-[![MediaPipe](https://img.shields.io/badge/MediaPipe-0097A7?style=for-the-badge&logo=google&logoColor=white)](https://mediapipe.dev/)
-
-### 🔊 **Audio & Speech**
-[![SpeechRecognition](https://img.shields.io/badge/Speech_Recognition-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://pypi.org/project/SpeechRecognition/)
-[![pyttsx3](https://img.shields.io/badge/pyttsx3-FF6B6B?style=for-the-badge)](https://pypi.org/project/pyttsx3/)
-[![Resemblyzer](https://img.shields.io/badge/Resemblyzer-8E44AD?style=for-the-badge)](https://github.com/resemble-ai/Resemblyzer)
-
-### 🎯 **Object Detection & Vision**
-[![YOLO](https://img.shields.io/badge/YOLO_v8-00FFFF?style=for-the-badge)](https://ultralytics.com/)
-[![NumPy](https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white)](https://numpy.org)
-
-### 💾 **Data & Storage**
-[![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://sqlite.org/)
-[![PyMuPDF](https://img.shields.io/badge/PyMuPDF-FF4B4B?style=for-the-badge)](https://pymupdf.readthedocs.io/)
-[![FPDF](https://img.shields.io/badge/FPDF-2ECC71?style=for-the-badge)](http://www.fpdf.org/)
-
-### ⚡ **APIs & Services**
-[![Judge0](https://img.shields.io/badge/Judge0_API-FF6B35?style=for-the-badge)](https://judge0.com/)
-[![RapidAPI](https://img.shields.io/badge/RapidAPI-0066CC?style=for-the-badge&logo=rapidapi&logoColor=white)](https://rapidapi.com/)
-
-<!-- INSTALLATION SECTION -->
-## 🔧 Installation <a name="installation"></a>
-
-<div align="center">
-<img src="https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png" alt="Fire" width="100">
-</div>
-
-### Prerequisites
-
-- Python 3.8+
-- Webcam and microphone
-- CUDA-compatible GPU (optional but recommended)
-
-### Setup
+## Quick start (local)
 
 ```bash
-# Clone the repository
-git clone https://github.com/DeAtHfIrE26/Next-Generation-Virtual-Interview-Training-System.git
-cd Next-Generation-Virtual-Interview-Training-System
-
-# Create and activate a virtual environment (optional but recommended)
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Download model files (if not included)
-python download_models.py
+cp .env.example .env
+python -c "import os,base64;print(base64.b64encode(os.urandom(32)).decode())"   # paste into TEMPLATE_KEK_BASE64
+docker compose up --build          # web on :3000, API on :8000; speech models download on first start
 ```
 
-<details>
-<summary>📋 Complete Dependency List</summary>
-
-```
-opencv-python==4.8.0.76
-opencv-contrib-python==4.8.0.76
-PyMuPDF==1.23.3
-SpeechRecognition==3.10.0
-pyttsx3==2.90
-transformers==4.31.0
-tensorflow==2.13.0
-torch==2.0.1
-torchaudio==2.0.2
-torchvision==0.15.2
-tkinter-tooltip==2.1.0
-matplotlib==3.7.2
-numpy==1.24.3
-fpdf==1.7.2
-mediapipe==0.10.3
-librosa==0.10.1
-soundfile==0.12.1
-ultralytics==8.0.145
-requests==2.31.0
-mistralai==0.0.7
-pyannote.audio==2.1.1
-ttkbootstrap==1.10.1
-Pillow==10.0.0
-```
-</details>
-
-<!-- USAGE SECTION -->
-## 🚀 Usage <a name="usage"></a>
-
-### Starting the Application
+Without Docker:
 
 ```bash
-python main.py
+uv sync --all-packages                                   # Python 3.11+
+uv run python -m interview_core.realtime.assets download # local speech models (~1.7 GB, checksum-verified)
+TEMPLATE_KEK_BASE64=... uv run uvicorn interview_api.main:app --reload --port 8000
+cd apps/web && npm ci && API_BASE_URL=http://localhost:8000 npm run dev
 ```
 
-### Interview Configuration Options
+**Choosing an LLM.** Set `LLM_PROVIDER` in `.env`, then follow the options in `.env.example`:
+- a hosted model, through its API key;
+- an OpenAI-compatible server;
+- a local Ollama model, for example `qwen2.5:7b-instruct`. Running `docker compose --profile local-llm up --build` with `LLM_PROVIDER=ollama` starts one for you.
 
-- **Upload Resume:** Load your resume to personalize the interview questions
-- **Select Job Role:** Target the interview for specific positions
-- **Interview Mode:** Choose between behavioral, technical, or mixed formats
-- **Difficulty Level:** Set the complexity of questions (basic to advanced)
+Without one, the interview still runs end to end, but with clearly badged backup questions and offline scoring. Face and voice verification need licensed models (see `.env.example`).
 
-### Technical Interview Mode
+## Quality gates
 
-The system includes a built-in code editor for technical interviews with:
-- Syntax highlighting for multiple languages
-- Real-time code execution and validation
-- Automatic assessment of solution efficiency and correctness
-
-<!-- PERFORMANCE REPORTS SECTION -->
-## 📊 Performance Reports <a name="performance-reports"></a>
-
-<div align="center">
-  <img src="https://user-images.githubusercontent.com/74038190/215768904-978777c0-ed29-48b6-9613-d75542a4125a.gif" width="200">
-</div>
-
-Our reporting system generates comprehensive performance analysis including:
-
-<table>
-<tr>
-<td width="60%">
-
-### Report Components
-- **Candidate Profile:** Resume summary and skills assessment
-- **Performance Metrics:** Quantified scores across multiple dimensions
-- **Engagement Analysis:** Eye contact, facial expressions, and attention tracking
-- **Response Quality:** Clarity, depth, and relevance of answers
-- **Technical Proficiency:** Code quality and problem-solving assessment
-- **Visual Analytics:** Radar charts, performance matrices, and trend visualization
-- **Personalized Recommendations:** Tailored improvement suggestions
-- **Complete Transcript:** Full interview dialogue with annotations
-
-</td>
-<td>
-
-<img src="https://user-images.githubusercontent.com/74038190/219923809-b86dc415-a0c2-4a38-bc88-ad6cf06395a8.gif" width="300">
-
-</td>
-</tr>
-</table>
-
-<!-- ROADMAP SECTION -->
-## 🗺️ Roadmap <a name="roadmap"></a>
-
-<div align="center">
-  <table>
-    <tr>
-      <td align="center">
-        <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Rocket.png" width="50"><br>
-        <b>Q3 2023</b><br>
-        Multi-language support<br>
-        Expanded job role templates
-      </td>
-      <td align="center">
-        <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Airplane.png" width="50"><br>
-        <b>Q4 2023</b><br>
-        Industry-specific modules<br>
-        Enhanced question generation
-      </td>
-    </tr>
-    <tr>
-      <td align="center">
-        <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/High-Speed%20Train.png" width="50"><br>
-        <b>Q1 2024</b><br>
-        VR integration<br>
-        Interview scenario simulations
-      </td>
-      <td align="center">
-        <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Flying%20Saucer.png" width="50"><br>
-        <b>Q2 2024</b><br>
-        Mobile application<br>
-        Enterprise integration APIs
-      </td>
-    </tr>
-  </table>
-</div>
-
-## 📖 **User Guide**
-
-### 🎮 **Getting Started**
-
-1. **🔐 Security Setup**
-   - Click **"Register Face"** to capture facial biometrics
-   - Click **"Record Voice Reference"** for voice authentication
-   - Ensure good lighting and clear audio
-
-2. **📄 Profile Configuration**
-   - Upload your resume (PDF format)
-   - Enter your desired job role
-   - The AI will analyze and create context-aware questions
-
-3. **🎤 Interview Session**
-   - Click **"Start Interview"** to begin
-   - Respond using voice (click "Record") or code editor
-   - Maintain eye contact and professional posture
-
-4. **💻 Code Challenges**
-   - Select programming language (Python, Java, C++, JavaScript, SQL)
-   - Write and test your code in real-time
-   - Submit solutions for AI evaluation
-
-5. **📊 Performance Analysis**
-   - Receive instant feedback and scoring
-   - Download comprehensive PDF report
-   - Review improvement recommendations
-
----
-
-## 🎯 **Advanced Features**
-
-### 🔍 **Multi-Factor Performance Scoring**
-
-
-
-| Metric | Weight | Description |
-|--------|--------|-------------|
-| 📝 **Response Depth** | 14.3% | Thoroughness and detail level |
-| 🎯 **Clarity & Organization** | 14.3% | Communication effectiveness |
-| 🏢 **Domain Relevance** | 14.3% | Role-specific knowledge |
-| 💪 **Confidence Level** | 14.3% | Assertiveness and certainty |
-| 🧩 **Problem-Solving** | 14.3% | Analytical thinking approach |
-| 🤝 **Teamwork Indicators** | 14.3% | Collaboration mentions |
-| 💻 **Technical Proficiency** | 14.3% | Code quality and concepts |
-| 👁️ **Eye Engagement** | Variable | Gaze tracking score |
-| ⚠️ **Warning Penalties** | -1 per warning | Security violations |
-
-
-
-### 🛡️ **Security Monitoring**
-
-- **Real-time Threat Detection**: Continuous monitoring for cheating attempts
-- **Behavioral Analysis**: Unusual movement or activity patterns
-- **Device Scanning**: Automatic detection of unauthorized devices
-- **Voice Consistency**: Ongoing voice pattern verification
-- **Engagement Metrics**: Eye contact and attention measurement
-
----
-
-## 📁 **Project Structure**
-
-```
-ai-interview-coach/
-├── 📄 Kash.py                    # Main application file
-├── 📁 Code/                      # Additional modules
-│   ├── 🔧 fix.py                # Bug fixes and patches
-│   ├── 🎮 main.py               # Alternative entry point
-│   ├── 📊 report_generator.py   # PDF report generation
-│   └── 🧪 test.py               # Testing utilities
-├── 📁 Images/                    # UI screenshots
-│   ├── 🖼️ 1.jpg                # Main interface
-│   ├── 🖼️ 2.jpg                # Interview session
-│   ├── 🖼️ 3.jpg                # Code challenge
-│   └── 🖼️ 4.jpg                # Analytics dashboard
-├── 📁 logs/                      # Session logs
-├── 📁 reports/                   # Generated reports
-├── 📁 models/                    # AI model cache
-├── 📁 face_samples/              # Face recognition data
-├── 📁 voice_samples/             # Voice authentication data
-├── 📁 interview_bot_env/         # Virtual environment
-├── 📁 interview_data/            # Interview session data
-├── 📁 resources/                 # Application resources
-├── 📁 temp/                      # Temporary files
-├── 📄 requirements.txt           # Python dependencies
-├── 📄 README.md                  # Project documentation
-├── 📄 config.json               # Configuration settings
-├── 📄 config.py                 # Python configuration
-├── 📄 VirtualCoach.gif          # Bot animation
-└── 📄 .env                       # Environment variables
+```bash
+make check        # secret scan, ruff, Python tests (core + API, incl. real speech models when installed)
+make web-test     # eslint, typecheck, vitest
+make e2e          # Playwright: the full spoken interview through a fake microphone
+make eval         # evaluation harness -> docs/EVAL_REPORT.md, then: uv run python -m eval_harness gate
 ```
 
----
+CI runs these on every push. It also runs:
+- the spoken E2E on Chromium, Firefox, WebKit, Edge, mobile Chrome and mobile Safari;
+- the same E2E against a real open-weights LLM;
+- 20 mock interviews with that LLM (`.github/workflows/agent-evidence.yml`), whose transcripts are in [`docs/evidence/questions/`](docs/evidence/questions/).
 
-## 🔧 **Configuration Options**
+Accuracy numbers are published **only** in [`docs/EVAL_REPORT.md`](docs/EVAL_REPORT.md), and only when measured on a real, consented dataset. Today every suite reads "not measured"; see [`eval/DATA_COLLECTION.md`](eval/DATA_COLLECTION.md) for what to collect.
 
-### 🎨 **UI Customization**
+## Repository
 
-```
-# Theme Configuration
-MAIN_BG = "#101826"           # Dark background
-ACCENT_COLOR = "#31F4C7"      # Neon cyan highlights
-BUTTON_BG = "#802BB1"         # Purple buttons
-GRADIENT_START = "#802BB1"    # Gradient start color
-GRADIENT_END = "#1CD8D2"      # Gradient end color
-```
+| Path | |
+|---|---|
+| `apps/web` | Next.js app (Vercel) |
+| `services/api` | FastAPI service (Cloud Run) |
+| `packages/core` | Patented algorithms, pure and tested; `legacy/` sub-package reproduces the prototype exactly |
+| `eval` | Evaluation harness and regression gate |
+| `infra/terraform` | GCP and Vercel infrastructure |
+| `legacy/` | Original research prototypes (frozen, not shipped) |
 
-### 🎯 **Performance Thresholds**
+## Documentation
 
-```
-# Security Settings
-LBPH_THRESHOLD = 70           # Face recognition sensitivity
-PHONE_DETECT_THRESHOLD = 3    # Phone detection tolerance
-FACE_MISMATCH_THRESHOLD = 5   # Face verification strictness
-MIN_MOUTH_MOVEMENT_RATIO = 0.02  # Lip-sync validation
-```
+- [Plan](docs/PLAN.md), [Claim map](docs/CLAIM_MAP.md), [Architecture](docs/ARCHITECTURE.md), [Decisions](docs/DECISIONS.md), [Design](docs/DESIGN.md), [Truth report](docs/TRUTH_REPORT.md)
+- [Evaluation report](docs/EVAL_REPORT.md), [Load test](docs/LOAD_TEST.md), [Rubric](docs/RUBRIC.md)
+- [Compliance](COMPLIANCE.md), [Model cards](MODEL_CARDS/), [Privacy notice draft](docs/legal/privacy-policy-draft.md)
+- [Licence decision](docs/LICENSE_DECISION.md): no licence has been chosen yet; owner decision pending.
 
-### 🤖 **AI Model Settings**
+## Credits
 
-```
-# Model Configuration
-MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.3"
-CONVO_MODEL_NAME = "facebook/blenderbot-400M-distill"
-ZS_MODEL_NAME = "facebook/bart-large-mnli"
-```
-
----
-
-## 🚀 **Performance Metrics**
-
-
-
-### 📊 **System Benchmarks**
-
-| Component | Performance | Accuracy |
-|-----------|-------------|----------|
-| 👤 **Face Recognition** | ~50ms | 99.7% |
-| 🎙️ **Voice Authentication** | ~200ms | 95.3% |
-| 👁️ **Eye Tracking** | ~30ms | 92.1% |
-| 📱 **Object Detection** | ~100ms | 88.9% |
-| 🤖 **AI Response Generation** | ~2-5s | 94.2% |
-| 💻 **Code Execution** | ~1-3s | 99.9% |
-
-
-
----
-
-## 🔗 **Dependencies**
-
-```
-opencv-python==4.8.1.78
-mediapipe==0.10.7
-insightface==0.7.3
-resemblyzer==0.1.1
-transformers==4.35.2
-torch==2.1.0
-ultralytics==8.0.196
-requests==2.31.0
-numpy==1.24.3
-Pillow==10.0.1
-speechrecognition==3.10.0
-pyttsx3==2.90
-PyMuPDF==1.23.8
-fpdf2==2.7.6
-librosa==0.10.1
-soundfile==0.12.1
-pyannote.audio==3.1.1
-ttkbootstrap==1.10.1
-scikit-learn==1.3.2
-```
-
----
-
-## 🤝 **Contributing**
-
-
-
-We welcome contributions from the community! Here's how you can help:
-
-
-
-### 🛠️ **Development Setup**
-
-```
-# 🍴 Fork the repository
-git clone https://github.com/yourusername/ai-interview-coach.git
-
-# 🌿 Create feature branch
-git checkout -b feature/amazing-feature
-
-# 💻 Make your changes
-# ... code changes ...
-
-# ✅ Run tests
-python -m pytest tests/
-
-# 📝 Commit changes
-git commit -m "Add amazing feature"
-
-# 🚀 Push to branch
-git push origin feature/amazing-feature
-
-# 🎯 Create Pull Request
-```
-
-### 🎯 **Contribution Areas**
-
-- 🤖 **AI Model Integration**: Add new language models
-- 🎨 **UI/UX Improvements**: Enhance user interface
-- 🔒 **Security Features**: Strengthen proctoring capabilities
-- 📊 **Analytics Dashboard**: Advanced reporting features
-- 🌐 **Multi-language Support**: Internationalization
-- 📱 **Mobile Compatibility**: Cross-platform support
-
----
-
-## 🐛 **Troubleshooting**
-
-
-🎥 Camera Issues
-
-```
-# Check camera permissions
-# Windows: Settings > Privacy > Camera
-# macOS: System Preferences > Security & Privacy > Camera
-# Linux: Check /dev/video0 permissions
-
-# Test camera access
-python -c "import cv2; cap = cv2.VideoCapture(0); print('Camera OK' if cap.isOpened() else 'Camera Error')"
-```
-
-
-
-
-🎤 Microphone Problems
-
-```
-# Install audio dependencies
-pip install pyaudio
-
-# Test microphone
-python -c "import speech_recognition as sr; print('Mic OK' if sr.Microphone.list_microphone_names() else 'Mic Error')"
-```
-
-
-
-
-🤖 Model Loading Errors
-
-```
-# Clear model cache
-rm -rf ~/.cache/huggingface/
-
-# Reinstall transformers
-pip uninstall transformers
-pip install transformers
-
-# Check internet connection for model downloads
-```
----
-
-
-
-### 🙏 **Special Thanks**
-
-- **🤗 Hugging Face** - For providing state-of-the-art AI models
-- **🔍 InsightFace** - For advanced facial recognition technology
-- **🎯 MediaPipe** - For real-time computer vision solutions
-- **⚡ Judge0** - For reliable code execution services
-- **🎨 OpenCV** - For comprehensive computer vision tools
-
-
-
----
-
-<!-- CONTRIBUTING SECTION -->
-## 👥 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-
-
-<!-- CONTACT SECTION -->
-## 📬 Contact
-
-Project Link: https://github.com/DeAtHfIrE26/Next-Generation-Virtual-Interview-Training-System
-
-<!-- FOOTER ANIMATION -->
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="400">
-</p>
-
-<!-- FOOTER -->
-<div align="center">
-  <p>⭐ Star this repository if you found it helpful! ⭐</p>
-  
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Victory%20Hand.png" width="50" alt="Victory">
-  
-  <p>**Made with ❤️ by [ Kashyap Patel ] | © 2025 AI Interview Coach**</p>
-</div> 
+Based on research by Dr. Kopperundevi N, Patel Kashyap Kalpeshkumar, Goditi Nishanth Sai Ram and Danaboina Venkata Prabhave (Vellore Institute of Technology), ICCCNT 2025.

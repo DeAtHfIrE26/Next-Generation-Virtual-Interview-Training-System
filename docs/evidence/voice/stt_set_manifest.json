@@ -1,0 +1,212 @@
+[
+ {
+  "path": "af_heart_0.wav",
+  "text": "In my last role I owned the payments reconciliation service and reduced the failure rate from four percent to under half a percent.",
+  "voice": "af_heart",
+  "dur": 6.9991875,
+  "tts_rtf": 0.2635931034919174
+ },
+ {
+  "path": "af_heart_1.wav",
+  "text": "I would start by clarifying the requirements, then sketch the data model, and only after that think about caching and sharding.",
+  "voice": "af_heart",
+  "dur": 6.606625,
+  "tts_rtf": 0.2508315260547442
+ },
+ {
+  "path": "af_heart_2.wav",
+  "text": "We had a disagreement about the release date, so I set up a short meeting, listed the risks, and we agreed to ship a smaller scope first.",
+  "voice": "af_heart",
+  "dur": 6.841125,
+  "tts_rtf": 0.2617089499259055
+ },
+ {
+  "path": "af_heart_3.wav",
+  "text": "Honestly I have not used Kubernetes in production, but I have deployed containers on a managed service and I understand the basics.",
+  "voice": "af_heart",
+  "dur": 7.075625,
+  "tts_rtf": 0.2812756412459559
+ },
+ {
+  "path": "af_heart_4.wav",
+  "text": "The bottleneck was the database, so I added a read replica and moved the reporting queries off the primary.",
+  "voice": "af_heart",
+  "dur": 5.696125,
+  "tts_rtf": 0.23150356830824956
+ },
+ {
+  "path": "af_heart_5.wav",
+  "text": "My biggest weakness is that I sometimes take on too much myself, so now I break work into tickets and delegate earlier.",
+  "voice": "af_heart",
+  "dur": 6.7565,
+  "tts_rtf": 0.21031000240167397
+ },
+ {
+  "path": "am_michael_0.wav",
+  "text": "In my last role I owned the payments reconciliation service and reduced the failure rate from four percent to under half a percent.",
+  "voice": "am_michael",
+  "dur": 7.572875,
+  "tts_rtf": 0.2309231030071946
+ },
+ {
+  "path": "am_michael_1.wav",
+  "text": "I would start by clarifying the requirements, then sketch the data model, and only after that think about caching and sharding.",
+  "voice": "am_michael",
+  "dur": 7.395625,
+  "tts_rtf": 0.2469614261643187
+ },
+ {
+  "path": "am_michael_2.wav",
+  "text": "We had a disagreement about the release date, so I set up a short meeting, listed the risks, and we agreed to ship a smaller scope first.",
+  "voice": "am_michael",
+  "dur": 7.560125,
+  "tts_rtf": 0.2847181415934193
+ },
+ {
+  "path": "am_michael_3.wav",
+  "text": "Honestly I have not used Kubernetes in production, but I have deployed containers on a managed service and I understand the basics.",
+  "voice": "am_michael",
+  "dur": 7.994375,
+  "tts_rtf": 0.2705225393238366
+ },
+ {
+  "path": "am_michael_4.wav",
+  "text": "The bottleneck was the database, so I added a read replica and moved the reporting queries off the primary.",
+  "voice": "am_michael",
+  "dur": 6.2380625,
+  "tts_rtf": 0.2687147114436995
+ },
+ {
+  "path": "am_michael_5.wav",
+  "text": "My biggest weakness is that I sometimes take on too much myself, so now I break work into tickets and delegate earlier.",
+  "voice": "am_michael",
+  "dur": 7.4399375,
+  "tts_rtf": 0.2329212589270432
+ },
+ {
+  "path": "bf_emma_0.wav",
+  "text": "In my last role I owned the payments reconciliation service and reduced the failure rate from four percent to under half a percent.",
+  "voice": "bf_emma",
+  "dur": 6.928125,
+  "tts_rtf": 0.26545189499156024
+ },
+ {
+  "path": "bf_emma_1.wav",
+  "text": "I would start by clarifying the requirements, then sketch the data model, and only after that think about caching and sharding.",
+  "voice": "bf_emma",
+  "dur": 6.2463125,
+  "tts_rtf": 0.36619719652847377
+ },
+ {
+  "path": "bf_emma_2.wav",
+  "text": "We had a disagreement about the release date, so I set up a short meeting, listed the risks, and we agreed to ship a smaller scope first.",
+  "voice": "bf_emma",
+  "dur": 6.9885625,
+  "tts_rtf": 0.5092575817231652
+ },
+ {
+  "path": "bf_emma_3.wav",
+  "text": "Honestly I have not used Kubernetes in production, but I have deployed containers on a managed service and I understand the basics.",
+  "voice": "bf_emma",
+  "dur": 6.6534375,
+  "tts_rtf": 0.49042104043560014
+ },
+ {
+  "path": "bf_emma_4.wav",
+  "text": "The bottleneck was the database, so I added a read replica and moved the reporting queries off the primary.",
+  "voice": "bf_emma",
+  "dur": 5.5834375,
+  "tts_rtf": 0.5093956106097992
+ },
+ {
+  "path": "bf_emma_5.wav",
+  "text": "My biggest weakness is that I sometimes take on too much myself, so now I break work into tickets and delegate earlier.",
+  "voice": "bf_emma",
+  "dur": 6.382375,
+  "tts_rtf": 0.5447431924264071
+ },
+ {
+  "path": "hf_alpha_0.wav",
+  "text": "In my last role I owned the payments reconciliation service and reduced the failure rate from four percent to under half a percent.",
+  "voice": "hf_alpha",
+  "dur": 7.455625,
+  "tts_rtf": 0.5068181532882272
+ },
+ {
+  "path": "hf_alpha_1.wav",
+  "text": "I would start by clarifying the requirements, then sketch the data model, and only after that think about caching and sharding.",
+  "voice": "hf_alpha",
+  "dur": 6.884625,
+  "tts_rtf": 0.4771983898168452
+ },
+ {
+  "path": "hf_alpha_2.wav",
+  "text": "We had a disagreement about the release date, so I set up a short meeting, listed the risks, and we agreed to ship a smaller scope first.",
+  "voice": "hf_alpha",
+  "dur": 7.3350625,
+  "tts_rtf": 0.32249141506803064
+ },
+ {
+  "path": "hf_alpha_3.wav",
+  "text": "Honestly I have not used Kubernetes in production, but I have deployed containers on a managed service and I understand the basics.",
+  "voice": "hf_alpha",
+  "dur": 7.6755,
+  "tts_rtf": 0.26189887199826783
+ },
+ {
+  "path": "hf_alpha_4.wav",
+  "text": "The bottleneck was the database, so I added a read replica and moved the reporting queries off the primary.",
+  "voice": "hf_alpha",
+  "dur": 6.186375,
+  "tts_rtf": 0.29176140613890816
+ },
+ {
+  "path": "hf_alpha_5.wav",
+  "text": "My biggest weakness is that I sometimes take on too much myself, so now I break work into tickets and delegate earlier.",
+  "voice": "hf_alpha",
+  "dur": 7.278125,
+  "tts_rtf": 0.27434395510979637
+ },
+ {
+  "path": "hm_omega_0.wav",
+  "text": "In my last role I owned the payments reconciliation service and reduced the failure rate from four percent to under half a percent.",
+  "voice": "hm_omega",
+  "dur": 7.2559375,
+  "tts_rtf": 0.2780737923194935
+ },
+ {
+  "path": "hm_omega_1.wav",
+  "text": "I would start by clarifying the requirements, then sketch the data model, and only after that think about caching and sharding.",
+  "voice": "hm_omega",
+  "dur": 7.03475,
+  "tts_rtf": 0.2813957754180072
+ },
+ {
+  "path": "hm_omega_2.wav",
+  "text": "We had a disagreement about the release date, so I set up a short meeting, listed the risks, and we agreed to ship a smaller scope first.",
+  "voice": "hm_omega",
+  "dur": 7.087875,
+  "tts_rtf": 0.2967013447923349
+ },
+ {
+  "path": "hm_omega_3.wav",
+  "text": "Honestly I have not used Kubernetes in production, but I have deployed containers on a managed service and I understand the basics.",
+  "voice": "hm_omega",
+  "dur": 7.6965625,
+  "tts_rtf": 0.2800051461434573
+ },
+ {
+  "path": "hm_omega_4.wav",
+  "text": "The bottleneck was the database, so I added a read replica and moved the reporting queries off the primary.",
+  "voice": "hm_omega",
+  "dur": 6.12725,
+  "tts_rtf": 0.25437259436714016
+ },
+ {
+  "path": "hm_omega_5.wav",
+  "text": "My biggest weakness is that I sometimes take on too much myself, so now I break work into tickets and delegate earlier.",
+  "voice": "hm_omega",
+  "dur": 7.1735,
+  "tts_rtf": 0.2597617199007639
+ }
+]

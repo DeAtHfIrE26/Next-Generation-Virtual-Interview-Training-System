@@ -1,0 +1,1088 @@
+{
+ "checks": {
+  "questions": 19,
+  "bank_overlap": 0,
+  "follow_ups": 10,
+  "follow_ups_referencing_answer": 10,
+  "difficulty_tracks_performance": true,
+  "difficulty_transitions": [
+   {
+    "score": 2,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 2,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 2,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 2,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 2,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 2,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 2,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 2,
+    "from": 3,
+    "to": 3
+   },
+   {
+    "score": 2,
+    "from": 3,
+    "to": 2
+   },
+   {
+    "score": 2,
+    "from": 2,
+    "to": 2
+   },
+   {
+    "score": 2,
+    "from": 2,
+    "to": 2
+   },
+   {
+    "score": 2,
+    "from": 2,
+    "to": 2
+   },
+   {
+    "score": 2,
+    "from": 2,
+    "to": 2
+   },
+   {
+    "score": 2,
+    "from": 2,
+    "to": 2
+   },
+   {
+    "score": 2,
+    "from": 2,
+    "to": 2
+   },
+   {
+    "score": 2,
+    "from": 2,
+    "to": 2
+   },
+   {
+    "score": 2,
+    "from": 2,
+    "to": 2
+   },
+   {
+    "score": 2,
+    "from": 2,
+    "to": 2
+   }
+  ],
+  "difficulty_corrections_by_code": 1,
+  "emergency_questions": 0,
+  "fresh_questions": 0,
+  "rejected_attempts": {
+   "say must ask the candidate a question": 2,
+   "follow_up must ask about what the candidate just said (the a": 1,
+   "to return to an earlier answer use action revisit": 1,
+   "repeats an earlier question": 5,
+   "anchor_quote must be copied verbatim from the candidate's la": 3,
+   "ollama": 2
+  },
+  "emergency_blueprint": false,
+  "repeats": 0,
+  "closed_on_time": true,
+  "passed": true
+ },
+ "state": {
+  "session_id": "mock-16",
+  "params": {
+   "role": "Business Analyst",
+   "seniority": "junior",
+   "company": "Deloitte",
+   "company_style": "Case plus stakeholder communication",
+   "job_description": "",
+   "resume_context": "",
+   "skills": [],
+   "interview_type": "case",
+   "round": "screening",
+   "difficulty": "auto",
+   "language": "en",
+   "duration_minutes": 12,
+   "persona": "maya"
+  },
+  "blueprint": {
+   "summary": "This interview assesses core competencies essential for a junior Business Analyst role at Deloitte, focusing on analytical skills and stakeholder communication.",
+   "competencies": [
+    {
+     "id": "c1",
+     "name": "Analytical Thinking",
+     "why": "Critical for interpreting data and solving complex business problems as a junior Business Analyst.",
+     "weight": 0.4,
+     "minutes": 6.0,
+     "signals": [
+      "Demonstrates ability to break down complex problems into manageable components",
+      "..."
+     ]
+    },
+    {
+     "id": "c2",
+     "name": "Stakeholder Communication",
+     "why": "Importantly, as a junior Business Analyst, effective communication with stakeholders is crucial for delivering actionable insights.",
+     "weight": 0.3,
+     "minutes": 4.0,
+     "signals": [
+      "Clear and concise explanations",
+      "..."
+     ]
+    },
+    {
+     "id": "c3",
+     "name": "Problem Solving",
+     "why": "A key skill for identifying and resolving issues that arise during business analysis projects.",
+     "weight": 0.3,
+     "minutes": 2.0,
+     "signals": [
+      "Provides logical and structured solutions",
+      "..."
+     ]
+    }
+   ],
+   "opening": "Warm greeting: 'Hello, thank you for joining us today. Let's start by discussing your approach to solving complex business problems.'",
+   "style_notes": "The tone will be warm and encouraging, with a focus on probing for specific examples and measurable outcomes. The format will be a case study, with a mix of analytical questions and communication scenarios.",
+   "start_difficulty": 3,
+   "emergency": false,
+   "provider": "ollama"
+  },
+  "turns": [
+   {
+    "index": 0,
+    "action": "open",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Hello, thank you for joining us today. My name is Maya. Let's start by discussing your approach to solving complex business problems. Can you share an example where you had to break down a complex problem into manageable components?",
+    "anchor_quote": "",
+    "reason": "Setting the stage for the analytical thinking discussion. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000000.0,
+    "answer": "Sure, it's been a challenge. In my last project, we had to improve the supply chain for a client. I started by talking to different departments and understanding their needs. Then, I made a few diagrams to show the flow. It felt okay, but not great, I guess.",
+    "answer_words": [],
+    "answer_seconds": 19.2,
+    "answered_at": 1000027.2,
+    "score": 2,
+    "assessment": {
+     "strengths": "Candidate provided a brief example of breaking down a complex problem, but the details are vague.",
+     "gaps": "No specific examples, lack of measurable outcomes, and the answer feels generic.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 1,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "That's a good start. Could you walk me through a specific step or action where you contributed to breaking down the supply chain problem into more manageable components?",
+    "anchor_quote": "Sure, it's been a challenge. In my last project, we had to improve the supply chain for a client. I started by talking to different departments and understanding their needs. Then, I made a few diagrams to show the flow.",
+    "reason": "Need more details and a specific example. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000027.2,
+    "answer": "Yeah, sure. I tried to break it down by looking at each stage of the supply chain separately. I made a map, you know, just to see where the bottlenecks were. But I'm not sure if it helped much. It was a bit confusing, I think.",
+    "answer_words": [],
+    "answer_seconds": 18.4,
+    "answered_at": 1000053.6,
+    "score": 2,
+    "assessment": {
+     "strengths": "The candidate attempted to break down the problem but struggled with specificity and impact.",
+     "gaps": "Lack of clear steps, measurable outcomes, and contributions.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 2,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Can you provide more detail on the specific steps you took to identify the bottlenecks and how these steps helped in solving the problem?",
+    "anchor_quote": "I tried to break it down by looking at each stage of the supply chain separately. I made a map, you know, just to see where the bottlenecks were.",
+    "reason": "Need more detail on the specific actions and their impact. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000053.6,
+    "answer": "Uh, sure. I tried to gather data from different sources, like sales and production reports. Then, I made some charts to see where the delays were. I'm not sure if it helped much, but I thought it was a good start.",
+    "answer_words": [],
+    "answer_seconds": 16.4,
+    "answered_at": 1000078.0,
+    "score": 2,
+    "assessment": {
+     "strengths": "Candidate acknowledges the need for detailed steps and provides an example of gathering data.",
+     "gaps": "Candidate struggles with providing specific details and impact of actions taken.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 3,
+    "action": "revisit",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Could you elaborate on how you gathered this data and how it helped in identifying the bottlenecks?",
+    "anchor_quote": "I tried to gather data from different sources",
+    "reason": "Candidate provided a vague action, need to probe further. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000078.0,
+    "answer": "Sure, I tried to get data from different departments, like sales and production. I made some charts, but I'm not sure if it really helped. I just thought it was a way to start.",
+    "answer_words": [],
+    "answer_seconds": 13.6,
+    "answered_at": 1000099.6,
+    "score": 2,
+    "assessment": {
+     "strengths": "Candidate attempted to gather data and visualize it, but struggled to articulate specific actions and their impact.",
+     "gaps": "Lacked detail on specific steps and their effectiveness.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 4,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Can you give me an example of a specific chart you created and how it helped identify the bottlenecks?",
+    "anchor_quote": "I made some charts, but I'm not sure if it really helped.",
+    "reason": "Need more clarity on specific actions and impact. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000099.6,
+    "answer": "Sure, I made a chart to show the time it took for each part of the supply chain. I tried to see where the delays were, you know, like how long it took to get materials and ship them. I'm not sure if it really helped, but I thought it was a step in the right direction.",
+    "answer_words": [],
+    "answer_seconds": 22.8,
+    "answered_at": 1000130.4,
+    "score": 2,
+    "assessment": {
+     "strengths": "Candidate attempted to gather and analyze data but struggled with providing specific details.",
+     "gaps": "Lack of specificity and detail in explaining the data analysis process.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 5,
+    "action": "follow_up",
+    "competency": "c1",
+    "difficulty": 3,
+    "say": "Can you describe in more detail the specific chart you made and how you used it to identify the bottlenecks in the supply chain process?",
+    "anchor_quote": "I made a chart to show the time it took for each part of the supply chain.",
+    "reason": "Candidate's answer was vague and lacked specific details. Needs more clarity on the charts and data analysis process used to identify bottlenecks. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000130.4,
+    "answer": "Uh, sure. I made a chart to show the time it took for each part of the supply chain. I tried to see where the delays were, you know, like how long it took to get materials and ship them. I'm not sure if it really helped, but I thought it was a step in the right direction.",
+    "answer_words": [],
+    "answer_seconds": 23.2,
+    "answered_at": 1000161.6,
+    "score": 2,
+    "assessment": {
+     "strengths": "The candidate attempted to provide a detailed example but struggled with specifics.",
+     "gaps": "Lacked concrete details and clarity in the explanation.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 6,
+    "action": "new_topic",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "Moving on to stakeholder communication. As a junior Business Analyst, it's crucial to communicate effectively with stakeholders. Can you give an example of how you ensured clear and concise communication with a stakeholder during a project?",
+    "anchor_quote": "",
+    "reason": "Exploring stakeholder communication as a new topic. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000161.6,
+    "answer": "Yeah, sure. In one project, I had to brief the CEO on our findings. I tried to keep it simple, you know, just the key points. I made a slide deck and sent it to him before our meeting. I think it helped, but I'm not sure if it was perfect.",
+    "answer_words": [],
+    "answer_seconds": 20.4,
+    "answered_at": 1000190.0,
+    "score": 2,
+    "assessment": {
+     "strengths": "Candidate attempted to provide a specific example, but the details were vague and lacked concrete outcomes.",
+     "gaps": "The candidate could benefit from providing more details on the communication process and the impact of the meeting.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 7,
+    "action": "follow_up",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "Can you give more details on the slide deck you created for the CEO? What key points did you include, and how did you ensure they were clear and concise?",
+    "anchor_quote": "I tried to keep it simple, you know, just the key points. I made a slide deck and sent it to him before our meeting.",
+    "reason": "Candidate provided a general example, but needs more specific details. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000190.0,
+    "answer": "Sure, I made a slide deck with the main findings and recommendations. I tried to keep it simple, just the key points. I focused on the current issues and proposed solutions. I sent it to him before our meeting, so he could review it. I'm not sure if it was perfect, but I thought it helped.",
+    "answer_words": [],
+    "answer_seconds": 22.4,
+    "answered_at": 1000220.4,
+    "score": 2,
+    "assessment": {
+     "strengths": "Tried to keep it simple and focused on key points, but lacks specific details.",
+     "gaps": "No clear metrics or outcomes provided.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 8,
+    "action": "follow_up",
+    "competency": "c2",
+    "difficulty": 3,
+    "say": "Can you tell me more about the specific key points you included in the slide deck and how you ensured they were clear and concise for the CEO?",
+    "anchor_quote": "I sent it to him before our meeting, so he could review it.",
+    "reason": "Needs more detail on the content and impact of the communication. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000220.4,
+    "answer": "Yeah, sure. I kept it simple, just the main issues and proposed solutions. I tried to use bullet points and charts to make it easier to understand. I focused on the current problems and what we could do to fix them. I'm not sure if it was the best, but it was a start. I sent it to him before our meeting, so he could review it.",
+    "answer_words": [],
+    "answer_seconds": 26.8,
+    "answered_at": 1000255.2000000001,
+    "score": 2,
+    "assessment": {
+     "strengths": "Candidate tried to explain the process but struggled with providing specific details.",
+     "gaps": "Lacked concrete examples and structured solutions.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 9,
+    "action": "new_topic",
+    "competency": "c3",
+    "difficulty": 2,
+    "say": "Let's shift to problem solving. As a junior Business Analyst, you might encounter issues that arise during projects. Can you describe a situation where you identified a problem and what steps you took to resolve it?",
+    "anchor_quote": "",
+    "reason": "Move to a new competency and provide a fresh angle. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000255.2000000001,
+    "answer": "Sure, one time, we were working on a project to improve customer satisfaction. We were getting mixed feedback, so I started by asking for more details. I made a few surveys and talked to a few customers. I noticed a pattern where the delivery times were causing issues. I suggested we look into optimizing our delivery process. We started by analyzing the current system and found some bottlenecks. I think it helped, but I'm not sure if it was the best way to do it.",
+    "answer_words": [],
+    "answer_seconds": 34.0,
+    "answered_at": 1000297.2000000001,
+    "score": 2,
+    "assessment": {
+     "strengths": "The candidate provided a specific example but struggled with providing detailed steps and clear outcomes.",
+     "gaps": "The example lacked specific data and clear metrics to measure success.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 10,
+    "action": "follow_up",
+    "competency": "c3",
+    "difficulty": 2,
+    "say": "You mentioned optimizing the delivery process. Can you walk me through the specific steps you took to optimize the delivery and how you verified the improvements?",
+    "anchor_quote": "I noticed a pattern where the delivery times were causing issues. I suggested we look into optimizing our delivery process.",
+    "reason": "The candidate mentioned a specific project and identified a problem, need to drill into the solution process. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000297.2000000001,
+    "answer": "Yeah, sure. We started by analyzing the current delivery system, looking at the routes and times. I made a few changes, like adjusting the delivery schedules and routes. I think it helped, but I'm not sure if it was the best way. I just thought it was a step in the right direction. We also got some feedback from the customers, and they seemed happier with the new times.",
+    "answer_words": [],
+    "answer_seconds": 27.6,
+    "answered_at": 1000332.8,
+    "score": 2,
+    "assessment": {
+     "strengths": "Candidate provided a general approach but lacked specific details.",
+     "gaps": "Candidate could benefit from more concrete examples and clear explanations.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 11,
+    "action": "revisit",
+    "competency": "c2",
+    "difficulty": 2,
+    "say": "Could you give an example of how you ensured your explanations were clear and concise when communicating with a stakeholder?",
+    "anchor_quote": "I think it helped",
+    "reason": "Candidate needs to provide clearer and more detailed communication examples. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000332.8,
+    "answer": "Sure, in one project, I had to explain our findings to the CFO. I tried to keep it simple, just the key points. I made a slide deck with a few charts and sent it before our meeting. I focused on the financial impact of the issues and proposed solutions. I'm not sure if it was perfect, but I thought it helped.",
+    "answer_words": [],
+    "answer_seconds": 24.8,
+    "answered_at": 1000365.6000000001,
+    "score": 2,
+    "assessment": {
+     "strengths": "The candidate provided a general overview but lacked specific details and measurable outcomes.",
+     "gaps": "The answer was vague and generic, with no clear steps or results.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 12,
+    "action": "follow_up",
+    "competency": "c2",
+    "difficulty": 2,
+    "say": "Can you provide more detail on the specific steps you took to communicate the financial impact and proposed solutions to the CFO?",
+    "anchor_quote": "I focused on the financial impact of the issues and proposed solutions.",
+    "reason": "The candidate's answer was generic and lacked specifics. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000365.6000000001,
+    "answer": "Sure, I made a slide deck with charts showing the financial impact of the issues. I tried to explain each chart clearly and concisely. I focused on the proposed solutions and how they would help improve the financial situation. I think it helped, but I'm not sure if it was the best way. I just wanted to make sure he understood the issues and what we could do to fix them.",
+    "answer_words": [],
+    "answer_seconds": 28.4,
+    "answered_at": 1000402.0000000001,
+    "score": 2,
+    "assessment": {
+     "strengths": "Candidate provided a relevant example and attempted to explain the process, though details were lacking.",
+     "gaps": "Candidate struggled to provide specific details and was unsure of the effectiveness of their actions.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 13,
+    "action": "follow_up",
+    "competency": "c2",
+    "difficulty": 2,
+    "say": "Can you give an example of a specific chart or section of the slide deck you created for the CFO and how you ensured it was clear and concise?",
+    "anchor_quote": "I tried to explain each chart clearly and concisely. I focused on the proposed solutions and how they would help improve the financial situation.",
+    "reason": "Need to clarify the clarity and conciseness of the communication. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000402.0000000001,
+    "answer": "Sure, I made a chart showing the current revenue and costs, and then another one with the projected numbers after implementing the proposed solutions. I tried to keep it simple, using clear labels and colors. I focused on the key numbers and how the solutions would improve things. I think it helped, but I'm not sure if it was perfect.",
+    "answer_words": [],
+    "answer_seconds": 24.0,
+    "answered_at": 1000434.0000000001,
+    "score": 2,
+    "assessment": {
+     "strengths": "The candidate provided a general idea of creating charts and slide decks but lacked specific details and measurable outcomes.",
+     "gaps": "The candidate's answers were vague and generic, lacking specific examples and clear explanations.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 14,
+    "action": "follow_up",
+    "competency": "c2",
+    "difficulty": 2,
+    "say": "Can you tell me more about the specific steps you took to create the charts and how you ensured the CFO understood the proposed solutions?",
+    "anchor_quote": "I tried to keep it simple, using clear labels and colors. I focused on the key numbers and how the solutions would improve",
+    "reason": "Need to clarify and expand on the specifics of the communication process. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000434.0000000001,
+    "answer": "Sure, I made the charts to show the current revenue and costs, and then another one with the projected numbers after the solutions. I tried to keep it simple, using clear labels and colors. I focused on the key numbers and how the solutions would improve things. I think it helped, but I'm not sure if it was the best way. I just wanted to make sure he understood the issues and what we could do to fix them.",
+    "answer_words": [],
+    "answer_seconds": 31.6,
+    "answered_at": 1000473.6000000001,
+    "score": 2,
+    "assessment": {
+     "strengths": "The candidate provided a general approach but lacked specific details and measurable outcomes.",
+     "gaps": "The candidate could provide more concrete examples and explain the impact of their actions.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": [
+     "anchor_quote grounded to the candidate's words (model wrote 'I focused on the proposed solutions and how they would help improve the financia')"
+    ]
+   },
+   {
+    "index": 15,
+    "action": "revisit",
+    "competency": "c3",
+    "difficulty": 2,
+    "say": "Can you describe the process you followed to create these charts and how you ensured the CFO could easily understand the proposed solutions?",
+    "anchor_quote": "I made the charts to show the current revenue",
+    "reason": "The candidate mentioned creating charts but did not provide specific steps or outcomes. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000473.6000000001,
+    "answer": "Sure, I just made the charts to show the current revenue and costs, and then another one with the projected numbers after the solutions. I tried to be simple, using clear labels and colors. I just focused on the key numbers and how the solutions would help. I think it helped, but I'm not sure if it was perfect. I just wanted to make sure the CFO understood the issues and what we could do to fix them.",
+    "answer_words": [],
+    "answer_seconds": 31.2,
+    "answered_at": 1000512.8,
+    "score": 2,
+    "assessment": {
+     "strengths": "Candidate provided examples of creating charts and slide decks, but details were vague.",
+     "gaps": "Lacked specific examples of breaking down complex problems into manageable components.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 16,
+    "action": "revisit",
+    "competency": "c1",
+    "difficulty": 2,
+    "say": "Can you give an example of how you broke down a complex problem into more manageable components in one of your projects?",
+    "anchor_quote": "I just made the charts to show the current revenue",
+    "reason": "Demonstrates ability to break down complex problems into manageable components [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000512.8,
+    "answer": "Sure, in a project to improve customer satisfaction, we were getting mixed feedback. I started by asking for more details and making a few surveys. I noticed a pattern where delivery times were a big issue. I suggested we look into optimizing our delivery process. We started by analyzing the current system and found some bottlenecks. I think it helped, but I'm not sure if it was the best way.",
+    "answer_words": [],
+    "answer_seconds": 28.0,
+    "answered_at": 1000548.8,
+    "score": 2,
+    "assessment": {
+     "strengths": "The candidate provided a general example but lacked specific details on the steps and tools used.",
+     "gaps": "The candidate could benefit from providing more concrete examples and steps.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 17,
+    "action": "revisit",
+    "competency": "c1",
+    "difficulty": 2,
+    "say": "Can you describe the process you followed to break down the complex problem into more manageable components in the customer satisfaction project? How did you ensure each component was clearly defined and actionable??",
+    "anchor_quote": "Can you describe the process you followed to break down the complex problem into more manageable components in the customer satisfaction project?",
+    "reason": "The candidate provided a general example but lacked specific details on the steps and tools used. Revisiting this example with more detail will help to fully assess the candidate's analytical thinking skills. [candidate quality: weak]",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000548.8,
+    "answer": "Sure, I started by gathering feedback from customers and analyzing it. I made a few surveys to get more details and noticed a pattern with delivery times. I suggested we look into optimizing the delivery process, so I started by analyzing the current system and found some bottlenecks. I made a few changes, like adjusting the schedules and routes, and got some feedback from customers. I think it helped, but I'm not sure if it was the best way. I just wanted to make sure the components were clear and actionable.",
+    "answer_words": [],
+    "answer_seconds": 36.4,
+    "answered_at": 1000593.2000000001,
+    "score": 2,
+    "assessment": {
+     "strengths": "Candidate provided a general process but lacked specific details and measurable outcomes.",
+     "gaps": "Candidate could provide more concrete steps and impact of their actions.",
+     "vague": true
+    },
+    "evaluation": null,
+    "corrections": []
+   },
+   {
+    "index": 18,
+    "action": "close",
+    "competency": "c1",
+    "difficulty": 2,
+    "say": "Thank you for sharing your experiences. Let's conclude the interview here. I appreciate your time and insights.",
+    "anchor_quote": "Can you describe the process you followed to break down the complex problem into more manageable components in the customer satisfaction project? How did you ensure each component was clearly defined and actionable??",
+    "reason": "Candidate has already covered the required competencies and provided general steps without specific details.",
+    "provider": "ollama",
+    "emergency": false,
+    "asked_at": 1000593.2000000001,
+    "answer": null,
+    "answer_words": [],
+    "answer_seconds": 0.0,
+    "answered_at": null,
+    "score": null,
+    "assessment": null,
+    "evaluation": null,
+    "corrections": []
+   }
+  ],
+  "difficulty": 2,
+  "started_at": 1000000.0,
+  "finished": true,
+  "events": [
+   {
+    "t": 1791321521.134,
+    "kind": "turn",
+    "turn": 0,
+    "provider": "ollama",
+    "ms": 137582.9,
+    "action": "open"
+   },
+   {
+    "t": 1791321606.614,
+    "kind": "turn",
+    "turn": 1,
+    "provider": "ollama",
+    "ms": 62956.9,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321688.488,
+    "kind": "turn",
+    "turn": 2,
+    "provider": "ollama",
+    "ms": 61727.5,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321805.198,
+    "kind": "turn",
+    "turn": 3,
+    "provider": "ollama",
+    "ms": 98833.4,
+    "action": "revisit"
+   },
+   {
+    "t": 1791321881.098,
+    "kind": "turn",
+    "turn": 4,
+    "provider": "ollama",
+    "ms": 60718.2,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791321973.1,
+    "kind": "turn",
+    "turn": 5,
+    "provider": "ollama",
+    "ms": 72893.1,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791322123.529,
+    "kind": "turn",
+    "turn": 6,
+    "provider": "ollama",
+    "ms": 128815.6,
+    "action": "new_topic"
+   },
+   {
+    "t": 1791322228.84,
+    "kind": "turn",
+    "turn": 7,
+    "provider": "ollama",
+    "ms": 82867.7,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791322331.888,
+    "kind": "turn",
+    "turn": 8,
+    "provider": "ollama",
+    "ms": 79506.3,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791322546.359,
+    "kind": "turn",
+    "turn": 9,
+    "provider": "ollama",
+    "ms": 189193.1,
+    "action": "new_topic"
+   },
+   {
+    "t": 1791322676.402,
+    "kind": "turn",
+    "turn": 10,
+    "provider": "ollama",
+    "ms": 98526.9,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791322864.677,
+    "kind": "turn",
+    "turn": 11,
+    "provider": "ollama",
+    "ms": 158211.8,
+    "action": "revisit"
+   },
+   {
+    "t": 1791322987.169,
+    "kind": "turn",
+    "turn": 12,
+    "provider": "ollama",
+    "ms": 95580.6,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791323122.71,
+    "kind": "turn",
+    "turn": 13,
+    "provider": "ollama",
+    "ms": 108240.1,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791323258.692,
+    "kind": "correction",
+    "turn": 14,
+    "detail": "anchor_quote grounded to the candidate's words (model wrote 'I focused on the proposed solutions and how they would help improve the financia')"
+   },
+   {
+    "t": 1791323258.692,
+    "kind": "turn",
+    "turn": 14,
+    "provider": "ollama",
+    "ms": 109130.1,
+    "action": "follow_up"
+   },
+   {
+    "t": 1791323666.609,
+    "kind": "turn",
+    "turn": 15,
+    "provider": "ollama",
+    "ms": 375835.0,
+    "action": "revisit"
+   },
+   {
+    "t": 1791324068.707,
+    "kind": "turn",
+    "turn": 16,
+    "provider": "ollama",
+    "ms": 371523.7,
+    "action": "revisit"
+   },
+   {
+    "t": 1791324743.216,
+    "kind": "turn",
+    "turn": 17,
+    "provider": "ollama",
+    "ms": 645130.8,
+    "action": "revisit"
+   },
+   {
+    "t": 1791325142.371,
+    "kind": "turn",
+    "turn": 18,
+    "provider": "ollama",
+    "ms": 363408.4,
+    "action": "close"
+   }
+  ]
+ },
+ "attempts": [
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 102978.7,
+   "error": "",
+   "input_tokens": 602,
+   "output_tokens": 326
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 115996.5,
+   "error": "say must ask the candidate a question",
+   "input_tokens": 1422,
+   "output_tokens": 69
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 21586.2,
+   "error": "",
+   "input_tokens": 1460,
+   "output_tokens": 90
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 62956.9,
+   "error": "",
+   "input_tokens": 1563,
+   "output_tokens": 183
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 61727.5,
+   "error": "",
+   "input_tokens": 1713,
+   "output_tokens": 164
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 65242.0,
+   "error": "follow_up must ask about what the candidate just said (the anchor_quote); to return to an earlier answer use action revisit",
+   "input_tokens": 1848,
+   "output_tokens": 171
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 33590.9,
+   "error": "",
+   "input_tokens": 1921,
+   "output_tokens": 130
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 60718.2,
+   "error": "",
+   "input_tokens": 1960,
+   "output_tokens": 138
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 72893.1,
+   "error": "",
+   "input_tokens": 2099,
+   "output_tokens": 171
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 74034.6,
+   "error": "repeats an earlier question: 'Can you give me an example of a specific chart you created and how it helped ide'",
+   "input_tokens": 2253,
+   "output_tokens": 159
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 54780.7,
+   "error": "",
+   "input_tokens": 2524,
+   "output_tokens": 139
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 82867.6,
+   "error": "",
+   "input_tokens": 2432,
+   "output_tokens": 174
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 79506.3,
+   "error": "",
+   "input_tokens": 2594,
+   "output_tokens": 143
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 127590.6,
+   "error": "repeats an earlier question: 'Can you tell me more about the specific key points you included in the slide dec'",
+   "input_tokens": 2761,
+   "output_tokens": 332
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 61602.3,
+   "error": "",
+   "input_tokens": 3084,
+   "output_tokens": 137
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 98526.9,
+   "error": "",
+   "input_tokens": 2973,
+   "output_tokens": 160
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 94693.2,
+   "error": "anchor_quote must be copied verbatim from the candidate's last answer; repeats an earlier question: 'You mentioned optimizing the delivery process. Can you walk me through the speci'",
+   "input_tokens": 3139,
+   "output_tokens": 144
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 63518.4,
+   "error": "",
+   "input_tokens": 3479,
+   "output_tokens": 122
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 95580.5,
+   "error": "",
+   "input_tokens": 3286,
+   "output_tokens": 137
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 108240.0,
+   "error": "",
+   "input_tokens": 3444,
+   "output_tokens": 167
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 109130.0,
+   "error": "",
+   "input_tokens": 3604,
+   "output_tokens": 154
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 111446.7,
+   "error": "anchor_quote must be copied verbatim from the candidate's last answer; repeats an earlier question: 'Can you tell me more about the specific steps you took to create the charts and '",
+   "input_tokens": 3776,
+   "output_tokens": 157
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 264388.1,
+   "error": "",
+   "input_tokens": 4048,
+   "output_tokens": 142
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 108287.6,
+   "error": "anchor_quote must be copied verbatim from the candidate's last answer; repeats an earlier question: 'Can you tell me more about the specific steps you took to create the charts and '",
+   "input_tokens": 3943,
+   "output_tokens": 135
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 263235.9,
+   "error": "",
+   "input_tokens": 4023,
+   "output_tokens": 140
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 277643.1,
+   "error": "say must ask the candidate a question",
+   "input_tokens": 4088,
+   "output_tokens": 173
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240114.0,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 126967.4,
+   "error": "",
+   "input_tokens": 4072,
+   "output_tokens": 199
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": false,
+   "ms": 240109.1,
+   "error": "ollama: ReadTimeout",
+   "input_tokens": 0,
+   "output_tokens": 0
+  },
+  {
+   "provider": "ollama",
+   "model": "qwen2.5:7b-instruct",
+   "ok": true,
+   "ms": 122898.0,
+   "error": "",
+   "input_tokens": 4049,
+   "output_tokens": 171
+  }
+ ],
+ "qualities": [
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak",
+  "weak"
+ ]
+}
